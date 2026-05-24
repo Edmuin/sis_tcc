@@ -36,3 +36,15 @@ export const Agendar = async (req, res) => {
 export const PainelPrincipal = async (req, res) => {
     res.sendFile(path.join(process.cwd(), "src/views/Painel-principal.html"));
 }
+
+export const Configuracoes = async (req, res) => {
+    res.sendFile(path.join(process.cwd(), "src/views/Configurações.html"));
+}
+
+export const Curso = async (req, res) => {
+    res.sendFile(path.join(process.cwd(), "src/views/Curso.html"));
+}
+
+export const AreadeFormacao = async (req, res) => {
+    res.sendFile(path.join(process.cwd(), "src/views/Area-de-Formacao.html"));
+}
