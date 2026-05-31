@@ -209,7 +209,7 @@ export const criarTabelaTcc = async () => {
 
 export const criarTabelaUser = async () => {
   const query = `
-    CREATE TABLE IF NOT EXISTS user_table (
+    CREATE TABLE IF NOT EXISTS user (
       id INT AUTO_INCREMENT PRIMARY KEY,
       nome VARCHAR(255) NOT NULL,
       email VARCHAR(255) NOT NULL UNIQUE,

@@ -4,7 +4,7 @@ import { AuthService } from "../services/auth-service.js";
 import { UserService } from "../services/user-service.js";
 
 export const formLogin = async (req, res) => {
-    res.sendFile(path.join(process.cwd(), "src/views/auth/login.ejs"));
+    res.sendFile(path.join(process.cwd(), "src/views/auth/login.html"));
 };
 
 export const login = async (req, res) => {
@@ -17,7 +17,7 @@ export const login = async (req, res) => {
 };
 
 export const formRegister = async (req, res) => {
-    res.sendFile(path.join(process.cwd(), "src/views/auth/register.ejs"));
+    res.sendFile(path.join(process.cwd(), "src/views/auth/register.html"));
 };
 
 export const logout = async (req, res) => {

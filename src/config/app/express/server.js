@@ -35,4 +35,7 @@ app.get("/", (req, res) => {
     res.sendFile(path.join(PATHS.views, "index_new.html"));
 });
 
+//app.set("view engine", "ejs");
+//app.set("views", path.join(process.cwd(), "src/views"));
+
 export default app;
