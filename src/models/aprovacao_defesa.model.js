@@ -3,10 +3,9 @@ import Repository from "../config/database/repository.js";
 export const tabela = {
   nome: "aprovacao_defesa",
   colunas: {
-    id_defesa: "id_defesa",
+    id_tcc: "id_tcc",
     id_subdireccao: "id_subdireccao",
     status: "status",
-    data: "data",
     observacao: "observacao"
   },
   // colunas: "(id_defesa, id_subdireccao, status, data, observacao)",
@@ -26,6 +25,10 @@ export const AprovacaoDefesaModel = {
 
   async store(data) {
     return await apro_defesaRepo.store(data);
+  },
+
+  async update(id, data) {
+    return await apro_defesaRepo.update(id, data);
   },
 
   async deleteById(id) {

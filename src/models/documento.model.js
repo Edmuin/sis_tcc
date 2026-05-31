@@ -25,6 +25,10 @@ export const DocumentoModel = {
     return await documentoRepo.store(data);
   },
 
+  async update(id, data) {
+    return await documentoRepo.update(id, data);
+  },
+
   async deleteById(id) {
     return await documentoRepo.deleteById(id);
   },

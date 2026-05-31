@@ -25,6 +25,10 @@ export const AvaliacaoModel = {
     return await avaliacaoRepo.store(data);
   },
 
+  async update(id, data) {
+    return await avaliacaoRepo.update(id, data);
+  },
+
   async deleteById(id) {
     return await avaliacaoRepo.deleteById(id);
   },

@@ -27,6 +27,10 @@ export const TccModel = {
     return await tccRepo.store(data);
   },
 
+  async update(id, data) {
+    return await tccRepo.update(id, data);
+  },
+
   async deleteById(id) {
     return await tccRepo.deleteById(id);
   },
