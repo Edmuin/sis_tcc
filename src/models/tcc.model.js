@@ -8,7 +8,8 @@ export const tabela = {
     estado: "estado",
     data_submissao: "data_submissao",
     id_estudante: "id_estudante",
-    id_professor: "id_professor"
+    id_professor: "id_professor",
+    relatorio_pdf: "relatorio_pdf"
   },
 };
 

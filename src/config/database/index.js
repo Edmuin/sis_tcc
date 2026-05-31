@@ -213,12 +213,21 @@ export const criarTabelaTcc = async () => {
       data_submissao TIMESTAMP NULL DEFAULT NULL,
       id_estudante INT NOT NULL,
       id_professor INT NOT NULL,
+      relatorio_pdf VARCHAR(255),
       created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
       updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
       UNIQUE KEY (tema)
     )
   `;
   await pool.query(query);
+  await garantirColunaTcc("relatorio_pdf", "VARCHAR(255)");
+}
+
+const garantirColunaTcc = async (coluna, definicao) => {
+  const [rows] = await pool.query(`SHOW COLUMNS FROM tcc LIKE ?`, [coluna]);
+  if (rows.length > 0) return;
+
+  await pool.query(`ALTER TABLE tcc ADD COLUMN ${coluna} ${definicao}`);
 }
 
 export const criarTabelaUser = async () => {

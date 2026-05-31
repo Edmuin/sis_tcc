@@ -190,7 +190,9 @@
         `).join('');
 
         navMenu.querySelectorAll('.nav-link').forEach((link) => {
-            link.classList.toggle('active', link.getAttribute('href') === window.location.pathname);
+            const href = link.getAttribute('href');
+            const isActive = href === window.location.pathname || (href === '/tcc' && window.location.pathname.startsWith('/tcc/'));
+            link.classList.toggle('active', isActive);
         });
     }
 

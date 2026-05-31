@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Detalhe do TCC - Gestor TCC</title>
+  <link rel="stylesheet" href="/css/templatemo-glass-admin-style.css">
+</head>
+<body>
+  <div class="background"></div>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+
+  <div class="dashboard">
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="logo">HB</div>
+        <span class="logo-text">Gestor TCC</span>
+      </div>
+
+      <ul class="nav-menu"></ul>
+
+      <div class="sidebar-footer">
+        <div class="user-profile">
+          <div class="user-avatar">HB</div>
+          <div class="user-info">
+            <div class="user-name">H & B</div>
+            <div class="user-role">Administrador</div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+  <main class="main-content">
+    <nav class="navbar">
+      <div class="page-header">
+        <h1 class="page-title">Detalhe do TCC</h1>
+        <div class="page-breadcrumb"><a href="/tcc">TCCs</a><span>/</span><span>Detalhe</span></div>
+      </div>
+      <div class="navbar-right">
+        <a class="btn btn-secondary" data-edit-link href="/tcc">Editar</a>
+      </div>
+    </nav>
+
+    <section class="glass-card table-card" style="max-width:860px;">
+      <div class="card-header">
+        <div>
+          <h2 class="card-title" data-tema>A carregar...</h2>
+          <p class="card-subtitle">Informação principal do trabalho</p>
+        </div>
+      </div>
+      <div class="table-wrapper">
+        <table class="data-table">
+          <tbody data-detail>
+            <tr><td>A carregar...</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="operational-actions" style="margin-top:18px;">
+        <a class="btn btn-secondary" href="/tcc">Voltar</a>
+        <button class="btn btn-primary" type="button" data-delete>Eliminar</button>
+      </div>
+    </section>
+  </main>
+  </div>
+
+  <button class="mobile-menu-toggle">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <line x1="3" y1="12" x2="21" y2="12"/>
+      <line x1="3" y1="6" x2="21" y2="6"/>
+      <line x1="3" y1="18" x2="21" y2="18"/>
+    </svg>
+  </button>
+
+  <script src="/js/templatemo-glass-admin-script.js"></script>
+  <script>
+    const id = window.location.pathname.split("/").filter(Boolean)[1];
+
+    async function loadTcc() {
+      const detail = document.querySelector("[data-detail]");
+      const response = await fetch(`/tcc/${id}/api`, { headers: { Accept: "application/json" } });
+      const result = await response.json();
+
+      if (!response.ok) {
+        detail.innerHTML = `<tr><td>${result.message || "TCC não encontrado."}</td></tr>`;
+        return;
+      }
+
+      const row = result.data;
+      document.querySelector("[data-tema]").textContent = row.tema || "TCC sem tema";
+      document.querySelector("[data-edit-link]").href = `/tcc/${id}/edit`;
+      detail.innerHTML = `
+        <tr><th>ID</th><td>${row.id}</td></tr>
+        <tr><th>Tema</th><td>${row.tema || "-"}</td></tr>
+        <tr><th>Objetivo</th><td>${row.objectivo || "-"}</td></tr>
+        <tr><th>Estado</th><td>${row.estado ?? "-"}</td></tr>
+        <tr><th>Data de submissão</th><td>${row.data_submissao || "-"}</td></tr>
+        <tr><th>ID do estudante</th><td>${row.id_estudante || "-"}</td></tr>
+        <tr><th>ID do professor</th><td>${row.id_professor || "-"}</td></tr>
+        <tr><th>Relatório</th><td>${row.relatorio_pdf ? `<a class="card-btn" href="${row.relatorio_pdf}" target="_blank" rel="noopener">Abrir PDF</a>` : "-"}</td></tr>
+      `;
+    }
+
+    document.querySelector("[data-delete]").addEventListener("click", async () => {
+      if (!confirm("Deseja eliminar este TCC?")) return;
+
+      const response = await fetch(`/tcc/${id}`, { method: "DELETE", headers: { Accept: "application/json" } });
+      if (response.ok) window.location.href = "/tcc";
+      else alert("Não foi possível eliminar o TCC.");
+    });
+
+    loadTcc();
+  </script>
+</body>
+</html>

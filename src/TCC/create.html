@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Criar TCC - Gestor TCC</title>
+  <link rel="stylesheet" href="/css/templatemo-glass-admin-style.css">
+</head>
+<body>
+  <div class="background"></div>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+
+  <div class="dashboard">
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="logo">HB</div>
+        <span class="logo-text">Gestor TCC</span>
+      </div>
+
+      <ul class="nav-menu"></ul>
+
+      <div class="sidebar-footer">
+        <div class="user-profile">
+          <div class="user-avatar">HB</div>
+          <div class="user-info">
+            <div class="user-name">H & B</div>
+            <div class="user-role">Administrador</div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+  <main class="main-content">
+    <nav class="navbar">
+      <div class="page-header">
+        <h1 class="page-title">Novo TCC</h1>
+        <div class="page-breadcrumb"><a href="/tcc">TCCs</a><span>/</span><span>Criar</span></div>
+      </div>
+    </nav>
+
+    <section class="glass-card operational-panel" style="max-width:760px;">
+      <div class="card-header">
+        <div>
+          <h2 class="card-title">Criar TCC</h2>
+          <p class="card-subtitle">Preencha os dados principais do trabalho</p>
+        </div>
+      </div>
+
+      <form class="operational-form" data-tcc-form>
+        <div class="form-group">
+          <label class="form-label">Tema</label>
+          <input class="form-input" name="tema" type="text" placeholder="Tema do TCC">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Objetivo</label>
+          <input class="form-input" name="objectivo" type="text" placeholder="Objetivo do trabalho">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Estado</label>
+          <input class="form-input" name="estado" type="number" min="0" value="0">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Data de submissão</label>
+          <input class="form-input" name="data_submissao" type="date">
+        </div>
+        <div class="form-group">
+          <label class="form-label">ID do estudante</label>
+          <input class="form-input" name="id_estudante" type="number" min="1" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">ID do professor</label>
+          <input class="form-input" name="id_professor" type="number" min="1" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Relatório (PDF)</label>
+          <input class="form-input" name="relatorio_pdf" type="file" accept="application/pdf,.pdf">
+        </div>
+        <div class="operational-actions">
+          <button class="btn btn-primary" type="submit">Criar TCC</button>
+          <a class="btn btn-secondary" href="/tcc">Cancelar</a>
+        </div>
+        <p class="operational-message" data-message></p>
+      </form>
+    </section>
+  </main>
+  </div>
+
+  <button class="mobile-menu-toggle">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <line x1="3" y1="12" x2="21" y2="12"/>
+      <line x1="3" y1="6" x2="21" y2="6"/>
+      <line x1="3" y1="18" x2="21" y2="18"/>
+    </svg>
+  </button>
+
+  <script src="/js/templatemo-glass-admin-script.js"></script>
+  <script>
+    document.querySelector("[data-tcc-form]").addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const message = document.querySelector("[data-message]");
+      const data = new FormData(event.target);
+      if (!event.target.elements.relatorio_pdf.files.length) data.delete("relatorio_pdf");
+
+      try {
+        const response = await fetch("/tcc", {
+          method: "POST",
+          headers: { Accept: "application/json" },
+          body: data,
+        });
+        const result = await response.json();
+
+        if (!response.ok) throw new Error(result.message || "Não foi possível criar o TCC.");
+        window.location.href = `/tcc/${result.data.id}`;
+      } catch (error) {
+        message.textContent = error.message;
+        message.dataset.type = "error";
+      }
+    });
+  </script>
+</body>
+</html>

@@ -7,6 +7,7 @@ import { PATHS } from "../../paths.js";
 import authRoutes from "./routes/auth-routes.js";
 import systemRoutes from "./routes/system-routes.js";
 import userRoutes from "./routes/user-routes.js";
+import tccRoutes from "./routes/tcc-routes.js";
 import { criarTodasTabelas } from "../../database/index.js";
 import { configSession } from "./session/index.js";
 import operationalRoutes from "./routes/operational-routes.js";
@@ -27,6 +28,7 @@ configSession(app);
 
 const port = process.env.PORT || 3000;
 
+app.use("/tcc", tccRoutes);
 app.use("/", systemRoutes);
 app.use("/auth", authRoutes);
 app.use("/users", userRoutes);

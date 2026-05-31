@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TCCs - Gestor TCC</title>
+  <link rel="stylesheet" href="/css/templatemo-glass-admin-style.css">
+</head>
+
+
+
+<body>
+  <div class="background"></div>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+
+  <div class="dashboard">
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="logo">HB</div>
+        <span class="logo-text">Gestor TCC</span>
+      </div>
+
+      <ul class="nav-menu">
+        <li class="nav-section">
+          <span class="nav-section-title">Menu Principal</span>
+          <ul>
+            <li class="nav-item"><a href="/PainelPrincipal" class="nav-link" data-route="/PainelPrincipal">Painel Principal</a></li>
+            <li class="nav-item"><a href="/tcc" class="nav-link active" data-route="/tcc">TCCs</a></li>
+            <li class="nav-item">
+              <a href="/Agendar" class="nav-link" data-route="/Agendar">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                  <line x1="16" y1="2" x2="16" y2="6"/>
+                  <line x1="8" y1="2" x2="8" y2="6"/>
+                  <line x1="3" y1="10" x2="21" y2="10"/>
+                  <path d="M8 14h.01"/>
+                  <path d="M12 14h.01"/>
+                  <path d="M16 14h.01"/>
+                  <path d="M8 18h.01"/>
+                  <path d="M12 18h.01"/>
+                </svg>
+                Defesas
+              </a>
+            </li>
+            <li class="nav-item"><a href="/Estudantes" class="nav-link" data-route="/Estudantes">Estudantes</a></li>
+            <li class="nav-item"><a href="/Professores" class="nav-link" data-route="/Professores">Professores</a></li>
+            <li class="nav-item"><a href="/DetalhesTcc" class="nav-link" data-route="/DetalhesTcc">Detalhes do TCC</a></li>
+            <li class="nav-item"><a href="/Bancas" class="nav-link" data-route="/Bancas">Bancas</a></li>
+            <li class="nav-item"><a href="/Documentos" class="nav-link" data-route="/Documentos">Documentos</a></li>
+            <li class="nav-item"><a href="/Avaliacoes" class="nav-link" data-route="/Avaliacoes">Avaliações</a></li>
+            <li class="nav-item"><a href="/Aprovacoes" class="nav-link" data-route="/Aprovacoes">Aprovações</a></li>
+            <li class="nav-item"><a href="/Relatorios" class="nav-link" data-route="/Relatorios">Relatórios</a></li>
+          </ul>
+        </li>
+
+        <li class="nav-section" data-settings-section="true">
+          <span class="nav-section-title">Configurações</span>
+          <ul>
+            <li class="nav-item"><a href="/ConfigUtilizadores" class="nav-link" data-route="/ConfigUtilizadores">Utilizadores</a></li>
+            <li class="nav-item"><a href="/AreadeFormacao" class="nav-link" data-route="/AreadeFormacao">Área de Formação</a></li>
+            <li class="nav-item"><a href="/Curso" class="nav-link" data-route="/Curso">Cursos</a></li>
+            <li class="nav-item"><a href="/ConfigSobre" class="nav-link" data-route="/ConfigSobre">Sobre</a></li>
+          </ul>
+        </li>
+
+        <li class="nav-section">
+          <span class="nav-section-title">Conta</span>
+          <ul>
+            <li class="nav-item">
+              <a href="/MeusDados" class="nav-link" data-route="/MeusDados">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                  <circle cx="12" cy="7" r="4"/>
+                </svg>
+                Meus Dados
+              </a>
+            </li>
+            <li class="nav-item"><a href="/auth/form-login" class="nav-link">Sair</a></li>
+          </ul>
+        </li>
+      </ul>
+
+      <div class="sidebar-footer">
+        <div class="user-profile">
+          <div class="user-avatar">HB</div>
+          <div class="user-info">
+            <div class="user-name">H & B</div>
+            <div class="user-role">Administrador</div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+  <main class="main-content">
+    <nav class="navbar">
+      <div class="page-header">
+        <h1 class="page-title">TCCs</h1>
+        <div class="page-breadcrumb"><a href="/PainelPrincipal">Painel</a><span>/</span><span>TCCs</span></div>
+      </div>
+      <div class="navbar-right">
+        <a class="btn btn-primary" href="/tcc/create">Novo TCC</a>
+      </div>
+    </nav>
+
+    <section class="glass-card table-card">
+      <div class="card-header">
+        <div>
+          <h2 class="card-title">Listagem de TCCs</h2>
+          <p class="card-subtitle">Todos os trabalhos cadastrados</p>
+        </div>
+      </div>
+      <div class="table-wrapper">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Tema</th>
+              <th>Estado</th>
+              <th>Data de submissão</th>
+              <th>Estudante</th>
+              <th>Professor</th>
+              <th>Relatório</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody data-tcc-list>
+            <tr><td colspan="7" class="empty-table-message">A carregar...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+  </div>
+
+  <button class="mobile-menu-toggle">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <line x1="3" y1="12" x2="21" y2="12"/>
+      <line x1="3" y1="6" x2="21" y2="6"/>
+      <line x1="3" y1="18" x2="21" y2="18"/>
+    </svg>
+  </button>
+
+  <script src="/js/templatemo-glass-admin-script.js"></script>
+  <script src="/js/TCC/index.js"></script>
+</body>
+</html>
