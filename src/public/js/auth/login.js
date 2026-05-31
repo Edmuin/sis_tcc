@@ -15,33 +15,21 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 });
 
-document.getElementById('loginForm').addEventListener('submit', async function(e) {
+document.getElementById('loginForm').addEventListener('submit', function(e) {
     e.preventDefault();
 
     const email = document.getElementById('email').value.trim();
     const password = document.getElementById('password').value;
 
-    const response = await fetch("/auth/login", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            email: email,
-            password: password
-        })
-    });
+    if (email && password) {
+      localStorage.setItem('email', email);//
+      localStorage.setItem('password', password);//
 
-    const data = await response.json();
+      console.log('Usuário autenticado:', email);
+      console.log('Redirecionando para a página principal...');
 
-    if (response.ok) {
-        localStorage.setItem('user', JSON.stringify(data.user)); // Armazenar o usuário no localStorage
-        localStorage.setItem('token', data.token); // Armazenar o token no localStorage
-        window.alert("Login bem-sucedido!");
-        console.log('Token de autenticação:', localStorage.getItem('token'));
-        console.log('Usuário autenticado:', JSON.parse(localStorage.getItem('user')));
-        alert('Redirecionando para a página principal...');
-        window.location.href = '/';
+      // Redirecionar
+      window.location.href = '/';
     } else {
       console.log('Erro ao autenticar:', data.message);
         window.alert(data.message || "Erro ao autenticar. Tente novamente.");
