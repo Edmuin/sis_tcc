@@ -4,7 +4,8 @@ export const tabela = {
   nome: "curso",
   colunas: {
     nome: "nome",
-    descricao: "descricao"
+    descricao: "descricao",
+    area_formacao_id: "area_formacao_id"
   },
 };
 

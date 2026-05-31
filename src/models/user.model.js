@@ -3,14 +3,17 @@ import Repository from "../config/database/repository.js";
 export const tabela = {
   nome: "user",
   colunas: {
-    nome: "nome",
+    fullname: "fullname",
     email: "email",
-    password: "password",
     telefone: "telefone",
     idade: "idade",
     genero: "genero",
-    foto: "foto",
-    role_id: "role_id"
+    role_id: "role_id",
+    n_processo: "n_processo",
+    curso: "curso",
+    area_formacao: "area_formacao",
+    n_mecanografico: "n_mecanografico",
+    password: "password",
   },
 };
 
@@ -23,6 +26,10 @@ export const UserModel = {
 
   async findById(id) {
     return await userRepo.findById(id);
+  },
+
+  async findByEmail(email) {
+    return await userRepo.findByEmail(email);
   },
 
   async store(data) {

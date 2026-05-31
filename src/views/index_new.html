@@ -403,5 +403,12 @@ https://templatemo.com/tm-607-glass-admin
 
     <script src="/js/templatemo-glass-admin-script.js"></script>
     <!-- TemplateMo 607 Glass Admin -->
+
+    <script>
+        const user = JSON.parse(localStorage.getItem('user'));
+        const token = localStorage.getItem('token');
+        console.log('User:', user);
+        console.log('Token:', token);
+    </script>
 </body>
 </html>

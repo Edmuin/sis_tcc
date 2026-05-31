@@ -10,5 +10,10 @@ export const RoleService = {
   async roles () {
     const roles = await RoleModel.findAll();
     return roles;
+  },
+
+  async getRoleByName (name) {
+    const role = await RoleModel.findByName(name);
+    return role;
   }
 }
