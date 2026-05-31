@@ -17,7 +17,7 @@ export const login = async (req, res) => {
 };
 
 export const formRegister = async (req, res) => {
-    res.sendFile(path.join(process.cwd(), "src/views/auth/register/create_user.html"));
+    res.sendFile(path.join(process.cwd(), "src/views/auth/register.html"));
 };
 
 export const logout = async (req, res) => {

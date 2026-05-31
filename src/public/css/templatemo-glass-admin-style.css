@@ -1,10 +1,4 @@
 /* ============================================
-   TemplateMo 3D Glassmorphism Dashboard
-   https://templatemo.com
-   CSS Stylesheet
-============================================ */
-
-/* ============================================
    CSS CUSTOM PROPERTIES
 ============================================ */
 :root {
@@ -223,6 +217,8 @@ a {
     display: flex;
     flex-direction: column;
     z-index: 100;
+    overflow-y: auto;
+    overflow-x: hidden;
     transition: transform var(--transition-normal);
 }
 
@@ -1598,6 +1594,59 @@ a {
     border-color: var(--emerald-light);
 }
 
+/* ============================================
+   OPERATIONAL PAGES
+============================================ */
+.operational-grid {
+    grid-template-columns: minmax(0, 2fr) minmax(320px, 0.8fr);
+    align-items: start;
+}
+
+.operational-table {
+    grid-column: span 1;
+}
+
+.operational-panel {
+    padding: 28px;
+}
+
+.operational-form {
+    margin-top: 20px;
+}
+
+.operational-form .form-group {
+    margin-bottom: 18px;
+}
+
+.operational-submit {
+    margin-top: 6px;
+}
+
+.operational-message {
+    min-height: 20px;
+    margin-top: 16px;
+    font-size: 13px;
+    color: var(--text-muted);
+}
+
+.operational-message[data-type="success"] {
+    color: var(--success);
+}
+
+.operational-message[data-type="error"] {
+    color: var(--coral);
+}
+
+.operational-message[data-type="info"] {
+    color: var(--emerald-light);
+}
+
+@media (max-width: 1200px) {
+    .operational-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
 .divider {
     display: flex;
     align-items: center;
@@ -2231,4 +2280,27 @@ a {
 
 .login-card {
     animation: fadeInUp 0.6s ease-out;
+}
+
+.empty-table-message {
+    color: var(--text-muted);
+    text-align: center;
+    padding: 28px 16px !important;
+}
+
+.table-actions {
+    display: flex;
+    gap: 8px;
+    min-width: 170px;
+}
+
+.operational-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.pending-action {
+    cursor: not-allowed;
+    opacity: 0.72;
 }

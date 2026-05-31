@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {// Remove a classe no-trans
 
         // Aqui estamos a simular autenticação
         localStorage.setItem('email', email);
-        localStorage.setItem('password', password);
+        localStorage.removeItem('password');
         // Mantemos preferência de tema (se existir)
         window.location.href = '/';
       });
@@ -66,10 +66,9 @@ document.addEventListener('DOMContentLoaded', () => {// Remove a classe no-trans
 
     if (onIndex) {
       const email = localStorage.getItem('email');
-      const password = localStorage.getItem('password');
 
       // Se não estivermos logados, força o redirect para login
-      if (!email || !password) {
+      if (!email) {
         console.warn('Usuário não autenticado — redirecionando para login.');
         window.location.href = '/auth/form-login';
         return;

@@ -12,18 +12,22 @@ const bancaRepo = Repository(tabela);
 
 export const BancaModel = {
   async findAll() {
-    return await cursoRepo.findAll();
+    return await bancaRepo.findAll();
   },
 
   async findById(id) {
-    return await cursoRepo.findById(id);
+    return await bancaRepo.findById(id);
   },
 
   async store(data) {
-    return await cursoRepo.store(data);
+    return await bancaRepo.store(data);
+  },
+
+  async update(id, data) {
+    return await bancaRepo.update(id, data);
   },
 
   async deleteById(id) {
-    return await cursoRepo.deleteById(id);
+    return await bancaRepo.deleteById(id);
   },
 };

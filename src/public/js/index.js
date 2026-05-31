@@ -3,10 +3,10 @@ document.addEventListener('DOMContentLoaded', () => {// Remove a classe no-trans
 
     const tipo = 'aluno';
     const email = localStorage.getItem('email');
-    const password = localStorage.getItem('password');
+    const logoutBtn = document.getElementById('logout-btn');
 
     // Se não estivermos logados, força o redirect para login
-    if (!email || !password) {
+    if (!email) {
         console.warn('Usuário não autenticado — redirecionando para login.');
         window.location.href = '/auth/form-login';
         return;

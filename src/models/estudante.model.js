@@ -27,6 +27,10 @@ export const EstudanteModel = {
     return await estudanteRepo.store(data);
   },
 
+  async update(id, data) {
+    return await estudanteRepo.update(id, data);
+  },
+
   async deleteById(id) {
     return await estudanteRepo.deleteById(id);
   },
