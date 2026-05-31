@@ -10,14 +10,14 @@ export const index = async (req, res) => {
 export const show = async (req, res) => {
   try {
     const user = await UserService.buscarPorId(req.params.id);
-    res.render("users/show", { user });
+    res.sendFile(path.join(process.cwd(), "src/views/users/show.html"));
   } catch (err) {
     res.status(404).send(err.message);
   }
 };
 
 export const createForm = async (req, res) => {
-  res.render("users/create");
+  res.sendFile(path.join(process.cwd(), "src/views/users/create.html"));
 };
 
 export const store = async (req, res) => {

@@ -29,6 +29,32 @@ function Repository(table) {
       }
     },
 
+    async findByName(name) {
+      try {
+        const [rows] = await pool.query(
+          `SELECT * FROM ${table.nome} WHERE nome = ?`,
+          [name]
+        );
+        return rows[0];
+      } catch (error) {
+        console.error("Erro ao buscar pelo Nome:", error);
+        throw error;
+      }
+    },
+
+    async findByEmail(email) {
+      try {
+        const [rows] = await pool.query(
+          `SELECT * FROM ${table.nome} WHERE email = ?`,
+          [email]
+        );
+        return rows[0];
+      } catch (error) {
+        console.error("Erro ao buscar pelo Email:", error);
+        throw error;
+      }
+    },
+
     async store(entity) {
       try {
         const values = nomes_colunas.map((coluna) => entity[coluna]);

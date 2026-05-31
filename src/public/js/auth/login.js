@@ -4,26 +4,26 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   try {
     const roles = await window.ApiClient.get("/roles");
-    roles.forEach((role) => {
+    /*roles.forEach((role) => {
       const newOption = document.createElement("option");
       newOption.value = role.nome;
       newOption.textContent = role.nome;
       roleList.append(newOption);
-    });
+    });*/
   } catch (error) {
     console.error("Não foi possível carregar os perfis.", error);
   }
 });
 
-document.getElementById('loginForm')?.addEventListener('submit', function(e) {
+document.getElementById('loginForm').addEventListener('submit', function(e) {
     e.preventDefault();
 
     const email = document.getElementById('email').value.trim();
     const password = document.getElementById('password').value;
 
     if (email && password) {
-      localStorage.setItem('email', email);
-      localStorage.removeItem('password');
+      localStorage.setItem('email', email);//
+      localStorage.setItem('password', password);//
 
       console.log('Usuário autenticado:', email);
       console.log('Redirecionando para a página principal...');
@@ -31,6 +31,7 @@ document.getElementById('loginForm')?.addEventListener('submit', function(e) {
       // Redirecionar
       window.location.href = '/';
     } else {
-      alert("Preencha todos os campos.");
+      console.log('Erro ao autenticar:', data.message);
+        window.alert(data.message || "Erro ao autenticar. Tente novamente.");
     }
 });

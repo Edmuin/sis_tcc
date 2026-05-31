@@ -7,6 +7,8 @@ import { PATHS } from "../../paths.js";
 import authRoutes from "./routes/auth-routes.js";
 import systemRoutes from "./routes/system-routes.js";
 import userRoutes from "./routes/user-routes.js";
+import { criarTodasTabelas } from "../../database/index.js";
+import { configSession } from "./session/index.js";
 import operationalRoutes from "./routes/operational-routes.js";
 
 dotenv.config();
@@ -17,14 +19,25 @@ app.use(express.static(PATHS.public));
 app.use("/uploads", express.static(path.resolve("uploads")));
 
 // Middlewares para ler formulários
+
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+
+configSession(app);
+
+const port = process.env.PORT || 3000;
 
 app.use("/", systemRoutes);
 app.use("/auth", authRoutes);
 app.use("/users", userRoutes);
 app.use("/api", operationalRoutes);
 
+const startServer = async () => {
+  await criarTodasTabelas();
+  app.listen(port, () => {
+    console.log(`Server On Fire on port: http://localhost:${port}`);
+  });
+};
 app.get("/", (req, res) => {
     res.sendFile(path.join(PATHS.views, "index_new.html"));
 });
@@ -69,4 +82,4 @@ app.use((req, res) => {
     `);
 });
 
-export default app;
+export default { app, startServer };

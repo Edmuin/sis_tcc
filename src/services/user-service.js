@@ -6,8 +6,8 @@ export const UserService = {
   },
 
   async gravar(dados) {
-    if (!dados.name || !dados.email)
-      throw new Error("Nome e email são obrigatórios.");
+    if (!dados.fullname || !dados.email)
+      throw new Error("Nome completo e email são obrigatórios.");
 
     const novo = await UserModel.store(dados);
     return novo;
@@ -15,6 +15,12 @@ export const UserService = {
 
   async buscarPorId(id) {
     const user = await UserModel.findById(id);
+    if (!user) throw new Error("Usuário não encontrado.");
+    return user;
+  },
+
+  async buscarPorEmail(email) {
+    const user = await UserModel.findByEmail(email);
     if (!user) throw new Error("Usuário não encontrado.");
     return user;
   },

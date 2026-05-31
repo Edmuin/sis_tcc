@@ -75,12 +75,26 @@ export const criarTabelaBanca = async () => {
   await pool.query(query);
 }
 
+export const criarTabelaAreaFormacao = async () => {
+  const query = `
+    CREATE TABLE IF NOT EXISTS area_formacao (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      nome VARCHAR(50) NOT NULL,
+      descricao VARCHAR(255),
+      created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+      updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    )
+  `;
+  await pool.query(query);
+}
+
 export const criarTabelaCurso = async () => {
   const query = `
     CREATE TABLE IF NOT EXISTS curso (
       id INT AUTO_INCREMENT PRIMARY KEY,
       nome VARCHAR(50) NOT NULL,
       descricao VARCHAR(255),
+      area_formacao_id INT NOT NULL,
       created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
       updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
     )
@@ -211,14 +225,17 @@ export const criarTabelaUser = async () => {
   const query = `
     CREATE TABLE IF NOT EXISTS user (
       id INT AUTO_INCREMENT PRIMARY KEY,
-      nome VARCHAR(255) NOT NULL,
+      fullname VARCHAR(255) NOT NULL,
       email VARCHAR(255) NOT NULL UNIQUE,
-      password VARCHAR(255) NOT NULL,
       telefone VARCHAR(20),
       idade INT NOT NULL DEFAULT 17,
       genero VARCHAR(10),
-      foto VARCHAR(255),
       role_id INT,
+      n_processo VARCHAR(50) NULL,
+      curso VARCHAR(50) NULL,
+      area_formacao VARCHAR(50) NULL,
+      n_mecanografico VARCHAR(50) NULL,
+      password VARCHAR(255) NOT NULL,
       created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
       updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
     )
@@ -229,7 +246,7 @@ export const criarTabelaUser = async () => {
 export const dadosDeRoles = async () => {
   const query = `
     INSERT IGNORE INTO role (nome, descricao) VALUES
-      ('orientador', NULL),
+      ('tutor', NULL),
       ('aluno', NULL),
       ('coordenador', NULL)
   `;
@@ -240,6 +257,7 @@ export const criarTodasTabelas = async () => {
   await criarTabelaRole();
   await dadosDeRoles();
   await criarTabelaUser();
+  await criarTabelaAreaFormacao();
   await criarTabelaCurso();
   await criarTabelaEstudante();
   await criarTabelaProfessor();

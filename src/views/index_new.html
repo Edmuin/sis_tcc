@@ -401,8 +401,16 @@
         <p style="justify-content: center;">Copyright © 2026 Gestor TCC. Desenvolvido por <a href="index_new.html" target="_blank" rel="nofollow">H & B</a></p>
     </footer>
 
-    <script src="/js/api-client.js"></script>
     <script src="/js/templatemo-glass-admin-script.js"></script>
+    <script src="/js/api-client.js"></script>
     <script src="/js/dashboard-page.js"></script>
+    <!-- TemplateMo 607 Glass Admin -->
+
+    <script>
+        const user = JSON.parse(localStorage.getItem('user'));
+        const token = localStorage.getItem('token');
+        console.log('User:', user);
+        console.log('Token:', token);
+    </script>
 </body>
 </html>

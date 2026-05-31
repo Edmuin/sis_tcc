@@ -19,6 +19,10 @@ export const RoleModel = {
     return await roleRepo.findById(id);
   },
 
+  async findByName(name) {
+    return await roleRepo.findByName(name);
+  },
+
   async store(data) {
     return await roleRepo.store(data);
   },
