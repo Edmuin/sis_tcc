@@ -1,6 +1,5 @@
 import { pool } from "./mysql/db.js";
 
-// ...existing code...
 export const criarTabelaAprovacaoBanca = async () => {
   const query = `
     CREATE TABLE IF NOT EXISTS aprovacao_banca (
@@ -24,12 +23,13 @@ export const criarTabelaAprovacaoDefesa = async () => {
       id_tcc INT NOT NULL,
       id_subdireccao INT NOT NULL,
       status INT,
-      observacao INT NOT NULL,
+      observacao VARCHAR(100) NOT NULL,
       created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
       updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
     )
   `;
   await pool.execute(query);
+  await pool.execute("ALTER TABLE aprovacao_defesa MODIFY COLUMN observacao VARCHAR(100) NOT NULL");
 }
 
 export const criarTabelaAprovacaoTcc = async () => {

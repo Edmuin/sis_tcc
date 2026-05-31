@@ -23,6 +23,10 @@ export const SubdireccaoModel = {
     return await subdireccaoRepo.store(data);
   },
 
+  async update(id, data) {
+    return await subdireccaoRepo.update(id, data);
+  },
+
   async deleteById(id) {
     return await subdireccaoRepo.deleteById(id);
   },

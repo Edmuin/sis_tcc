@@ -24,6 +24,10 @@ export const ProfessorModel = {
     return await professorRepo.store(data);
   },
 
+  async update(id, data) {
+    return await professorRepo.update(id, data);
+  },
+
   async deleteById(id) {
     return await professorRepo.deleteById(id);
   },

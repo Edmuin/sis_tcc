@@ -27,6 +27,10 @@ export const RoleModel = {
     return await roleRepo.store(data);
   },
 
+  async update(id, data) {
+    return await roleRepo.update(id, data);
+  },
+
   async deleteById(id) {
     return await roleRepo.deleteById(id);
   },

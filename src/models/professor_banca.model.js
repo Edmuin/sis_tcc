@@ -23,6 +23,10 @@ export const ProfessorBancaModel = {
     return await prof_bancaRepo.store(data);
   },
 
+  async update(id, data) {
+    return await prof_bancaRepo.update(id, data);
+  },
+
   async deleteById(id) {
     return await prof_bancaRepo.deleteById(id);
   },

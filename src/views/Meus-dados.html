@@ -1,31 +1,24 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Settings - 3D Glassmorphism Dashboard</title>
-    <meta name="description" content="3D Glassmorphism Dashboard Template by TemplateMo">
+    <title>Meus Dados - Gestor TCC</title>
+    <meta name="description" content="Sistema de Gerenciamento de TCC">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/templatemo-glass-admin-style.css">
-    <!--
-
-TemplateMo 607 Glass Admin
-
-https://templatemo.com/tm-607-glass-admin
-
--->
 </head>
 <body>
-    <!-- Animated Background -->
+    
     <div class="background"></div>
     <div class="orb orb-1"></div>
     <div class="orb orb-2"></div>
     <div class="orb orb-3"></div>
 
     <div class="dashboard">
-        <!-- Sidebar -->
+        
        <aside class="sidebar" id="sidebar">
             <div class="sidebar-header">
                 <div class="logo">HB</div>
@@ -34,10 +27,10 @@ https://templatemo.com/tm-607-glass-admin
 
             <ul class="nav-menu">
                 <li class="nav-section">
-                    <span class="nav-section-title">Main Menu</span>
+                    <span class="nav-section-title">Menu Principal</span>
                     <ul>
                         <li class="nav-item">
-                            <a href="/PainelPrincipal" class="nav-link active">
+                            <a href="/PainelPrincipal" class="nav-link ">
                                 <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <rect x="3" y="3" width="7" height="7" rx="1"/>
                                     <rect x="14" y="3" width="7" height="7" rx="1"/>
@@ -59,40 +52,38 @@ https://templatemo.com/tm-607-glass-admin
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="" class="nav-link">
+                            <a href="/Agendar" class="nav-link">
                                 <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-                                    <circle cx="9" cy="7" r="4"/>
-                                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
-                                    <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                                    <line x1="16" y1="2" x2="16" y2="6"/>
+                                    <line x1="8" y1="2" x2="8" y2="6"/>
+                                    <line x1="3" y1="10" x2="21" y2="10"/>
+                                    <path d="M8 14h.01"/>
+                                    <path d="M12 14h.01"/>
+                                    <path d="M16 14h.01"/>
+                                    <path d="M8 18h.01"/>
+                                    <path d="M12 18h.01"/>
                                 </svg>
                                 Defesas
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="/MeusDados" class="nav-link">
-                                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <circle cx="12" cy="12" r="3"/>
-                                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 a= "M6.34" l= "17.66" a= "M19.07" l= "M12" a= "M12" a= "M4.93" l= "M17.66" l= "M2" a= "M20" a= "M6.34" l= "M19.07" l= ""/>
-                                </svg>
-                                Meus Dados
                             </a>
                         </li>
                     </ul>
                 </li>
                 
                  <li class="nav-item">
-                            <a href="" class="nav-link">
+                            <a href="#" class="nav-link">
                                 <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <circle cx="12" cy="12" r="3"/>
                                     <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
                                 </svg>
                                 <summary>Configurações</summary>
+                            </a>
                                 <ol class="submenu">
                                     <li><a href="/ConfigUtilizadores">Utilizadores</a></li>
+                                    <li><a href="/AreadeFormacao">Área de Formação</a></li>
+                                    <li><a href="/Curso">Cursos</a></li>
                                     <li><a href="/ConfigSobre">Sobre</a></li>
                                 </ol>
-                            </a>
                         </li>
                     </ul>
                 </li>
@@ -100,7 +91,16 @@ https://templatemo.com/tm-607-glass-admin
                     <span class="nav-section-title">Conta</span>
                     <ul>
                         <li class="nav-item">
-                            <a href="/form-login" class="nav-link">
+                            <a href="/MeusDados" class="nav-link active" data-route="/MeusDados">
+                                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                                    <circle cx="12" cy="7" r="4"/>
+                                </svg>
+                                Meus Dados
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/auth/form-login" class="nav-link">
                                 <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
                                     <polyline points="16 17 21 12 16 7"/>
@@ -118,7 +118,7 @@ https://templatemo.com/tm-607-glass-admin
                     <div class="user-avatar">HB</div>
                     <div class="user-info">
                         <div class="user-name">H & B</div>
-                        <div class="user-role">Administrator</div>
+                        <div class="user-role">Administrador</div>
                     </div>
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <polyline points="6 9 12 15 18 9"/>
@@ -134,7 +134,7 @@ https://templatemo.com/tm-607-glass-admin
                 <div class="page-header">
                     <h1 class="page-title">Meus Dados</h1>
                     <div class="page-breadcrumb">
-                        <a href="/">Dashboard</a>
+                        <a href="/">Painel</a>
                         <span>/</span>
                         <span>Meus Dados</span>
                     </div>
@@ -146,7 +146,7 @@ https://templatemo.com/tm-607-glass-admin
                         </svg>
                         <span class="notification-dot"></span>
                     </button>
-                    <button class="nav-btn" id="theme-toggle" title="Toggle Light/Dark Mode">
+                    <button class="nav-btn" id="theme-toggle" title="Alternar tema">
                         <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/>
                             <path d="M4.93 4.93l1.41 1.41"/><path d="M17.66 17.66l1.41 1.41"/>
@@ -179,39 +179,39 @@ https://templatemo.com/tm-607-glass-admin
                                 </div>
                             </div>
                             <div class="profile-info">
-                                <h2>Desconhecido</h2>
-                                <p>admin@templatemo.com • Administrator</p>
+                                <h2>Utilizador</h2>
+                                <p>admin@gestortcc.local • Administrador</p>
                             </div>
                         </div>
 
                         <div class="settings-section">
-                            <h3 class="settings-section-title">Profile Information</h3>
+                            <h3 class="settings-section-title">Informações Pessoais</h3>
                             <div class="form-grid">
                                 <div class="form-group-settings">
-                                    <label>First Name</label>
-                                    <input type="text" value="Template">
+                                    <label>Nome</label>
+                                    <input type="text" value="Helder">
                                 </div>
                                 <div class="form-group-settings">
-                                    <label>Last Name</label>
-                                    <input type="text" value="Mo">
+                                    <label>Sobrenome</label>
+                                    <input type="text" value="Benvindo">
                                 </div>
                                 <div class="form-group-settings">
-                                    <label>Email Address</label>
-                                    <input type="email" value="admin@templatemo.com">
+                                    <label>E-mail</label>
+                                    <input type="email" value="admin@gestortcc.local">
                                 </div>
                                 <div class="form-group-settings">
-                                    <label>Phone Number</label>
-                                    <input type="tel" value="+1 (555) 123-4567">
+                                    <label>Telefone</label>
+                                    <input type="tel" value="+244 900 000 000">
                                 </div>
                                 <div class="form-group-settings full-width">
-                                    <label>Bio</label>
-                                    <textarea>Dashboard template creator and web design enthusiast. Building beautiful interfaces for modern applications.</textarea>
+                                    <label>Resumo acadêmico</label>
+                                    <textarea>Utilizador do sistema académico para acompanhamento de TCCs.</textarea>
                                 </div>
                             </div>
                         </div>
 
                         <div class="settings-section">
-                            <h3 class="settings-section-title">Preferences</h3>
+                            <h3 class="settings-section-title">Dados Acadêmicos</h3>
                             <div class="settings-row">
                                 <div class="settings-label">
                                     <span class="settings-label-title">Orientador</span>
@@ -238,37 +238,37 @@ https://templatemo.com/tm-607-glass-admin
                             </div>
 
                         <div class="btn-group">
-                            <button class="btn btn-primary" style="width: auto;">Save Changes</button>
-                            <button class="btn btn-secondary" style="width: auto;">Cancel</button>
+                            <button class="btn btn-primary" style="width: auto;">Guardar Alterações</button>
+                            <button class="btn btn-secondary" style="width: auto;">Cancelar</button>
                         </div>
                     </div>
 
                     <!-- Security Tab -->
                     <div class="settings-tab-content" id="tab-security">
                         <div class="settings-section">
-                            <h3 class="settings-section-title">Change Password</h3>
+                            <h3 class="settings-section-title">Alterar Senha</h3>
                             <div class="form-grid">
                                 <div class="form-group-settings full-width">
-                                    <label>Current Password</label>
-                                    <input type="password" placeholder="Enter current password">
+                                    <label>Senha Atual</label>
+                                    <input type="password" placeholder="Informe a senha atual">
                                 </div>
                                 <div class="form-group-settings">
-                                    <label>New Password</label>
-                                    <input type="password" placeholder="Enter new password">
+                                    <label>Nova Senha</label>
+                                    <input type="password" placeholder="Informe a nova senha">
                                 </div>
                                 <div class="form-group-settings">
-                                    <label>Confirm New Password</label>
-                                    <input type="password" placeholder="Confirm new password">
+                                    <label>Confirm Nova Senha</label>
+                                    <input type="password" placeholder="Confirme a nova senha">
                                 </div>
                             </div>
                         </div>
 
                         <div class="settings-section">
-                            <h3 class="settings-section-title">Two-Factor Authentication</h3>
+                            <h3 class="settings-section-title">Autenticação em Duas Etapas</h3>
                             <div class="settings-row">
                                 <div class="settings-label">
-                                    <span class="settings-label-title">Enable 2FA</span>
-                                    <span class="settings-label-desc">Add an extra layer of security to your account</span>
+                                    <span class="settings-label-title">Ativar 2FA</span>
+                                    <span class="settings-label-desc">Aumenta a segurança da sua conta</span>
                                 </div>
                                 <label class="toggle-switch">
                                     <input type="checkbox">
@@ -277,8 +277,8 @@ https://templatemo.com/tm-607-glass-admin
                             </div>
                             <div class="settings-row">
                                 <div class="settings-label">
-                                    <span class="settings-label-title">SMS Authentication</span>
-                                    <span class="settings-label-desc">Receive codes via SMS</span>
+                                    <span class="settings-label-title">Autenticação por SMS</span>
+                                    <span class="settings-label-desc">Receber códigos por SMS</span>
                                 </div>
                                 <label class="toggle-switch">
                                     <input type="checkbox" checked>
@@ -287,8 +287,8 @@ https://templatemo.com/tm-607-glass-admin
                             </div>
                             <div class="settings-row">
                                 <div class="settings-label">
-                                    <span class="settings-label-title">Authenticator App</span>
-                                    <span class="settings-label-desc">Use Google Authenticator or similar</span>
+                                    <span class="settings-label-title">Aplicação autenticadora</span>
+                                    <span class="settings-label-desc">Usar Google Authenticator ou semelhante</span>
                                 </div>
                                 <label class="toggle-switch">
                                     <input type="checkbox">
@@ -298,44 +298,44 @@ https://templatemo.com/tm-607-glass-admin
                         </div>
 
                         <div class="settings-section">
-                            <h3 class="settings-section-title">Active Sessions</h3>
+                            <h3 class="settings-section-title">Sessões Ativas</h3>
                             <div class="settings-row">
                                 <div class="settings-label">
-                                    <span class="settings-label-title">Chrome on MacOS</span>
-                                    <span class="settings-label-desc">San Francisco, CA • Current session</span>
+                                    <span class="settings-label-title">Navegador principal</span>
+                                    <span class="settings-label-desc">Luanda, Angola • Sessão atual</span>
                                 </div>
-                                <span class="status-badge completed">Active</span>
+                                <span class="status-badge completed">Ativa</span>
                             </div>
                             <div class="settings-row">
                                 <div class="settings-label">
-                                    <span class="settings-label-title">Safari on iPhone</span>
-                                    <span class="settings-label-desc">San Francisco, CA • 2 hours ago</span>
+                                    <span class="settings-label-title">Dispositivo móvel</span>
+                                    <span class="settings-label-desc">Luanda, Angola • Há 2 horas</span>
                                 </div>
-                                <button class="card-btn" style="padding: 6px 12px;">Revoke</button>
+                                <button class="card-btn" style="padding: 6px 12px;">Revogar</button>
                             </div>
                             <div class="settings-row">
                                 <div class="settings-label">
-                                    <span class="settings-label-title">Firefox on Windows</span>
-                                    <span class="settings-label-desc">New York, NY • 3 days ago</span>
+                                    <span class="settings-label-title">Outro navegador</span>
+                                    <span class="settings-label-desc">Luanda, Angola • Há 3 dias</span>
                                 </div>
-                                <button class="card-btn" style="padding: 6px 12px;">Revoke</button>
+                                <button class="card-btn" style="padding: 6px 12px;">Revogar</button>
                             </div>
                         </div>
 
                         <div class="btn-group">
-                            <button class="btn btn-primary" style="width: auto;">Update Password</button>
-                            <button class="btn btn-secondary" style="width: auto;">Cancel</button>
+                            <button class="btn btn-primary" style="width: auto;">Atualizar Senha</button>
+                            <button class="btn btn-secondary" style="width: auto;">Cancelar</button>
                         </div>
                     </div>
 
                     <!-- Notifications Tab -->
                     <div class="settings-tab-content" id="tab-notifications">
                         <div class="settings-section">
-                            <h3 class="settings-section-title">Email Notifications</h3>
+                            <h3 class="settings-section-title">Notificações por E-mail</h3>
                             <div class="settings-row">
                                 <div class="settings-label">
-                                    <span class="settings-label-title">Account Activity</span>
-                                    <span class="settings-label-desc">Get notified about sign-ins and security changes</span>
+                                    <span class="settings-label-title">Atividade da Conta</span>
+                                    <span class="settings-label-desc">Receber avisos sobre acessos e segurança</span>
                                 </div>
                                 <label class="toggle-switch">
                                     <input type="checkbox" checked>
@@ -344,8 +344,8 @@ https://templatemo.com/tm-607-glass-admin
                             </div>
                             <div class="settings-row">
                                 <div class="settings-label">
-                                    <span class="settings-label-title">New Features</span>
-                                    <span class="settings-label-desc">Learn about new features and updates</span>
+                                    <span class="settings-label-title">Atualizações do Sistema</span>
+                                    <span class="settings-label-desc">Receber avisos sobre mudanças no sistema</span>
                                 </div>
                                 <label class="toggle-switch">
                                     <input type="checkbox" checked>
@@ -354,8 +354,8 @@ https://templatemo.com/tm-607-glass-admin
                             </div>
                             <div class="settings-row">
                                 <div class="settings-label">
-                                    <span class="settings-label-title">Weekly Reports</span>
-                                    <span class="settings-label-desc">Receive weekly analytics summary</span>
+                                    <span class="settings-label-title">Relatórios Semanais</span>
+                                    <span class="settings-label-desc">Receber resumo semanal do TCC</span>
                                 </div>
                                 <label class="toggle-switch">
                                     <input type="checkbox">
@@ -364,8 +364,8 @@ https://templatemo.com/tm-607-glass-admin
                             </div>
                             <div class="settings-row">
                                 <div class="settings-label">
-                                    <span class="settings-label-title">Marketing Emails</span>
-                                    <span class="settings-label-desc">Receive news about promotions and offers</span>
+                                    <span class="settings-label-title">Comunicados Acadêmicos</span>
+                                    <span class="settings-label-desc">Receber avisos da coordenação</span>
                                 </div>
                                 <label class="toggle-switch">
                                     <input type="checkbox">
@@ -375,11 +375,11 @@ https://templatemo.com/tm-607-glass-admin
                         </div>
 
                         <div class="settings-section">
-                            <h3 class="settings-section-title">Push Notifications</h3>
+                            <h3 class="settings-section-title">Notificações no Sistema</h3>
                             <div class="settings-row">
                                 <div class="settings-label">
-                                    <span class="settings-label-title">Desktop Notifications</span>
-                                    <span class="settings-label-desc">Show notifications on your desktop</span>
+                                    <span class="settings-label-title">Notificações no computador</span>
+                                    <span class="settings-label-desc">Mostrar notificações no computador</span>
                                 </div>
                                 <label class="toggle-switch">
                                     <input type="checkbox" checked>
@@ -388,8 +388,8 @@ https://templatemo.com/tm-607-glass-admin
                             </div>
                             <div class="settings-row">
                                 <div class="settings-label">
-                                    <span class="settings-label-title">Mobile Push</span>
-                                    <span class="settings-label-desc">Receive push notifications on mobile</span>
+                                    <span class="settings-label-title">Notificações móveis</span>
+                                    <span class="settings-label-desc">Receber notificações no telemóvel</span>
                                 </div>
                                 <label class="toggle-switch">
                                     <input type="checkbox" checked>
@@ -398,8 +398,8 @@ https://templatemo.com/tm-607-glass-admin
                             </div>
                             <div class="settings-row">
                                 <div class="settings-label">
-                                    <span class="settings-label-title">Sound</span>
-                                    <span class="settings-label-desc">Play sound for notifications</span>
+                                    <span class="settings-label-title">Som</span>
+                                    <span class="settings-label-desc">Reproduzir som nas notificações</span>
                                 </div>
                                 <label class="toggle-switch">
                                     <input type="checkbox">
@@ -409,47 +409,47 @@ https://templatemo.com/tm-607-glass-admin
                         </div>
 
                         <div class="btn-group">
-                            <button class="btn btn-primary" style="width: auto;">Save Preferences</button>
-                            <button class="btn btn-secondary" style="width: auto;">Reset to Default</button>
+                            <button class="btn btn-primary" style="width: auto;">Guardar Dados Acadêmicos</button>
+                            <button class="btn btn-secondary" style="width: auto;">Repor Padrão</button>
                         </div>
                     </div>
 
                     <!-- Appearance Tab -->
                     <div class="settings-tab-content" id="tab-appearance">
                         <div class="settings-section">
-                            <h3 class="settings-section-title">Theme</h3>
+                            <h3 class="settings-section-title">Tema</h3>
                             <div class="settings-row">
                                 <div class="settings-label">
-                                    <span class="settings-label-title">Color Mode</span>
-                                    <span class="settings-label-desc">Choose your preferred color mode</span>
+                                    <span class="settings-label-title">Modo de cor</span>
+                                    <span class="settings-label-desc">Escolha o modo de cor preferido</span>
                                 </div>
                                 <select class="settings-select" id="theme-select">
-                                    <option value="dark">Dark Mode</option>
-                                    <option value="light">Light Mode</option>
-                                    <option value="system">System Default</option>
+                                    <option value="dark">Modo Escuro</option>
+                                    <option value="light">Modo Claro</option>
+                                    <option value="system">Padrão do Sistema</option>
                                 </select>
                             </div>
                             <div class="settings-row">
                                 <div class="settings-label">
-                                    <span class="settings-label-title">Accent Color</span>
-                                    <span class="settings-label-desc">Choose your preferred accent color</span>
+                                    <span class="settings-label-title">Cor de destaque</span>
+                                    <span class="settings-label-desc">Escolha a cor de destaque</span>
                                 </div>
                                 <select class="settings-select">
-                                    <option>Emerald (Default)</option>
-                                    <option>Blue</option>
-                                    <option>Purple</option>
-                                    <option>Orange</option>
-                                    <option>Pink</option>
+                                    <option>Esmeralda (Padrão)</option>
+                                    <option>Azul</option>
+                                    <option>Roxo</option>
+                                    <option>Laranja</option>
+                                    <option>Rosa</option>
                                 </select>
                             </div>
                         </div>
 
                         <div class="settings-section">
-                            <h3 class="settings-section-title">Display</h3>
+                            <h3 class="settings-section-title">Visualização</h3>
                             <div class="settings-row">
                                 <div class="settings-label">
-                                    <span class="settings-label-title">Compact Mode</span>
-                                    <span class="settings-label-desc">Reduce spacing for more content</span>
+                                    <span class="settings-label-title">Modo Compacto</span>
+                                    <span class="settings-label-desc">Reduzir espaçamento para mostrar mais conteúdo</span>
                                 </div>
                                 <label class="toggle-switch">
                                     <input type="checkbox">
@@ -458,8 +458,8 @@ https://templatemo.com/tm-607-glass-admin
                             </div>
                             <div class="settings-row">
                                 <div class="settings-label">
-                                    <span class="settings-label-title">Animations</span>
-                                    <span class="settings-label-desc">Enable smooth animations and transitions</span>
+                                    <span class="settings-label-title">Animações</span>
+                                    <span class="settings-label-desc">Ativar animações e transições</span>
                                 </div>
                                 <label class="toggle-switch">
                                     <input type="checkbox" checked>
@@ -468,8 +468,8 @@ https://templatemo.com/tm-607-glass-admin
                             </div>
                             <div class="settings-row">
                                 <div class="settings-label">
-                                    <span class="settings-label-title">Blur Effects</span>
-                                    <span class="settings-label-desc">Enable glassmorphism blur effects</span>
+                                    <span class="settings-label-title">Efeito de Vidro</span>
+                                    <span class="settings-label-desc">Ativar efeito de vidro</span>
                                 </div>
                                 <label class="toggle-switch">
                                     <input type="checkbox" checked>
@@ -478,8 +478,8 @@ https://templatemo.com/tm-607-glass-admin
                             </div>
                             <div class="settings-row">
                                 <div class="settings-label">
-                                    <span class="settings-label-title">Floating Orbs</span>
-                                    <span class="settings-label-desc">Show animated background orbs</span>
+                                    <span class="settings-label-title">Fundo Animado</span>
+                                    <span class="settings-label-desc">Mostrar fundo animado</span>
                                 </div>
                                 <label class="toggle-switch">
                                     <input type="checkbox" checked>
@@ -489,91 +489,91 @@ https://templatemo.com/tm-607-glass-admin
                         </div>
 
                         <div class="btn-group">
-                            <button class="btn btn-primary" style="width: auto;">Apply Changes</button>
-                            <button class="btn btn-secondary" style="width: auto;">Reset to Default</button>
+                            <button class="btn btn-primary" style="width: auto;">Aplicar Alterações</button>
+                            <button class="btn btn-secondary" style="width: auto;">Repor Padrão</button>
                         </div>
                     </div>
 
-                    <!-- Billing Tab -->
+                    <!-- Academic History Tab -->
                     <div class="settings-tab-content" id="tab-billing">
                         <div class="settings-section">
-                            <h3 class="settings-section-title">Current Plan</h3>
+                            <h3 class="settings-section-title">Resumo do TCC</h3>
                             <div class="billing-plan-card" style="background: linear-gradient(135deg, rgba(5, 150, 105, 0.15), rgba(212, 165, 116, 0.15)); padding: 24px; border-radius: 16px; margin-bottom: 20px; border: 1px solid var(--glass-border);">
                                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
                                     <div>
-                                        <h4 style="font-size: 20px; font-weight: 600; margin-bottom: 4px;">Pro Plan</h4>
-                                        <p style="color: var(--text-muted); font-size: 14px;">Billed monthly</p>
+                                        <h4 style="font-size: 20px; font-weight: 600; margin-bottom: 4px;">Sistema de Gestão de TCC</h4>
+                                        <p style="color: var(--text-muted); font-size: 14px;">Orientador: por definir</p>
                                     </div>
                                     <div style="text-align: right;">
-                                        <span style="font-family: 'Space Mono', monospace; font-size: 32px; font-weight: 700;">$29</span>
-                                        <span style="color: var(--text-muted);">/month</span>
+                                        <span style="font-family: 'Space Mono', monospace; font-size: 32px; font-weight: 700;">75%</span>
+                                        <span style="color: var(--text-muted);">concluído</span>
                                     </div>
                                 </div>
                                 <div style="display: flex; gap: 12px;">
-                                    <button class="btn btn-primary" style="width: auto; padding: 10px 20px;">Upgrade Plan</button>
-                                    <button class="btn btn-secondary" style="width: auto; padding: 10px 20px;">Cancel Subscription</button>
+                                    <button class="btn btn-primary" style="width: auto; padding: 10px 20px;">Atualizar TCC</button>
+                                    <button class="btn btn-secondary" style="width: auto; padding: 10px 20px;">Enviar Documento</button>
                                 </div>
                             </div>
                         </div>
 
                         <div class="settings-section">
-                            <h3 class="settings-section-title">Payment Method</h3>
+                            <h3 class="settings-section-title">Documentos Recentes</h3>
                             <div class="settings-row">
                                 <div class="settings-label" style="display: flex; align-items: center; gap: 16px;">
-                                    <div style="width: 48px; height: 32px; background: linear-gradient(135deg, #1a1f71, #00579f); border-radius: 6px; display: flex; align-items: center; justify-content: center;">
-                                        <span style="color: white; font-size: 10px; font-weight: bold;">VISA</span>
+                                    <div style="width: 48px; height: 32px; background: linear-gradient(135deg, var(--emerald), var(--gold)); border-radius: 6px; display: flex; align-items: center; justify-content: center;">
+                                        <span style="color: white; font-size: 10px; font-weight: bold;">PDF</span>
                                     </div>
                                     <div>
-                                        <span class="settings-label-title">Visa ending in 4242</span>
-                                        <span class="settings-label-desc">Expires 12/2026</span>
+                                        <span class="settings-label-title">Relatório parcial</span>
+                                        <span class="settings-label-desc">Submetido em 24/05/2026</span>
                                     </div>
                                 </div>
-                                <button class="card-btn" style="padding: 6px 12px;">Edit</button>
+                                <button class="card-btn" style="padding: 6px 12px;">Ver</button>
                             </div>
                             <div style="margin-top: 16px;">
                                 <button class="btn btn-secondary" style="width: auto; padding: 10px 20px;">
                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 8px;">
                                         <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
                                     </svg>
-                                    Add Payment Method
+                                    Adicionar Documento
                                 </button>
                             </div>
                         </div>
 
                         <div class="settings-section">
-                            <h3 class="settings-section-title">Billing History</h3>
+                            <h3 class="settings-section-title">Histórico Acadêmico</h3>
                             <div class="table-wrapper" style="margin: 0;">
                                 <table class="data-table" style="min-width: 100%;">
                                     <thead>
                                         <tr>
-                                            <th>Date</th>
-                                            <th>Description</th>
-                                            <th>Amount</th>
-                                            <th>Status</th>
-                                            <th>Invoice</th>
+                                            <th>Data</th>
+                                            <th>Atividade</th>
+                                            <th>Responsável</th>
+                                            <th>Estado</th>
+                                            <th>Documento</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td>Jan 1, 2025</td>
-                                            <td>Pro Plan - Monthly</td>
-                                            <td><span class="table-amount">$29.00</span></td>
-                                            <td><span class="status-badge completed">Paid</span></td>
-                                            <td><a href="#" style="color: var(--emerald-light);">Download</a></td>
+                                            <td>12/05/2026</td>
+                                            <td>Proposta de TCC submetida</td>
+                                            <td>Estudante</td>
+                                            <td><span class="status-badge completed">Recebido</span></td>
+                                            <td><a href="#" style="color: var(--emerald-light);">Ver</a></td>
                                         </tr>
                                         <tr>
-                                            <td>Dec 1, 2024</td>
-                                            <td>Pro Plan - Monthly</td>
-                                            <td><span class="table-amount">$29.00</span></td>
-                                            <td><span class="status-badge completed">Paid</span></td>
-                                            <td><a href="#" style="color: var(--emerald-light);">Download</a></td>
+                                            <td>18/05/2026</td>
+                                            <td>Parecer do orientador</td>
+                                            <td>Orientador</td>
+                                            <td><span class="status-badge completed">Validado</span></td>
+                                            <td><a href="#" style="color: var(--emerald-light);">Ver</a></td>
                                         </tr>
                                         <tr>
-                                            <td>Nov 1, 2024</td>
-                                            <td>Pro Plan - Monthly</td>
-                                            <td><span class="table-amount">$29.00</span></td>
-                                            <td><span class="status-badge completed">Paid</span></td>
-                                            <td><a href="#" style="color: var(--emerald-light);">Download</a></td>
+                                            <td>24/05/2026</td>
+                                            <td>Correções solicitadas</td>
+                                            <td>Coordenação</td>
+                                            <td><span class="status-badge pending">Pendente</span></td>
+                                            <td><a href="#" style="color: var(--emerald-light);">Ver</a></td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -592,12 +592,11 @@ https://templatemo.com/tm-607-glass-admin
         </svg>
     </button>
 
-    <!-- Footer -->
+    
     <footer class="site-footer">
-        <p>Copyright © 2026 Your Company. Designed by <a href="https://templatemo.com" target="_blank" rel="nofollow">TemplateMo</a></p>
+        <p>Copyright © 2026 Gestor TCC. Desenvolvido por <a href="/PainelPrincipal" target="_blank" rel="nofollow">H&B</a></p>
     </footer>
 
-    <script src="templatemo-glass-admin-script.js"></script>
-    <!-- TemplateMo 607 Glass Admin -->
+    <script src="/js/templatemo-glass-admin-script.js"></script>
 </body>
 </html>

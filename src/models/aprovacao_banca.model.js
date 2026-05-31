@@ -29,6 +29,10 @@ export const AprovacaoBancaModel = {
     return await apro_bancaRepo.store(data);
   },
 
+  async update(id, data) {
+    return await apro_bancaRepo.update(id, data);
+  },
+
   async deleteById(id) {
     return await apro_bancaRepo.deleteById(id);
   },

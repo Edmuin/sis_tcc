@@ -36,6 +36,10 @@ export const UserModel = {
     return await userRepo.store(data);
   },
 
+  async update(id, data) {
+    return await userRepo.update(id, data);
+  },
+
   async deleteById(id) {
     return await userRepo.deleteById(id);
   },

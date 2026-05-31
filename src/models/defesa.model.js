@@ -25,6 +25,10 @@ export const DefesaModel = {
     return await defesaRepo.store(data);
   },
 
+  async update(id, data) {
+    return await defesaRepo.update(id, data);
+  },
+
   async deleteById(id) {
     return await defesaRepo.deleteById(id);
   },

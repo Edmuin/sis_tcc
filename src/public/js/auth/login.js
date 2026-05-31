@@ -1,19 +1,19 @@
 document.addEventListener("DOMContentLoaded", async () => {
   const roleList = document.getElementById("roles");
+  if (!roleList) return;
 
-  // podes criar esta rota JSON
-  const response = await fetch("/roles"); 
-  const roles = await response.json();
-
-  /*roles.forEach(role => {
-    const newOption = document.createElement("option");
-    newOption.setAttribute("value", `${role.nome}`);
-    newOption.innerHTML = `${role.nome}`;
-    roleList.append(newOption);
-  })*/
+  try {
+    const roles = await window.ApiClient.get("/roles");
+    /*roles.forEach((role) => {
+      const newOption = document.createElement("option");
+      newOption.value = role.nome;
+      newOption.textContent = role.nome;
+      roleList.append(newOption);
+    });*/
+  } catch (error) {
+    console.error("Não foi possível carregar os perfis.", error);
+  }
 });
-
-console.log("Login JS carregado");
 
 document.getElementById('loginForm').addEventListener('submit', async function(e) {
     e.preventDefault();

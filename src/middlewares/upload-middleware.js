@@ -2,6 +2,14 @@ import multer from "multer";
 import path from "path";
 import fs from "fs";
 
+const allowedMimeTypes = new Set([
+  "application/pdf",
+  "application/msword",
+  "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+]);
+
+const allowedExtensions = new Set([".pdf", ".doc", ".docx"]);
+
 // Define o diretório onde os ficheiros serão armazenados
 const uploadPath = path.resolve("uploads");
 
@@ -17,8 +25,27 @@ const storage = multer.diskStorage({
   },
   filename: (req, file, cb) => {
     const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-    cb(null, `${uniqueSuffix}-${file.originalname}`);
+    const safeName = path.basename(file.originalname).replace(/[^\w.-]/g, "-");
+    cb(null, `${uniqueSuffix}-${safeName}`);
   },
 });
 
-export const uploadMiddleware = multer({ storage });
+const fileFilter = (req, file, cb) => {
+  const extension = path.extname(file.originalname).toLowerCase();
+  const isAllowed = allowedMimeTypes.has(file.mimetype) && allowedExtensions.has(extension);
+
+  if (!isAllowed) {
+    req.fileValidationError = "Formato inválido. Envie apenas PDF, DOC ou DOCX.";
+    return cb(null, false);
+  }
+
+  cb(null, true);
+};
+
+export const uploadMiddleware = multer({
+  storage,
+  fileFilter,
+  limits: {
+    fileSize: 10 * 1024 * 1024,
+  },
+});

@@ -24,6 +24,10 @@ export const CursoModel = {
     return await cursoRepo.store(data);
   },
 
+  async update(id, data) {
+    return await cursoRepo.update(id, data);
+  },
+
   async deleteById(id) {
     return await cursoRepo.deleteById(id);
   },
