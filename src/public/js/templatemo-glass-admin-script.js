@@ -135,9 +135,9 @@
         {
             title: "Menu Principal",
             links: [
-                ["/PainelPrincipal", "Painel Principal"],
-                ["/tcc", "TCCs"],
-                ["/Defesas", "Defesas"],
+                ["/PainelPrincipal", "Dashboard"],
+                ["/tcc", "TCC"],
+                ["/Agendar", "Defesa"],
                 ["/Estudantes", "Estudantes"],
                 ["/Professores", "Professores"],
                 ["/Subdireccoes", "Subdirecções"],
@@ -149,15 +149,16 @@
             links: [
                 ["/AreadeFormacao", "Área de Formação"],
                 ["/Curso", "Cursos"],
-                ["/ConfigUtilizadores", "Utilizadores"],
-                ["/Perfis", "Perfis"],
+                ["/users", "Utilizadores"],
+                ["/Perfis", "Papeis"],
+
                 ["/ConfigSobre", "Sobre"],
             ],
         },
         {
             title: "Conta",
             links: [
-                ["/MeusDados", "Meus Dados"],
+                ["/MeusDados", "Meu Perfil"],
                 ["/auth/form-login", "Sair"],
             ],
         },

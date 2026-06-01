@@ -52,19 +52,6 @@ app.get("/", (req, res) => {
     res.sendFile(path.join(PATHS.views, "index_new.html"));
 });
 
-app.use((error, req, res, next) => {
-    if (error?.code === "LIMIT_FILE_SIZE") {
-        return res.status(400).json({ message: "O ficheiro deve ter no máximo 10MB." });
-    }
-
-    if (error) {
-        console.error(error);
-        return res.status(500).json({ message: "Não foi possível processar o pedido." });
-    }
-
-    return next();
-});
-
 app.use((req, res) => {
     res.status(404).send(`
         <!DOCTYPE html>
