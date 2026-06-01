@@ -1,12 +1,16 @@
 import { Router } from "express";
-import { index, createForm, show, store } from "../../../../controllers/user-controller.js";
+import { all, create, findById, destroy, edit, index, show, store, update } from "../../../../controllers/user-controller.js";
 import { uploadMiddleware } from "../../../../middlewares/upload-middleware.js";
 
 const router = Router();
 
 router.get("/", index);
-router.get("/create", createForm);
-router.get("/:id", show);
-router.post("/", store);
+router.get("/all", all);
+router.get("/getusertoedit", findById);
+router.get("/create", create);
+router.post("/create", store);
+router.get("/edit/:id", edit);
+router.put("/edit/:id", update);
+router.delete("/:id", destroy);
 
 export default router;

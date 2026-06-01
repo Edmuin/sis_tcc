@@ -23,7 +23,8 @@ export const login = async (req, res) => {
         }
         const expiresDate = new Date(Date.now() + 24 * 60 * 60 * 1000); // Token expira em 24 horas
         const token = generateToken({name: user.fullname, email: user.email}, expiresDate); // Gerar um token de autenticação aleatório
-        res.json({ user, token });
+        console.log("Token gerado:", { user, token });
+        return res.json({ user, token });
     } catch (err) {
         res.status(404).send(err.message);
     }
