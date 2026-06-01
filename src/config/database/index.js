@@ -1,67 +1,5 @@
 import { pool } from "./mysql/db.js";
 
-export const criarTabelaAprovacaoBanca = async () => {
-  const query = `
-    CREATE TABLE IF NOT EXISTS aprovacao_banca (
-      id INT AUTO_INCREMENT PRIMARY KEY,
-      id_banca INT NOT NULL,
-      id_subdireccao INT NOT NULL,
-      status INT NOT NULL,
-      data VARCHAR(20),
-      observacao VARCHAR(100),
-      created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-      updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-    )
-  `;
-  await pool.execute(query);
-}
-
-export const criarTabelaAprovacaoDefesa = async () => {
-  const query = `
-    CREATE TABLE IF NOT EXISTS aprovacao_defesa (
-      id INT AUTO_INCREMENT PRIMARY KEY,
-      id_tcc INT NOT NULL,
-      id_subdireccao INT NOT NULL,
-      status INT,
-      observacao VARCHAR(100) NOT NULL,
-      created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-      updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-    )
-  `;
-  await pool.execute(query);
-  await pool.execute("ALTER TABLE aprovacao_defesa MODIFY COLUMN observacao VARCHAR(100) NOT NULL");
-}
-
-export const criarTabelaAprovacaoTcc = async () => {
-  const query = `
-    CREATE TABLE IF NOT EXISTS aprovacao_tcc (
-      id INT AUTO_INCREMENT PRIMARY KEY,
-      id_tcc INT NOT NULL,
-      id_subdireccao INT NOT NULL,
-      status INT NOT NULL DEFAULT 0,
-      data_aprovacao VARCHAR(20),
-      observacao VARCHAR(100),
-      created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-      updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-    )
-  `;
-  await pool.execute(query);
-}
-
-export const criarTabelaAvaliacao = async () => {
-  const query = `
-    CREATE TABLE IF NOT EXISTS avaliacao (
-      id INT AUTO_INCREMENT PRIMARY KEY,
-      id_tcc INT NOT NULL,
-      observacao VARCHAR(100) NOT NULL,
-      data_avaliacao VARCHAR(20) NOT NULL,
-      created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-      updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-    )
-  `;
-  await pool.query(query);
-}
-
 export const criarTabelaBanca = async () => {
   const query = `
     CREATE TABLE IF NOT EXISTS banca (
@@ -100,6 +38,19 @@ export const criarTabelaCurso = async () => {
     )
   `;
   await pool.query(query);
+  await garantirColunaCurso("area_formacao_id", "INT NOT NULL DEFAULT 1");
+}
+
+const garantirColunaCurso = async (coluna, definicao) => {
+  const [rows] = await pool.query(`SHOW COLUMNS FROM curso LIKE ?`, [coluna]);
+  if (rows.length > 0) return;
+
+  try {
+    await pool.query(`ALTER TABLE curso ADD COLUMN ${coluna} ${definicao}`);
+  } catch (error) {
+    if (error?.code === "ER_DUP_FIELDNAME") return;
+    throw error;
+  }
 }
 
 export const criarTabelaDefesa = async () => {
@@ -110,21 +61,6 @@ export const criarTabelaDefesa = async () => {
       id_banca INT NOT NULL,
       data_defesa VARCHAR(50) NOT NULL,
       resultado VARCHAR(20) NOT NULL,
-      created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-      updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-    )
-  `;
-  await pool.query(query);
-}
-
-export const criarTabelaDocumento = async () => {
-  const query = `
-    CREATE TABLE IF NOT EXISTS documento (
-      id INT AUTO_INCREMENT PRIMARY KEY,
-      id_tcc INT NOT NULL,
-      nome VARCHAR(50) NOT NULL,
-      tipo VARCHAR(50) NOT NULL,
-      caminho_arquivo VARCHAR(255) NOT NULL,
       created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
       updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
     )
@@ -156,19 +92,6 @@ export const criarTabelaProfessor = async () => {
       id_user INT NOT NULL,
       especializacao VARCHAR(50),
       categoria VARCHAR(50),
-      created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-      updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-    )
-  `;
-  await pool.query(query);
-}
-
-export const criarTabelaProfessorBanca = async () => {
-  const query = `
-    CREATE TABLE IF NOT EXISTS professor_banca (
-      id INT AUTO_INCREMENT PRIMARY KEY,
-      id_professor INT NOT NULL,
-      id_banca INT NOT NULL,
       created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
       updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
     )
@@ -271,14 +194,8 @@ export const criarTodasTabelas = async () => {
   await criarTabelaEstudante();
   await criarTabelaProfessor();
   await criarTabelaTcc();
-  await criarTabelaDocumento();
   await criarTabelaBanca();
-  await criarTabelaProfessorBanca();
-  await criarTabelaAvaliacao();
   await criarTabelaDefesa();
-  await criarTabelaAprovacaoBanca();
-  await criarTabelaAprovacaoDefesa();
-  await criarTabelaAprovacaoTcc();
   await criarTabelaSubdireccao();
   console.log("Todas as tabelas foram criadas ou já existiam.");
 }

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Editar TCC - Gestor TCC</title>
+  <title>Criar TCC - Gestor TCC</title>
   <link rel="stylesheet" href="/css/templatemo-glass-admin-style.css">
 </head>
 <body>
@@ -35,16 +35,16 @@
   <main class="main-content">
     <nav class="navbar">
       <div class="page-header">
-        <h1 class="page-title">Editar TCC</h1>
-        <div class="page-breadcrumb"><a href="/tcc">TCCs</a><span>/</span><span>Editar</span></div>
+        <h1 class="page-title">Novo TCC</h1>
+        <div class="page-breadcrumb"><a href="/tcc">TCCs</a><span>/</span><span>Criar</span></div>
       </div>
     </nav>
 
     <section class="glass-card operational-panel" style="max-width:760px;">
       <div class="card-header">
         <div>
-          <h2 class="card-title">Editar TCC</h2>
-          <p class="card-subtitle">Atualize os dados do trabalho</p>
+          <h2 class="card-title">Criar TCC</h2>
+          <p class="card-subtitle">Preencha os dados principais do trabalho</p>
         </div>
       </div>
 
@@ -59,7 +59,7 @@
         </div>
         <div class="form-group">
           <label class="form-label">Estado</label>
-          <input class="form-input" name="estado" type="number" min="0">
+          <input class="form-input" name="estado" type="number" min="0" value="0">
         </div>
         <div class="form-group">
           <label class="form-label">Data de submissão</label>
@@ -77,10 +77,9 @@
           <label class="form-label">Relatório (PDF)</label>
           <input class="form-input" name="relatorio_pdf" type="file" accept="application/pdf,.pdf">
         </div>
-        <div class="operational-actions" data-existing-files></div>
         <div class="operational-actions">
-          <button class="btn btn-primary" type="submit">Guardar alterações</button>
-          <a class="btn btn-secondary" data-show-link href="/tcc">Cancelar</a>
+          <button class="btn btn-primary" type="submit">Criar TCC</button>
+          <a class="btn btn-secondary" href="/tcc">Cancelar</a>
         </div>
         <p class="operational-message" data-message></p>
       </form>
@@ -97,54 +96,6 @@
   </button>
 
   <script src="/js/templatemo-glass-admin-script.js"></script>
-  <script>
-    const id = window.location.pathname.split("/").filter(Boolean)[1];
-    const form = document.querySelector("[data-tcc-form]");
-    const message = document.querySelector("[data-message]");
-
-    async function loadTcc() {
-      const response = await fetch(`/tcc/${id}/api`, { headers: { Accept: "application/json" } });
-      const result = await response.json();
-
-      if (!response.ok) {
-        message.textContent = result.message || "TCC não encontrado.";
-        message.dataset.type = "error";
-        return;
-      }
-
-      Object.entries(result.data).forEach(([key, value]) => {
-        if (!form.elements[key]) return;
-        if (form.elements[key].type === "file") return;
-        form.elements[key].value = value ?? "";
-      });
-      document.querySelector("[data-show-link]").href = `/tcc/${id}`;
-      document.querySelector("[data-existing-files]").innerHTML = `
-        ${result.data.relatorio_pdf ? `<a class="card-btn" href="${result.data.relatorio_pdf}" target="_blank" rel="noopener">Ver relatório</a>` : ""}
-      `;
-    }
-
-    form.addEventListener("submit", async (event) => {
-      event.preventDefault();
-      const data = new FormData(form);
-      if (!form.elements.relatorio_pdf.files.length) data.delete("relatorio_pdf");
-
-      try {
-        const response = await fetch(`/tcc/${id}`, {
-          method: "PUT",
-          headers: { Accept: "application/json" },
-          body: data,
-        });
-        const result = await response.json();
-
-        if (!response.ok) throw new Error(result.message || "Não foi possível atualizar o TCC.");
-        window.location.href = `/tcc/${id}`;
-      } catch (error) {
-        message.textContent = error.message;
-        message.dataset.type = "error";
-      }
-    });
-
-    loadTcc();
-  </script>
+  <script src="/js/TCC/create.js"></script>
 </body>
 </html>

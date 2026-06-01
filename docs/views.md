@@ -14,7 +14,7 @@ As telas ficam em `src/views` e usam os assets publicos de `src/public`.
 
 ## Tela operacional reutilizavel
 
-`Tela-operacional.html` serve como base para modulos como estudantes, professores, bancas, documentos, avaliacoes, aprovacoes e relatorios.
+`Tela-operacional.html` serve como base para modulos como estudantes, professores, bancas e defesas.
 
 O conteudo desta tela e definido por `src/public/js/operational-page.js`, de acordo com a rota acessada.
 

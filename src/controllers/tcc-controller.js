@@ -2,7 +2,7 @@ import path from "path";
 
 import { TccModel } from "../models/tcc.model.js";
 
-const tccViewsPath = (...segments) => path.join(process.cwd(), "src/TCC", ...segments);
+const tccViewsPath = (...segments) => path.join(process.cwd(), "src/views/TCC", ...segments);
 
 const hasValue = (value) => value !== undefined && value !== null && value !== "";
 

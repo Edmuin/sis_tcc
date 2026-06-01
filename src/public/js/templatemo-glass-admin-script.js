@@ -137,30 +137,21 @@
             links: [
                 ["/PainelPrincipal", "Painel Principal"],
                 ["/tcc", "TCCs"],
-                ["/Agendar", "Defesas"],
-                ["/ConfigUtilizadores", "Utilizadores"],
-                ["/Perfis", "Perfis"],
-                ["/Curso", "Cursos"],
+                ["/Defesas", "Defesas"],
                 ["/Estudantes", "Estudantes"],
                 ["/Professores", "Professores"],
                 ["/Subdireccoes", "Subdirecções"],
                 ["/Bancas", "Bancas"],
-                ["/ProfessorBancas", "Professores em Bancas"],
-                ["/Documentos", "Documentos"],
-                ["/Avaliacoes", "Avaliações"],
-                ["/Aprovacoes", "Aprovações"],
-                ["/AprovacaoTccs", "Aprovações de TCC"],
-                ["/AprovacaoBancas", "Aprovações de Bancas"],
-                ["/AprovacaoDefesas", "Aprovações de Defesas"],
-                ["/Relatorios", "Relatórios"],
             ],
         },
         {
             title: "Configurações",
             links: [
                 ["/AreadeFormacao", "Área de Formação"],
+                ["/Curso", "Cursos"],
+                ["/ConfigUtilizadores", "Utilizadores"],
+                ["/Perfis", "Perfis"],
                 ["/ConfigSobre", "Sobre"],
-                ["/Configuracoes", "Configurações"],
             ],
         },
         {
@@ -191,7 +182,13 @@
 
         navMenu.querySelectorAll('.nav-link').forEach((link) => {
             const href = link.getAttribute('href');
-            const isActive = href === window.location.pathname || (href === '/tcc' && window.location.pathname.startsWith('/tcc/'));
+            const isActive = href === window.location.pathname ||
+                (href === '/tcc' && window.location.pathname.startsWith('/tcc/')) ||
+                (href === '/Curso' && window.location.pathname.startsWith('/Curso/')) ||
+                (href === '/Bancas' && window.location.pathname.startsWith('/Bancas/')) ||
+                (href === '/Defesas' && window.location.pathname.startsWith('/Defesas/')) ||
+                (href === '/Agendar' && window.location.pathname.startsWith('/Defesas')) ||
+                (href === '/AreadeFormacao' && window.location.pathname.startsWith('/AreadeFormacao/'));
             link.classList.toggle('active', isActive);
         });
     }
@@ -210,17 +207,9 @@
             '/Estudantes': '<path d="M17 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9.5" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/>',
             '/Professores': '<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/><path d="M12 14l2 3 2-3"/>',
             '/DetalhesTcc': '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M8 13h8"/><path d="M8 17h6"/>',
-            '/Agendar': '<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4"/><path d="M8 2v4"/><path d="M3 10h18"/>',
+            '/Defesas': '<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4"/><path d="M8 2v4"/><path d="M3 10h18"/>',
             '/Subdireccoes': '<path d="M3 21h18"/><path d="M6 21V8l6-4 6 4v13"/><path d="M9 21v-6h6v6"/>',
             '/Bancas': '<path d="M4 21v-7"/><path d="M20 21v-7"/><path d="M12 21v-9"/><path d="M2 14h20"/><path d="M12 3l9 5H3z"/>',
-            '/ProfessorBancas': '<path d="M4 21v-7"/><path d="M20 21v-7"/><path d="M2 14h20"/><circle cx="12" cy="7" r="3"/>',
-            '/Documentos': '<path d="M6 2h9l5 5v15H6z"/><path d="M14 2v6h6"/><path d="M9 13h6"/><path d="M9 17h6"/>',
-            '/Avaliacoes': '<path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>',
-            '/Aprovacoes': '<circle cx="12" cy="12" r="10"/><path d="M8 12l3 3 5-6"/>',
-            '/AprovacaoTccs': '<circle cx="12" cy="12" r="10"/><path d="M8 12l3 3 5-6"/>',
-            '/AprovacaoBancas': '<circle cx="12" cy="12" r="10"/><path d="M8 12l3 3 5-6"/>',
-            '/AprovacaoDefesas': '<circle cx="12" cy="12" r="10"/><path d="M8 12l3 3 5-6"/>',
-            '/Relatorios': '<path d="M3 3v18h18"/><rect x="7" y="12" width="3" height="5"/><rect x="12" y="8" width="3" height="9"/><rect x="17" y="5" width="3" height="12"/>',
             '/MeusDados': '<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',
             '/ConfigUtilizadores': '<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/>',
             '/AreadeFormacao': '<path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M9 21v-7h6v7"/>',

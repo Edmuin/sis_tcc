@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bancas - Gestor TCC</title>
+  <link rel="stylesheet" href="/css/templatemo-glass-admin-style.css">
+</head>
+<body>
+  <div class="background"></div>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+
+  <div class="dashboard">
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="logo">HB</div>
+        <span class="logo-text">Gestor TCC</span>
+      </div>
+      <ul class="nav-menu"></ul>
+      <div class="sidebar-footer">
+        <div class="user-profile">
+          <div class="user-avatar">HB</div>
+          <div class="user-info">
+            <div class="user-name">H & B</div>
+            <div class="user-role">Administrador</div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <nav class="navbar">
+        <div class="page-header">
+          <h1 class="page-title">Bancas</h1>
+          <div class="page-breadcrumb"><a href="/PainelPrincipal">Painel</a><span>/</span><span>Bancas</span></div>
+        </div>
+        <div class="navbar-right">
+          <a class="btn btn-primary" href="/Bancas/create">Nova Banca</a>
+        </div>
+      </nav>
+
+      <section class="glass-card table-card">
+        <div class="card-header">
+          <div>
+            <h2 class="card-title">Listagem de Bancas</h2>
+            <p class="card-subtitle">Bancas constituídas para as defesas</p>
+          </div>
+        </div>
+        <div class="table-wrapper">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Sala</th>
+                <th>Data</th>
+                <th>Criada em</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody data-banca-list>
+              <tr><td colspan="4" class="empty-table-message">A carregar...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <button class="mobile-menu-toggle">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <line x1="3" y1="12" x2="21" y2="12"/>
+      <line x1="3" y1="6" x2="21" y2="6"/>
+      <line x1="3" y1="18" x2="21" y2="18"/>
+    </svg>
+  </button>
+
+  <script src="/js/templatemo-glass-admin-script.js"></script>
+  <script src="/js/banca/index.js"></script>
+</body>
+</html>
