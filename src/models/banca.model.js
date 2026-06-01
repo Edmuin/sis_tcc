@@ -15,6 +15,11 @@ export const BancaModel = {
     return await bancaRepo.findAll();
   },
 
+  async findAllOrdered() {
+    const rows = await bancaRepo.findAll();
+    return rows.sort((a, b) => Number(b.id) - Number(a.id));
+  },
+
   async findById(id) {
     return await bancaRepo.findById(id);
   },

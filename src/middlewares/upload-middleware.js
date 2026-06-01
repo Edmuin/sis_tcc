@@ -8,7 +8,9 @@ const allowedMimeTypes = new Set([
   "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
 ]);
 
+const allowedPdfMimeTypes = new Set(["application/pdf"]);
 const allowedExtensions = new Set([".pdf", ".doc", ".docx"]);
+const allowedPdfExtensions = new Set([".pdf"]);
 
 // Define o diretório onde os ficheiros serão armazenados
 const uploadPath = path.resolve("uploads");
@@ -42,9 +44,29 @@ const fileFilter = (req, file, cb) => {
   cb(null, true);
 };
 
+const pdfFileFilter = (req, file, cb) => {
+  const extension = path.extname(file.originalname).toLowerCase();
+  const isAllowed = allowedPdfMimeTypes.has(file.mimetype) && allowedPdfExtensions.has(extension);
+
+  if (!isAllowed) {
+    req.fileValidationError = "Formato inválido. Envie apenas ficheiros PDF.";
+    return cb(null, false);
+  }
+
+  cb(null, true);
+};
+
 export const uploadMiddleware = multer({
   storage,
   fileFilter,
+  limits: {
+    fileSize: 10 * 1024 * 1024,
+  },
+});
+
+export const pdfUploadMiddleware = multer({
+  storage,
+  fileFilter: pdfFileFilter,
   limits: {
     fileSize: 10 * 1024 * 1024,
   },

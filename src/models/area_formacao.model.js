@@ -3,13 +3,9 @@ import Repository from "../config/database/repository.js";
 export const tabela = {
   nome: "area_formacao",
   colunas: {
-    id_area: "id_area",
     nome: "nome",
     descricao: "descricao"
   },
-  // colunas: "(id_area, nome, descricao)",
-  // querys: "(?, ?, ?)",
-
 };
 
 const area_formacaoRepo = Repository(tabela);
@@ -25,6 +21,10 @@ export const AreaFormacaoModel = {
 
   async store(data) {
     return await area_formacaoRepo.store(data);
+  },
+
+  async update(id, data) {
+    return await area_formacaoRepo.update(id, data);
   },
 
   async deleteById(id) {

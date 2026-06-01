@@ -106,9 +106,9 @@
             title: "Subdirecções",
             endpoint: "/api/subdireccoes",
             tableTitle: "Subdirecções cadastradas",
-            subtitle: "Responsáveis por aprovações e validações acadêmicas",
+            subtitle: "Responsáveis pelo acompanhamento acadêmico",
             action: "Nova Subdirecção",
-            stats: [["Total", "0"], ["Ativas", "-"], ["Com aprovações", "-"], ["Recentes", "-"]],
+            stats: [["Total", "0"], ["Ativas", "-"], ["Acadêmicas", "-"], ["Recentes", "-"]],
             columns: [["utilizador_nome", "Utilizador"], ["cargo", "Cargo"], ["created_at", "Criada em"], ["updated_at", "Atualizada em"]],
             form: [["id_user", "ID do utilizador", "number"], ["cargo", "Cargo", "text"]],
         },
@@ -127,16 +127,6 @@
             ],
             form: [["data", "Data", "date"], ["sala", "Sala", "number", true]],
         },
-        "/ProfessorBancas": {
-            title: "Professores em Bancas",
-            endpoint: "/api/professor_bancas",
-            tableTitle: "Composição das bancas",
-            subtitle: "Ligação entre professores e bancas constituídas",
-            action: "Associar Professor",
-            stats: [["Total", "0"], ["Bancas", "-"], ["Professores", "-"], ["Recentes", "-"]],
-            columns: [["professor_nome", "Professor"], ["banca_sala", "Sala"], ["banca_data", "Data"], ["created_at", "Criado em"]],
-            form: [["id_professor", "ID do professor", "number", true], ["id_banca", "ID da banca", "number", true]],
-        },
         "/Defesas": {
             title: "Defesas",
             endpoint: "/api/defesas",
@@ -152,152 +142,13 @@
                 ["resultado", "Resultado", "text", true],
             ],
         },
-        "/Documentos": {
-            title: "Documentos",
-            endpoint: "/api/documentos",
-            uploadEndpoint: "/api/documentos/upload",
-            tableTitle: "Documentos dos TCCs",
-            subtitle: "Submissões, versões e ficheiros associados aos trabalhos",
-            action: "Novo Documento",
-            stats: [["Ficheiros", "92"], ["Relatórios", "38"], ["Propostas", "31"], ["Pendentes", "23"]],
-            columns: [
-                ["nome", "Documento"],
-                ["tcc_tema", "TCC"],
-                ["tipo", "Tipo"],
-                ["caminho_arquivo", "Arquivo"],
-                ["created_at", "Criado em"],
-            ],
-            rows: [
-                ["Relatório Final", "1", "PDF", "/uploads/relatorio-final.pdf", "2026-05-12"],
-                ["Proposta", "2", "PDF", "/uploads/proposta.pdf", "2026-05-18"],
-                ["Correções", "3", "DOCX", "/uploads/correcoes.docx", "2026-05-20"],
-            ],
-            form: [
-                ["id_tcc", "ID do TCC", "number", true],
-                ["nome", "Nome do documento", "text", true],
-                ["tipo", "Tipo", "text", true],
-                ["ficheiro", "Ficheiro", "file", true],
-            ],
-        },
-        "/Avaliacoes": {
-            title: "Avaliações",
-            endpoint: "/api/avaliacoes",
-            tableTitle: "Pareceres e observações",
-            subtitle: "Histórico de análise feita pelos orientadores e coordenação",
-            action: "Nova Avaliação",
-            stats: [["Avaliações", "47"], ["Favoráveis", "29"], ["Com correções", "13"], ["Rejeitadas", "5"]],
-            columns: [["tcc_tema", "TCC"], ["observacao", "Observação"], ["data_avaliacao", "Data"], ["created_at", "Criada em"]],
-            rows: [
-                ["1", "Apto para defesa", "22/05/2026", "2026-05-22"],
-                ["2", "Rever objetivos", "24/05/2026", "2026-05-24"],
-                ["3", "Boa estrutura", "27/05/2026", "2026-05-27"],
-            ],
-            form: [
-                ["id_tcc", "ID do TCC", "number", true],
-                ["observacao", "Observação", "text", true],
-                ["data_avaliacao", "Data da avaliação", "date", true],
-            ],
-        },
-        "/Aprovacoes": {
-            title: "Aprovações",
-            endpoint: "/api/aprovacoes",
-            tableTitle: "Fila de aprovações",
-            subtitle: "TCCs, bancas e defesas que aguardam validação",
-            action: "Nova Aprovação",
-            stats: [["Pendentes", "16"], ["TCCs", "7"], ["Bancas", "5"], ["Defesas", "4"]],
-            columns: [
-                ["tipo", "Tipo"],
-                ["tcc_tema", "TCC"],
-                ["banca_sala", "Banca"],
-                ["id_subdireccao", "Subdirecção"],
-                ["status", "Status"],
-                ["observacao", "Observação"],
-            ],
-            rows: [
-                ["Sistema de Gestão de TCC", "TCC", "Coordenação", "22/05/2026", "Pendente", "Aguardar subdirecção"],
-                ["Banca 02", "Banca", "Secretaria", "24/05/2026", "Aprovado", "Sem observações"],
-                ["Defesa de Helena Costa", "Defesa", "Coordenação", "28/05/2026", "Pendente", "Confirmar sala"],
-            ],
-            form: [
-                ["tipo", "Tipo de aprovação", "select:tcc|banca|defesa"],
-                ["id_tcc", "ID do TCC", "number"],
-                ["id_banca", "ID da banca", "number"],
-                ["id_subdireccao", "ID da subdirecção", "number", true],
-                ["status", "Status", "number", true],
-                ["observacao", "Observação", "text"],
-            ],
-        },
-        "/AprovacaoTccs": {
-            title: "Aprovações de TCC",
-            endpoint: "/api/aprovacao_tccs",
-            tableTitle: "Aprovações de TCC",
-            subtitle: "Validações feitas pela subdirecção sobre os trabalhos submetidos",
-            action: "Nova Aprovação de TCC",
-            stats: [["Total", "0"], ["Aprovadas", "-"], ["Pendentes", "-"], ["Recentes", "-"]],
-            columns: [
-                ["tcc_tema", "TCC"],
-                ["id_subdireccao", "Subdirecção"],
-                ["status", "Status"],
-                ["data_aprovacao", "Data"],
-                ["observacao", "Observação"],
-            ],
-            form: [
-                ["id_tcc", "ID do TCC", "number", true],
-                ["id_subdireccao", "ID da subdirecção", "number", true],
-                ["status", "Status", "number", true],
-                ["data_aprovacao", "Data da aprovação", "date"],
-                ["observacao", "Observação", "text"],
-            ],
-        },
-        "/AprovacaoBancas": {
-            title: "Aprovações de Bancas",
-            endpoint: "/api/aprovacao_bancas",
-            tableTitle: "Aprovações de bancas",
-            subtitle: "Validações da composição e agenda de bancas",
-            action: "Nova Aprovação de Banca",
-            stats: [["Total", "0"], ["Aprovadas", "-"], ["Pendentes", "-"], ["Recentes", "-"]],
-            columns: [
-                ["banca_sala", "Banca"],
-                ["id_subdireccao", "Subdirecção"],
-                ["status", "Status"],
-                ["data", "Data"],
-                ["observacao", "Observação"],
-            ],
-            form: [
-                ["id_banca", "ID da banca", "number", true],
-                ["id_subdireccao", "ID da subdirecção", "number", true],
-                ["status", "Status", "number", true],
-                ["data", "Data", "date"],
-                ["observacao", "Observação", "text"],
-            ],
-        },
-        "/AprovacaoDefesas": {
-            title: "Aprovações de Defesas",
-            endpoint: "/api/aprovacao_defesas",
-            tableTitle: "Aprovações de defesas",
-            subtitle: "Validações feitas antes ou depois da defesa",
-            action: "Nova Aprovação de Defesa",
-            stats: [["Total", "0"], ["Aprovadas", "-"], ["Pendentes", "-"], ["Recentes", "-"]],
-            columns: [
-                ["tcc_tema", "TCC"],
-                ["id_subdireccao", "Subdirecção"],
-                ["status", "Status"],
-                ["observacao", "Observação"],
-            ],
-            form: [
-                ["id_tcc", "ID do TCC", "number", true],
-                ["id_subdireccao", "ID da subdirecção", "number", true],
-                ["status", "Status", "number"],
-                ["observacao", "Observação", "text", true],
-            ],
-        },
         "/DetalhesTcc": {
             title: "Detalhes do TCC",
             endpoint: "/api/tccs",
             tableTitle: "Histórico do trabalho",
-            subtitle: "Resumo do TCC selecionado, documentos, avaliações e defesa",
+            subtitle: "Resumo do TCC selecionado e defesa",
             action: "Atualizar TCC",
-            stats: [["Progresso", "75%"], ["Documentos", "4"], ["Avaliações", "3"], ["Defesa", "1"]],
+            stats: [["Progresso", "75%"], ["Defesa", "1"], ["Em análise", "3"], ["Atualizações", "4"]],
             columns: [
                 ["tema", "Tema"],
                 ["objectivo", "Objetivo"],
@@ -308,7 +159,6 @@
             ],
             rows: [
                 ["Submissão", "Ana Manuel", "02/04/2026", "Concluída", "Tema submetido", "Ver"],
-                ["Avaliação", "Prof. João Pedro", "22/05/2026", "Concluída", "Apto para defesa", "Ver"],
                 ["Defesa", "Coordenação", "12/06/2026", "Agendada", "Sala 12", "Editar"],
             ],
             form: [
@@ -320,26 +170,10 @@
                 ["id_professor", "ID do professor", "number", true],
             ],
         },
-        "/Relatorios": {
-            title: "Relatórios",
-            endpoint: "/api/relatorios",
-            tableTitle: "Indicadores acadêmicos",
-            subtitle: "Síntese para acompanhamento e exportação",
-            action: "Gerar Relatório",
-            stats: [["TCCs", "128"], ["Aprovados", "64"], ["Em análise", "39"], ["Defesas", "25"]],
-            columns: [["nome", "Relatório"], ["categoria", "Categoria"], ["total", "Registos"]],
-            rows: [
-                ["TCCs por estado", "TCC", "128"],
-                ["Defesas agendadas", "Defesas", "25"],
-                ["Orientações por professor", "Acadêmico", "36"],
-            ],
-            form: [],
-        },
     };
 
     pageConfigs["/Curso"] = pageConfigs["/Cursos"];
     pageConfigs["/ConfigUtilizadores"] = pageConfigs["/Utilizadores"];
-    pageConfigs["/Agendar"] = pageConfigs["/Defesas"];
     pageConfigs["/tcc"] = {
         ...pageConfigs["/DetalhesTcc"],
         title: "TCCs",
@@ -395,154 +229,31 @@
     }
 
     function renderHeader(page) {
-        document.title = `${page.title} - Gestor TCC`;
-
-        setText(dom.title, page.title);
-        setText(dom.breadcrumb, page.title);
-        setText(dom.tableTitle, page.tableTitle);
-        setText(dom.tableSubtitle, page.subtitle);
-        setText(dom.panelTitle, page.action);
-        setText(dom.panelSubtitle, "Informação principal do registo");
-        setText(dom.primaryAction, page.action);
-
-        dom.search.placeholder = `Pesquisar ${page.title.toLowerCase()}...`;
+        window.OperationalRenderers.renderHeader(dom, page);
     }
 
     function renderStats(stats) {
-        dom.statsGrid.innerHTML = stats.map(([label, value], index) => `
-            <div class="glass-card glass-card-3d stat-card">
-                <div class="stat-card-inner">
-                    <div class="stat-info">
-                        <h3>${label}</h3>
-                        <div class="stat-value">${value}</div>
-                        <span class="stat-change positive">Atualizado</span>
-                    </div>
-                    <div class="stat-icon ${["cyan", "magenta", "purple", "success"][index] || "cyan"}"></div>
-                </div>
-            </div>
-        `).join("");
-    }
-
-    function getRowCells(page, row, fromApi) {
-        if (!fromApi) return row;
-        return page.columns.map(([key]) => row[key] ?? "");
+        window.OperationalRenderers.renderStats(dom, stats);
     }
 
     function renderTable(page, rows = [], fromApi = false) {
-        const header = page.columns.map((column) => {
-            return `<th>${Array.isArray(column) ? column[1] : column}</th>`;
-        }).join("");
-
-        const hasActions = fromApi && page.form.length > 0;
-        const actionHeader = hasActions ? "<th>Ações</th>" : "";
-
-        if (rows.length === 0) {
-            const colspan = page.columns.length + (hasActions ? 1 : 0);
-            dom.table.innerHTML = `
-                <thead><tr>${header}${actionHeader}</tr></thead>
-                <tbody><tr><td colspan="${colspan}" class="empty-table-message">Nenhum registo encontrado.</td></tr></tbody>
-            `;
-            return;
-        }
-
-        const body = rows.map((row) => {
-            const cells = getRowCells(page, row, fromApi);
-            const actions = hasActions && row.id
-                ? `<td class="table-actions">
-                    <button class="card-btn" data-edit-id="${row.id}" data-edit-type="${row.tipo || ""}" type="button">Editar</button>
-                    <button class="card-btn" data-delete-id="${row.id}" data-delete-type="${row.tipo || ""}" type="button">Eliminar</button>
-                </td>`
-                : "";
-
-            return `<tr>${cells.map((cell, index) => renderTableCell(cells, cell, index)).join("")}${actions}</tr>`;
-        }).join("");
-
-        dom.table.innerHTML = `<thead><tr>${header}${actionHeader}</tr></thead><tbody>${body}</tbody>`;
-    }
-
-    function renderTableCell(cells, cell, index) {
-        return `<td>${cell || "-"}</td>`;
+        window.OperationalRenderers.renderTable(dom, page, rows, fromApi);
     }
 
     function renderForm(page) {
-        if (page.form.length === 0) {
-            dom.form.innerHTML = '<p class="card-subtitle">Use o botão Exportar para consultar estes indicadores fora do sistema.</p>';
-            return;
-        }
-
-        dom.form.innerHTML = page.form.map(([name, label, type, required = false]) => {
-            const input = type.startsWith("select:")
-                ? renderSelectInput(name, label, type, required)
-                : `<input class="form-input" name="${name}" type="${type}" placeholder="${label}" ${required ? "required" : ""}>`;
-
-            return `
-                <div class="form-group">
-                    <label class="form-label">${label}</label>
-                    ${input}
-                </div>
-            `;
-        }).join("") + `
-            <div class="operational-actions">
-                <button type="submit" class="btn btn-primary operational-submit">${page.action}</button>
-                <button type="button" class="btn btn-secondary operational-cancel" data-cancel-edit hidden>Cancelar</button>
-            </div>
-        `;
-    }
-
-    function renderSelectInput(name, label, type, required) {
-        const options = type.replace("select:", "").split("|");
-        return `
-            <select class="form-input" name="${name}" ${required ? "required" : ""}>
-                <option value="">${label}</option>
-                ${options.map((option) => `<option value="${option}">${option}</option>`).join("")}
-            </select>
-        `;
+        window.OperationalRenderers.renderForm(dom, page);
     }
 
     function filterTableRows(term) {
-        dom.table.querySelectorAll("tbody tr").forEach((row) => {
-            row.style.display = row.textContent.toLowerCase().includes(term) ? "" : "none";
-        });
+        window.OperationalTableTools.filterRows(dom.table, term);
     }
 
     function normalizePayload(formData) {
-        const payload = {};
-
-        formData.forEach((value, key) => {
-            if (value instanceof File) return;
-            if (value !== "") payload[key] = value;
-        });
-
-        if (payload.tipo === "banca") {
-            delete payload.id_tcc;
-        } else {
-            delete payload.id_banca;
-        }
-
-        return payload;
+        return window.OperationalForms.normalizePayload(formData);
     }
 
     function validatePayload(page, payload, formData) {
-        const missing = page.form
-            .filter(([name, , type, required = false]) => {
-                if (!required) return false;
-                if (type === "file") return !formData.get(name)?.name && !editingId;
-                return payload[name] === undefined || payload[name] === null || payload[name] === "";
-            })
-            .map(([, label]) => label);
-
-        if (missing.length > 0) return `Campos obrigatórios em falta: ${missing.join(", ")}.`;
-
-        const email = payload.email;
-        if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return "Informe um email válido.";
-
-        const invalidNumber = page.form.find(([name, , type]) => {
-            return type === "number" && payload[name] !== undefined && Number(payload[name]) < 0;
-        });
-
-        if (invalidNumber) return `${invalidNumber[1]} deve ser um número positivo.`;
-
-        return "";
+        return window.OperationalForms.validatePayload(page, payload, formData, editingId);
     }
 
     async function loadRows(page) {
@@ -580,11 +291,7 @@
     }
 
     function fillForm(page, row) {
-        page.form.forEach(([name, , type]) => {
-            const field = dom.form.elements[name];
-            if (type === "file") return;
-            if (field) field.value = row[name] ?? "";
-        });
+        window.OperationalForms.fillForm(dom, page, row);
         setFormMode(page, row);
         setMessage("Edite os campos e guarde as alterações.", "info");
     }
@@ -666,20 +373,7 @@
             return;
         }
 
-        const headers = page.columns.map(([, label]) => label);
-        const keys = page.columns.map(([key]) => key);
-        const csvRows = [
-            headers.join(";"),
-            ...currentRows.map((row) => keys.map((key) => `"${String(row[key] ?? "").replace(/"/g, '""')}"`).join(";")),
-        ];
-
-        const blob = new Blob([csvRows.join("\n")], { type: "text/csv;charset=utf-8" });
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement("a");
-        link.href = url;
-        link.download = `${page.title.toLowerCase().replace(/\s+/g, "-")}.csv`;
-        link.click();
-        URL.revokeObjectURL(url);
+        window.OperationalTableTools.exportCsv(page, currentRows);
     }
 
     function bindEvents(page) {

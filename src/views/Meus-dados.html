@@ -79,9 +79,10 @@
                                 <summary>Configurações</summary>
                             </a>
                                 <ol class="submenu">
-                                    <li><a href="/ConfigUtilizadores">Utilizadores</a></li>
                                     <li><a href="/AreadeFormacao">Área de Formação</a></li>
                                     <li><a href="/Curso">Cursos</a></li>
+                                    <li><a href="/ConfigUtilizadores">Utilizadores</a></li>
+                                    <li><a href="/Perfis">Perfis</a></li>
                                     <li><a href="/ConfigSobre">Sobre</a></li>
                                 </ol>
                         </li>
@@ -354,16 +355,6 @@
                             </div>
                             <div class="settings-row">
                                 <div class="settings-label">
-                                    <span class="settings-label-title">Relatórios Semanais</span>
-                                    <span class="settings-label-desc">Receber resumo semanal do TCC</span>
-                                </div>
-                                <label class="toggle-switch">
-                                    <input type="checkbox">
-                                    <span class="toggle-slider"></span>
-                                </label>
-                            </div>
-                            <div class="settings-row">
-                                <div class="settings-label">
                                     <span class="settings-label-title">Comunicados Acadêmicos</span>
                                     <span class="settings-label-desc">Receber avisos da coordenação</span>
                                 </div>
@@ -511,32 +502,7 @@
                                 </div>
                                 <div style="display: flex; gap: 12px;">
                                     <button class="btn btn-primary" style="width: auto; padding: 10px 20px;">Atualizar TCC</button>
-                                    <button class="btn btn-secondary" style="width: auto; padding: 10px 20px;">Enviar Documento</button>
                                 </div>
-                            </div>
-                        </div>
-
-                        <div class="settings-section">
-                            <h3 class="settings-section-title">Documentos Recentes</h3>
-                            <div class="settings-row">
-                                <div class="settings-label" style="display: flex; align-items: center; gap: 16px;">
-                                    <div style="width: 48px; height: 32px; background: linear-gradient(135deg, var(--emerald), var(--gold)); border-radius: 6px; display: flex; align-items: center; justify-content: center;">
-                                        <span style="color: white; font-size: 10px; font-weight: bold;">PDF</span>
-                                    </div>
-                                    <div>
-                                        <span class="settings-label-title">Relatório parcial</span>
-                                        <span class="settings-label-desc">Submetido em 24/05/2026</span>
-                                    </div>
-                                </div>
-                                <button class="card-btn" style="padding: 6px 12px;">Ver</button>
-                            </div>
-                            <div style="margin-top: 16px;">
-                                <button class="btn btn-secondary" style="width: auto; padding: 10px 20px;">
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 8px;">
-                                        <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
-                                    </svg>
-                                    Adicionar Documento
-                                </button>
                             </div>
                         </div>
 
@@ -550,7 +516,7 @@
                                             <th>Atividade</th>
                                             <th>Responsável</th>
                                             <th>Estado</th>
-                                            <th>Documento</th>
+                                            <th>Observação</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -559,21 +525,21 @@
                                             <td>Proposta de TCC submetida</td>
                                             <td>Estudante</td>
                                             <td><span class="status-badge completed">Recebido</span></td>
-                                            <td><a href="#" style="color: var(--emerald-light);">Ver</a></td>
+                                            <td>Registo inicial</td>
                                         </tr>
                                         <tr>
                                             <td>18/05/2026</td>
                                             <td>Parecer do orientador</td>
                                             <td>Orientador</td>
                                             <td><span class="status-badge completed">Validado</span></td>
-                                            <td><a href="#" style="color: var(--emerald-light);">Ver</a></td>
+                                            <td>Acompanhamento concluído</td>
                                         </tr>
                                         <tr>
                                             <td>24/05/2026</td>
                                             <td>Correções solicitadas</td>
                                             <td>Coordenação</td>
                                             <td><span class="status-badge pending">Pendente</span></td>
-                                            <td><a href="#" style="color: var(--emerald-light);">Ver</a></td>
+                                            <td>Aguardar atualização</td>
                                         </tr>
                                     </tbody>
                                 </table>

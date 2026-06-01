@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Editar Defesa - Gestor TCC</title>
+  <link rel="stylesheet" href="/css/templatemo-glass-admin-style.css">
+</head>
+<body>
+  <div class="background"></div>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+
+  <div class="dashboard">
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="logo">HB</div>
+        <span class="logo-text">Gestor TCC</span>
+      </div>
+      <ul class="nav-menu"></ul>
+      <div class="sidebar-footer">
+        <div class="user-profile">
+          <div class="user-avatar">HB</div>
+          <div class="user-info">
+            <div class="user-name">H & B</div>
+            <div class="user-role">Administrador</div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <nav class="navbar">
+        <div class="page-header">
+          <h1 class="page-title">Editar Defesa</h1>
+          <div class="page-breadcrumb"><a href="/Defesas">Defesas</a><span>/</span><span>Editar</span></div>
+        </div>
+      </nav>
+
+      <section class="glass-card operational-panel" style="max-width:760px;">
+        <div class="card-header">
+          <div>
+            <h2 class="card-title">Editar Defesa</h2>
+            <p class="card-subtitle">Atualize a agenda ou o resultado da defesa</p>
+          </div>
+        </div>
+
+        <form class="operational-form" data-defesa-form>
+          <div class="form-group">
+            <label class="form-label">TCC</label>
+            <select class="form-input" name="id_tcc" required data-tcc-select>
+              <option value="">A carregar TCCs...</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Banca</label>
+            <select class="form-input" name="id_banca" required data-banca-select>
+              <option value="">A carregar bancas...</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Data da defesa</label>
+            <input class="form-input" name="data_defesa" type="date" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Resultado</label>
+            <input class="form-input" name="resultado" type="text" placeholder="Ex.: Agendada, Aprovado, Reprovado" required>
+          </div>
+          <div class="operational-actions">
+            <button class="btn btn-primary" type="submit">Guardar alterações</button>
+            <a class="btn btn-secondary" data-show-link href="/Defesas">Cancelar</a>
+          </div>
+          <p class="operational-message" data-message></p>
+        </form>
+      </section>
+    </main>
+  </div>
+
+  <button class="mobile-menu-toggle">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <line x1="3" y1="12" x2="21" y2="12"/>
+      <line x1="3" y1="6" x2="21" y2="6"/>
+      <line x1="3" y1="18" x2="21" y2="18"/>
+    </svg>
+  </button>
+
+  <script src="/js/templatemo-glass-admin-script.js"></script>
+  <script src="/js/defesas/edit.js"></script>
+</body>
+</html>
