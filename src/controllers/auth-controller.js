@@ -7,6 +7,15 @@ import { generateToken } from "../utils/token/jwt.js";
 import axios from "axios";
 import { generateDateWith30s } from "../utils/date.js";
 
+const redirectByRole = {
+    aluno: "/tcc",
+    professor: "/tcc",
+    tutor: "/tcc",
+    coordenador: "/PainelPrincipal",
+    subdirecao: "/PainelPrincipal",
+    subdireção: "/PainelPrincipal",
+};
+
 export const signin = async (req, res) => {
     res.sendFile(path.join(process.cwd(), "src/views/auth/sign_in.html"));
 };
@@ -21,12 +30,17 @@ export const login = async (req, res) => {
         if (user.password !== password) {
             return res.status(404).send({message: "Credenciais inválidas"});
         }
+        const role = user.role_id ? await RoleService.getRoleById(user.role_id) : null;
+        const roleName = role?.nome || "";
+        const redirectTo = redirectByRole[roleName] || "/PainelPrincipal";
         const expiresDate = new Date(Date.now() + 24 * 60 * 60 * 1000); // Token expira em 24 horas
-        const token = generateToken({name: user.fullname, email: user.email}, expiresDate); // Gerar um token de autenticação aleatório
-        console.log("Token gerado:", { user, token });
-        return res.json({ user, token });
+        const token = generateToken({name: user.fullname, email: user.email, role: roleName}, expiresDate); // Gerar um token de autenticação aleatório
+        const authenticatedUser = { ...user, role: roleName };
+        req.session.user = authenticatedUser;
+        console.log("Token gerado:", { user: authenticatedUser, token });
+        return res.json({ user: authenticatedUser, token, redirectTo });
     } catch (err) {
-        res.status(404).send(err.message);
+        res.status(404).json({ message: err.message || "Credenciais inválidas" });
     }
 };
 
@@ -47,9 +61,12 @@ export const selectType = async (req, res) => {
                 res.redirect("/auth/sign-up/aluno");
                 break;
             case "tutor":
+            case "professor":
                 res.redirect("/auth/sign-up/professor");
                 break;
             case "coordenador":
+            case "subdirecao":
+            case "subdireção":
                 res.redirect("/auth/sign-up/coordenador");
                 break;
             default:

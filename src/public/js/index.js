@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {// Remove a classe no-trans
     // Se não estivermos logados, força o redirect para login
     if (!email) {
         console.warn('Usuário não autenticado — redirecionando para login.');
-        window.location.href = '/auth/form-login';
+        window.location.href = '/auth/sign-in';
         return;
     }
 
@@ -23,9 +23,11 @@ document.addEventListener('DOMContentLoaded', () => {// Remove a classe no-trans
       logoutBtn.addEventListener('click', () => {
         localStorage.removeItem('email');
         localStorage.removeItem('password');
+        localStorage.removeItem('user');
+        localStorage.removeItem('token');
         // Mantemos dark mode guardado (opcional): se preferires limpar, descomente a linha seguinte
         // localStorage.removeItem('darkMode');
-        // window.location.href = '/auth/form-login';
+        window.location.href = '/auth/logout';
       });
     }
 });

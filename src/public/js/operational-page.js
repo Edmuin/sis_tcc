@@ -153,6 +153,7 @@
                 ["tema", "Tema"],
                 ["objectivo", "Objetivo"],
                 ["estado", "Estado"],
+                ["observacao", "Observação"],
                 ["data_submissao", "Submissão"],
                 ["estudante_nome", "Estudante"],
                 ["professor_nome", "Orientador"],
@@ -164,7 +165,8 @@
             form: [
                 ["tema", "Tema", "text"],
                 ["objectivo", "Objetivo", "text"],
-                ["estado", "Estado", "number"],
+                ["estado", "Estado", "select:rascunho|submetido|em_analise|aprovado|rejeitado|agendado_defesa|defendido"],
+                ["observacao", "Observação", "text"],
                 ["data_submissao", "Data de submissão", "date"],
                 ["id_estudante", "ID do estudante", "number", true],
                 ["id_professor", "ID do professor", "number", true],

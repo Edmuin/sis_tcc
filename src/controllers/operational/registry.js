@@ -188,8 +188,8 @@ export const decorateRows = async (resourceName, rows) => {
 
       return {
         ...row,
-        estudante_nome: usersById[estudante?.id_user]?.nome || "",
-        professor_nome: usersById[professor?.id_user]?.nome || "",
+        estudante_nome: usersById[estudante?.id_user]?.fullname || "",
+        professor_nome: usersById[professor?.id_user]?.fullname || "",
       };
     });
   }

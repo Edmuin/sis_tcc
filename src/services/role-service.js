@@ -15,5 +15,10 @@ export const RoleService = {
   async getRoleByName (name) {
     const role = await RoleModel.findByName(name);
     return role;
+  },
+
+  async getRoleById (id) {
+    const role = await RoleModel.findById(id);
+    return role;
   }
 }

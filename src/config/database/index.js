@@ -11,6 +11,22 @@ export const criarTabelaBanca = async () => {
     )
   `;
   await pool.query(query);
+  await pool.query(`
+    INSERT INTO tcc_historico (id_tcc, estado_novo, acao, responsavel, observacao, created_at)
+    SELECT
+      tcc.id,
+      COALESCE(tcc.estado, 'rascunho'),
+      'Histórico inicial',
+      'Sistema',
+      'Registo importado a partir dos dados existentes.',
+      COALESCE(tcc.created_at, CURRENT_TIMESTAMP)
+    FROM tcc
+    WHERE NOT EXISTS (
+      SELECT 1
+      FROM tcc_historico
+      WHERE tcc_historico.id_tcc = tcc.id
+    )
+  `);
 }
 
 export const criarTabelaAreaFormacao = async () => {
@@ -132,7 +148,9 @@ export const criarTabelaTcc = async () => {
       id INT AUTO_INCREMENT PRIMARY KEY,
       tema VARCHAR(255),
       objectivo VARCHAR(255),
-      estado DOUBLE NOT NULL DEFAULT 0,
+      tipo VARCHAR(20) NOT NULL DEFAULT 'individual',
+      estado VARCHAR(30) NOT NULL DEFAULT 'rascunho',
+      observacao TEXT,
       data_submissao TIMESTAMP NULL DEFAULT NULL,
       id_estudante INT NOT NULL,
       id_professor INT NOT NULL,
@@ -143,6 +161,10 @@ export const criarTabelaTcc = async () => {
     )
   `;
   await pool.query(query);
+  await garantirColunaTcc("tipo", "VARCHAR(20) NOT NULL DEFAULT 'individual'");
+  await garantirColunaTcc("observacao", "TEXT");
+  await garantirDefinicaoColunaTcc("estado", "VARCHAR(30) NOT NULL DEFAULT 'rascunho'");
+  await normalizarEstadosTcc();
   await garantirColunaTcc("relatorio_pdf", "VARCHAR(255)");
 }
 
@@ -151,6 +173,71 @@ const garantirColunaTcc = async (coluna, definicao) => {
   if (rows.length > 0) return;
 
   await pool.query(`ALTER TABLE tcc ADD COLUMN ${coluna} ${definicao}`);
+}
+
+const garantirDefinicaoColunaTcc = async (coluna, definicao) => {
+  const [rows] = await pool.query(`SHOW COLUMNS FROM tcc LIKE ?`, [coluna]);
+  if (rows.length === 0) {
+    await pool.query(`ALTER TABLE tcc ADD COLUMN ${coluna} ${definicao}`);
+    return;
+  }
+
+  if (rows[0].Type !== "varchar(30)") {
+    await pool.query(`ALTER TABLE tcc MODIFY COLUMN ${coluna} ${definicao}`);
+  }
+}
+
+const normalizarEstadosTcc = async () => {
+  await pool.query(`
+    UPDATE tcc
+    SET estado = CASE
+      WHEN estado IN ('0', '0.0', '') OR estado IS NULL THEN 'rascunho'
+      WHEN estado IN ('1', '1.0') THEN 'submetido'
+      WHEN estado IN ('2', '2.0') THEN 'aprovado'
+      WHEN estado IN ('3', '3.0') THEN 'rejeitado'
+      ELSE estado
+    END
+  `);
+}
+
+export const criarTabelaTccEstudante = async () => {
+  const query = `
+    CREATE TABLE IF NOT EXISTS tcc_estudante (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      id_tcc INT NOT NULL,
+      id_estudante INT NOT NULL,
+      papel VARCHAR(20) NOT NULL DEFAULT 'autor',
+      created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+      updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+      UNIQUE KEY unique_tcc_estudante (id_tcc, id_estudante),
+      CONSTRAINT fk_tcc_estudante_tcc FOREIGN KEY (id_tcc) REFERENCES tcc(id) ON DELETE CASCADE,
+      CONSTRAINT fk_tcc_estudante_estudante FOREIGN KEY (id_estudante) REFERENCES estudante(id)
+    )
+  `;
+  await pool.query(query);
+  await pool.query(`
+    INSERT IGNORE INTO tcc_estudante (id_tcc, id_estudante, papel)
+    SELECT id, id_estudante, 'principal'
+    FROM tcc
+    WHERE id_estudante IS NOT NULL
+  `);
+}
+
+export const criarTabelaTccHistorico = async () => {
+  const query = `
+    CREATE TABLE IF NOT EXISTS tcc_historico (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      id_tcc INT NOT NULL,
+      estado_anterior VARCHAR(30),
+      estado_novo VARCHAR(30) NOT NULL,
+      acao VARCHAR(50) NOT NULL,
+      responsavel VARCHAR(100),
+      observacao TEXT,
+      created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+      CONSTRAINT fk_tcc_historico_tcc FOREIGN KEY (id_tcc) REFERENCES tcc(id) ON DELETE CASCADE
+    )
+  `;
+  await pool.query(query);
 }
 
 export const criarTabelaUser = async () => {
@@ -173,6 +260,35 @@ export const criarTabelaUser = async () => {
     )
   `;
   await pool.query(query);
+  await garantirColunaUser("fullname", "VARCHAR(255) NOT NULL DEFAULT ''");
+  await garantirColunaUser("telefone", "VARCHAR(20)");
+  await garantirColunaUser("idade", "INT NOT NULL DEFAULT 17");
+  await garantirColunaUser("genero", "VARCHAR(10)");
+  await garantirColunaUser("role_id", "INT");
+  await garantirColunaUser("n_processo", "VARCHAR(50) NULL");
+  await garantirColunaUser("curso", "VARCHAR(50) NULL");
+  await garantirColunaUser("area_formacao", "VARCHAR(50) NULL");
+  await garantirColunaUser("n_mecanografico", "VARCHAR(50) NULL");
+  await garantirColunaUser("password", "VARCHAR(255) NOT NULL DEFAULT ''");
+  await preencherFullnameUser();
+}
+
+const garantirColunaUser = async (coluna, definicao) => {
+  const [rows] = await pool.query(`SHOW COLUMNS FROM user LIKE ?`, [coluna]);
+  if (rows.length > 0) return;
+
+  await pool.query(`ALTER TABLE user ADD COLUMN ${coluna} ${definicao}`);
+}
+
+const preencherFullnameUser = async () => {
+  const [nomeRows] = await pool.query(`SHOW COLUMNS FROM user LIKE 'nome'`);
+  if (nomeRows.length === 0) return;
+
+  await pool.query(`
+    UPDATE user
+    SET fullname = nome
+    WHERE (fullname IS NULL OR fullname = '') AND nome IS NOT NULL
+  `);
 }
 
 export const dadosDeRoles = async () => {
@@ -194,6 +310,8 @@ export const criarTodasTabelas = async () => {
   await criarTabelaEstudante();
   await criarTabelaProfessor();
   await criarTabelaTcc();
+  await criarTabelaTccEstudante();
+  await criarTabelaTccHistorico();
   await criarTabelaBanca();
   await criarTabelaDefesa();
   await criarTabelaSubdireccao();

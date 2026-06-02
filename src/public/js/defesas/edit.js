@@ -13,7 +13,10 @@ const id = window.location.pathname.split("/").filter(Boolean)[1];
         ]);
         const [tccResult, bancaResult] = await Promise.all([tccResponse.json(), bancaResponse.json()]);
 
-        tccSelect.innerHTML = '<option value="">Selecione um TCC</option>' + (tccResult.data || []).map((row) => (
+        const tccsDisponiveis = (tccResult.data || []).filter((row) => (
+          row.estado === "aprovado" || row.estado === "agendado_defesa" || String(row.id) === String(selectedTccId)
+        ));
+        tccSelect.innerHTML = '<option value="">Selecione um TCC aprovado</option>' + tccsDisponiveis.map((row) => (
           `<option value="${row.id}" ${String(row.id) === String(selectedTccId) ? "selected" : ""}>${row.tema || `TCC ${row.id}`}</option>`
         )).join("");
         bancaSelect.innerHTML = '<option value="">Selecione uma banca</option>' + (bancaResult.data || []).map((row) => (

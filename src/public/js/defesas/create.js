@@ -1,3 +1,5 @@
+const selectedTccId = new URLSearchParams(window.location.search).get("tcc");
+
 async function loadOptions() {
       const tccSelect = document.querySelector("[data-tcc-select]");
       const bancaSelect = document.querySelector("[data-banca-select]");
@@ -9,8 +11,9 @@ async function loadOptions() {
         ]);
         const [tccResult, bancaResult] = await Promise.all([tccResponse.json(), bancaResponse.json()]);
 
-        tccSelect.innerHTML = '<option value="">Selecione um TCC</option>' + (tccResult.data || []).map((row) => (
-          `<option value="${row.id}">${row.tema || `TCC ${row.id}`}</option>`
+        const tccsAprovados = (tccResult.data || []).filter((row) => row.estado === "aprovado");
+        tccSelect.innerHTML = '<option value="">Selecione um TCC aprovado</option>' + tccsAprovados.map((row) => (
+          `<option value="${row.id}" ${String(row.id) === String(selectedTccId || "") ? "selected" : ""}>${row.tema || `TCC ${row.id}`}</option>`
         )).join("");
         bancaSelect.innerHTML = '<option value="">Selecione uma banca</option>' + (bancaResult.data || []).map((row) => (
           `<option value="${row.id}">Sala ${row.sala || "-"}${row.data ? ` - ${row.data}` : ""}</option>`

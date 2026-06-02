@@ -1,568 +1,160 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meus Dados - Gestor TCC</title>
-    <meta name="description" content="Sistema de Gerenciamento de TCC">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/css/templatemo-glass-admin-style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Meus Dados - Gestor TCC</title>
+  <meta name="description" content="Sistema de Gerenciamento de TCC">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/templatemo-glass-admin-style.css">
 </head>
 <body>
-    
-    <div class="background"></div>
-    <div class="orb orb-1"></div>
-    <div class="orb orb-2"></div>
-    <div class="orb orb-3"></div>
+  <div class="background"></div>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
 
-    <div class="dashboard">
-        
-       <aside class="sidebar" id="sidebar">
-            <div class="sidebar-header">
-                <div class="logo">HB</div>
-                <span class="logo-text">Gestor TCC</span>
+  <div class="dashboard">
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="logo">HB</div>
+        <span class="logo-text">Gestor TCC</span>
+      </div>
+
+      <ul class="nav-menu"></ul>
+
+      <div class="sidebar-footer">
+        <div class="user-profile">
+          <div class="user-avatar">HB</div>
+          <div class="user-info">
+            <div class="user-name">H & B</div>
+            <div class="user-role">Administrador</div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <nav class="navbar">
+        <div class="page-header">
+          <h1 class="page-title">Meus Dados</h1>
+          <div class="page-breadcrumb">
+            <a href="/PainelPrincipal">Painel</a>
+            <span>/</span>
+            <span>Meus Dados</span>
+          </div>
+        </div>
+        <div class="navbar-right">
+          <button class="nav-btn" id="theme-toggle" title="Alternar tema">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="4"/>
+              <path d="M12 2v2"/><path d="M12 20v2"/>
+              <path d="M4.93 4.93l1.41 1.41"/><path d="M17.66 17.66l1.41 1.41"/>
+              <path d="M2 12h2"/><path d="M20 12h2"/>
+              <path d="M6.34 17.66l-1.41 1.41"/><path d="M19.07 4.93l-1.41 1.41"/>
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: none;">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+            </svg>
+          </button>
+        </div>
+      </nav>
+
+      <section class="glass-card operational-panel" style="max-width: 960px;">
+        <div class="profile-header">
+          <div class="profile-avatar-large">HB</div>
+          <div class="profile-info">
+            <h2>Utilizador</h2>
+            <p>admin@gestortcc.local - Administrador</p>
+          </div>
+        </div>
+
+        <form class="operational-form">
+          <div class="settings-section">
+            <h3 class="settings-section-title">Informações Pessoais</h3>
+            <div class="form-grid">
+              <div class="form-group-settings">
+                <label>Nome completo</label>
+                <input type="text" value="H & B">
+              </div>
+              <div class="form-group-settings">
+                <label>E-mail</label>
+                <input type="email" value="admin@gestortcc.local">
+              </div>
+              <div class="form-group-settings">
+                <label>Telefone</label>
+                <input type="tel" value="+244 900 000 000">
+              </div>
+              <div class="form-group-settings">
+                <label>Perfil</label>
+                <input type="text" value="Administrador">
+              </div>
+              <div class="form-group-settings full-width">
+                <label>Resumo</label>
+                <textarea>Utilizador do sistema académico para acompanhamento de TCCs.</textarea>
+              </div>
             </div>
+          </div>
 
-            <ul class="nav-menu">
-                <li class="nav-section">
-                    <span class="nav-section-title">Menu Principal</span>
-                    <ul>
-                        <li class="nav-item">
-                            <a href="/PainelPrincipal" class="nav-link ">
-                                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <rect x="3" y="3" width="7" height="7" rx="1"/>
-                                    <rect x="14" y="3" width="7" height="7" rx="1"/>
-                                    <rect x="3" y="14" width="7" height="7" rx="1"/>
-                                    <rect x="14" y="14" width="7" height="7" rx="1"/>
-                                </svg>
-                                Painel Principal
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="/tcc" class="nav-link">
-                                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M12 2L2 7l10 5 10-5-10-5z"/>
-                                    <path d="M2 17l10 5 10-5"/>
-                                    <path d="M2 12l10 5 10-5"/>
-                                </svg>
-                                TCCs
-                                <span class="nav-badge"></span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="/Agendar" class="nav-link">
-                                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
-                                    <line x1="16" y1="2" x2="16" y2="6"/>
-                                    <line x1="8" y1="2" x2="8" y2="6"/>
-                                    <line x1="3" y1="10" x2="21" y2="10"/>
-                                    <path d="M8 14h.01"/>
-                                    <path d="M12 14h.01"/>
-                                    <path d="M16 14h.01"/>
-                                    <path d="M8 18h.01"/>
-                                    <path d="M12 18h.01"/>
-                                </svg>
-                                Defesas
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                
-                 <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <circle cx="12" cy="12" r="3"/>
-                                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
-                                </svg>
-                                <summary>Configurações</summary>
-                            </a>
-                                <ol class="submenu">
-                                    <li><a href="/AreadeFormacao">Área de Formação</a></li>
-                                    <li><a href="/Curso">Cursos</a></li>
-                                    <li><a href="/ConfigUtilizadores">Utilizadores</a></li>
-                                    <li><a href="/Perfis">Perfis</a></li>
-                                    <li><a href="/ConfigSobre">Sobre</a></li>
-                                </ol>
-                        </li>
-                    </ul>
-                </li>
-                <li class="nav-section">
-                    <span class="nav-section-title">Conta</span>
-                    <ul>
-                        <li class="nav-item">
-                            <a href="/MeusDados" class="nav-link active" data-route="/MeusDados">
-                                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-                                    <circle cx="12" cy="7" r="4"/>
-                                </svg>
-                                Meus Dados
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="/auth/form-login" class="nav-link">
-                                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
-                                    <polyline points="16 17 21 12 16 7"/>
-                                    <line x1="21" y1="12" x2="9" y2="12"/>
-                                </svg>
-                                Sair
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-            </ul>
-
-            <div class="sidebar-footer">
-                <div class="user-profile">
-                    <div class="user-avatar">HB</div>
-                    <div class="user-info">
-                        <div class="user-name">H & B</div>
-                        <div class="user-role">Administrador</div>
-                    </div>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <polyline points="6 9 12 15 18 9"/>
-                    </svg>
-                </div>
+          <div class="settings-section">
+            <h3 class="settings-section-title">Dados Académicos</h3>
+            <div class="form-grid">
+              <div class="form-group-settings">
+                <label>Curso</label>
+                <input type="text" value="Por definir">
+              </div>
+              <div class="form-group-settings">
+                <label>Orientador</label>
+                <input type="text" value="Por definir">
+              </div>
+              <div class="form-group-settings">
+                <label>Número de processo</label>
+                <input type="text" value="Por definir">
+              </div>
+              <div class="form-group-settings">
+                <label>Ano lectivo</label>
+                <input type="text" value="2026">
+              </div>
             </div>
-        </aside>
+          </div>
 
-        <!-- Main Content -->
-        <main class="main-content">
-            <!-- Top Navbar -->
-            <nav class="navbar">
-                <div class="page-header">
-                    <h1 class="page-title">Meus Dados</h1>
-                    <div class="page-breadcrumb">
-                        <a href="/">Painel</a>
-                        <span>/</span>
-                        <span>Meus Dados</span>
-                    </div>
-                </div>
-                <div class="navbar-right">
-                    <button class="nav-btn">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/>
-                        </svg>
-                        <span class="notification-dot"></span>
-                    </button>
-                    <button class="nav-btn" id="theme-toggle" title="Alternar tema">
-                        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/>
-                            <path d="M4.93 4.93l1.41 1.41"/><path d="M17.66 17.66l1.41 1.41"/>
-                            <path d="M2 12h2"/><path d="M20 12h2"/>
-                            <path d="M6.34 17.66l-1.41 1.41"/><path d="M19.07 4.93l-1.41 1.41"/>
-                        </svg>
-                        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: none;">
-                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-                        </svg>
-                    </button>
-                </div>
-            </nav>
-
-            <!-- Settings Content -->
-            <div class="settings-container">
-                <!-- Settings Navigation -->
-
-                <!-- Settings Content -->
-                <div class="settings-content">
-                    <!-- Profile Tab -->
-                    <div class="settings-tab-content active" id="tab-profile">
-                        <div class="profile-header">
-                            <div class="profile-avatar-large">
-                                DN
-                                <div class="profile-avatar-edit">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
-                                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
-                                    </svg>
-                                </div>
-                            </div>
-                            <div class="profile-info">
-                                <h2>Utilizador</h2>
-                                <p>admin@gestortcc.local • Administrador</p>
-                            </div>
-                        </div>
-
-                        <div class="settings-section">
-                            <h3 class="settings-section-title">Informações Pessoais</h3>
-                            <div class="form-grid">
-                                <div class="form-group-settings">
-                                    <label>Nome</label>
-                                    <input type="text" value="Helder">
-                                </div>
-                                <div class="form-group-settings">
-                                    <label>Sobrenome</label>
-                                    <input type="text" value="Benvindo">
-                                </div>
-                                <div class="form-group-settings">
-                                    <label>E-mail</label>
-                                    <input type="email" value="admin@gestortcc.local">
-                                </div>
-                                <div class="form-group-settings">
-                                    <label>Telefone</label>
-                                    <input type="tel" value="+244 900 000 000">
-                                </div>
-                                <div class="form-group-settings full-width">
-                                    <label>Resumo acadêmico</label>
-                                    <textarea>Utilizador do sistema académico para acompanhamento de TCCs.</textarea>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="settings-section">
-                            <h3 class="settings-section-title">Dados Acadêmicos</h3>
-                            <div class="settings-row">
-                                <div class="settings-label">
-                                    <span class="settings-label-title">Orientador</span>
-                                    <span class="settings-label-desc">Selecione o seu Orientador</span>
-                                </div>
-                                <select class="settings-select">
-                                    <option value="">Selecione o seu Orientador</option>
-                                    <option>Lucas Pazito</option>
-                                    <option>Maria Álvaro</option>
-                                    <option>Olívia Matos</option>
-                                </select>
-                            </div>
-                            <div class="settings-row">
-                                <div class="settings-label">
-                                    <span class="settings-label-title">Curso</span>
-                                    <span class="settings-label-desc">Selecione o seu Curso</span>
-                                </div>
-                                <select class="settings-select">
-                                    <option value="">Selecione o seu Curso</option>
-                                    <option>Engenharia de Software</option>
-                                    <option>Sistemas de Informação</option>
-                                    <option>Ciência da Computação</option>
-                                </select>
-                            </div>
-
-                        <div class="btn-group">
-                            <button class="btn btn-primary" style="width: auto;">Guardar Alterações</button>
-                            <button class="btn btn-secondary" style="width: auto;">Cancelar</button>
-                        </div>
-                    </div>
-
-                    <!-- Security Tab -->
-                    <div class="settings-tab-content" id="tab-security">
-                        <div class="settings-section">
-                            <h3 class="settings-section-title">Alterar Senha</h3>
-                            <div class="form-grid">
-                                <div class="form-group-settings full-width">
-                                    <label>Senha Atual</label>
-                                    <input type="password" placeholder="Informe a senha atual">
-                                </div>
-                                <div class="form-group-settings">
-                                    <label>Nova Senha</label>
-                                    <input type="password" placeholder="Informe a nova senha">
-                                </div>
-                                <div class="form-group-settings">
-                                    <label>Confirm Nova Senha</label>
-                                    <input type="password" placeholder="Confirme a nova senha">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="settings-section">
-                            <h3 class="settings-section-title">Autenticação em Duas Etapas</h3>
-                            <div class="settings-row">
-                                <div class="settings-label">
-                                    <span class="settings-label-title">Ativar 2FA</span>
-                                    <span class="settings-label-desc">Aumenta a segurança da sua conta</span>
-                                </div>
-                                <label class="toggle-switch">
-                                    <input type="checkbox">
-                                    <span class="toggle-slider"></span>
-                                </label>
-                            </div>
-                            <div class="settings-row">
-                                <div class="settings-label">
-                                    <span class="settings-label-title">Autenticação por SMS</span>
-                                    <span class="settings-label-desc">Receber códigos por SMS</span>
-                                </div>
-                                <label class="toggle-switch">
-                                    <input type="checkbox" checked>
-                                    <span class="toggle-slider"></span>
-                                </label>
-                            </div>
-                            <div class="settings-row">
-                                <div class="settings-label">
-                                    <span class="settings-label-title">Aplicação autenticadora</span>
-                                    <span class="settings-label-desc">Usar Google Authenticator ou semelhante</span>
-                                </div>
-                                <label class="toggle-switch">
-                                    <input type="checkbox">
-                                    <span class="toggle-slider"></span>
-                                </label>
-                            </div>
-                        </div>
-
-                        <div class="settings-section">
-                            <h3 class="settings-section-title">Sessões Ativas</h3>
-                            <div class="settings-row">
-                                <div class="settings-label">
-                                    <span class="settings-label-title">Navegador principal</span>
-                                    <span class="settings-label-desc">Luanda, Angola • Sessão atual</span>
-                                </div>
-                                <span class="status-badge completed">Ativa</span>
-                            </div>
-                            <div class="settings-row">
-                                <div class="settings-label">
-                                    <span class="settings-label-title">Dispositivo móvel</span>
-                                    <span class="settings-label-desc">Luanda, Angola • Há 2 horas</span>
-                                </div>
-                                <button class="card-btn" style="padding: 6px 12px;">Revogar</button>
-                            </div>
-                            <div class="settings-row">
-                                <div class="settings-label">
-                                    <span class="settings-label-title">Outro navegador</span>
-                                    <span class="settings-label-desc">Luanda, Angola • Há 3 dias</span>
-                                </div>
-                                <button class="card-btn" style="padding: 6px 12px;">Revogar</button>
-                            </div>
-                        </div>
-
-                        <div class="btn-group">
-                            <button class="btn btn-primary" style="width: auto;">Atualizar Senha</button>
-                            <button class="btn btn-secondary" style="width: auto;">Cancelar</button>
-                        </div>
-                    </div>
-
-                    <!-- Notifications Tab -->
-                    <div class="settings-tab-content" id="tab-notifications">
-                        <div class="settings-section">
-                            <h3 class="settings-section-title">Notificações por E-mail</h3>
-                            <div class="settings-row">
-                                <div class="settings-label">
-                                    <span class="settings-label-title">Atividade da Conta</span>
-                                    <span class="settings-label-desc">Receber avisos sobre acessos e segurança</span>
-                                </div>
-                                <label class="toggle-switch">
-                                    <input type="checkbox" checked>
-                                    <span class="toggle-slider"></span>
-                                </label>
-                            </div>
-                            <div class="settings-row">
-                                <div class="settings-label">
-                                    <span class="settings-label-title">Atualizações do Sistema</span>
-                                    <span class="settings-label-desc">Receber avisos sobre mudanças no sistema</span>
-                                </div>
-                                <label class="toggle-switch">
-                                    <input type="checkbox" checked>
-                                    <span class="toggle-slider"></span>
-                                </label>
-                            </div>
-                            <div class="settings-row">
-                                <div class="settings-label">
-                                    <span class="settings-label-title">Comunicados Acadêmicos</span>
-                                    <span class="settings-label-desc">Receber avisos da coordenação</span>
-                                </div>
-                                <label class="toggle-switch">
-                                    <input type="checkbox">
-                                    <span class="toggle-slider"></span>
-                                </label>
-                            </div>
-                        </div>
-
-                        <div class="settings-section">
-                            <h3 class="settings-section-title">Notificações no Sistema</h3>
-                            <div class="settings-row">
-                                <div class="settings-label">
-                                    <span class="settings-label-title">Notificações no computador</span>
-                                    <span class="settings-label-desc">Mostrar notificações no computador</span>
-                                </div>
-                                <label class="toggle-switch">
-                                    <input type="checkbox" checked>
-                                    <span class="toggle-slider"></span>
-                                </label>
-                            </div>
-                            <div class="settings-row">
-                                <div class="settings-label">
-                                    <span class="settings-label-title">Notificações móveis</span>
-                                    <span class="settings-label-desc">Receber notificações no telemóvel</span>
-                                </div>
-                                <label class="toggle-switch">
-                                    <input type="checkbox" checked>
-                                    <span class="toggle-slider"></span>
-                                </label>
-                            </div>
-                            <div class="settings-row">
-                                <div class="settings-label">
-                                    <span class="settings-label-title">Som</span>
-                                    <span class="settings-label-desc">Reproduzir som nas notificações</span>
-                                </div>
-                                <label class="toggle-switch">
-                                    <input type="checkbox">
-                                    <span class="toggle-slider"></span>
-                                </label>
-                            </div>
-                        </div>
-
-                        <div class="btn-group">
-                            <button class="btn btn-primary" style="width: auto;">Guardar Dados Acadêmicos</button>
-                            <button class="btn btn-secondary" style="width: auto;">Repor Padrão</button>
-                        </div>
-                    </div>
-
-                    <!-- Appearance Tab -->
-                    <div class="settings-tab-content" id="tab-appearance">
-                        <div class="settings-section">
-                            <h3 class="settings-section-title">Tema</h3>
-                            <div class="settings-row">
-                                <div class="settings-label">
-                                    <span class="settings-label-title">Modo de cor</span>
-                                    <span class="settings-label-desc">Escolha o modo de cor preferido</span>
-                                </div>
-                                <select class="settings-select" id="theme-select">
-                                    <option value="dark">Modo Escuro</option>
-                                    <option value="light">Modo Claro</option>
-                                    <option value="system">Padrão do Sistema</option>
-                                </select>
-                            </div>
-                            <div class="settings-row">
-                                <div class="settings-label">
-                                    <span class="settings-label-title">Cor de destaque</span>
-                                    <span class="settings-label-desc">Escolha a cor de destaque</span>
-                                </div>
-                                <select class="settings-select">
-                                    <option>Esmeralda (Padrão)</option>
-                                    <option>Azul</option>
-                                    <option>Roxo</option>
-                                    <option>Laranja</option>
-                                    <option>Rosa</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="settings-section">
-                            <h3 class="settings-section-title">Visualização</h3>
-                            <div class="settings-row">
-                                <div class="settings-label">
-                                    <span class="settings-label-title">Modo Compacto</span>
-                                    <span class="settings-label-desc">Reduzir espaçamento para mostrar mais conteúdo</span>
-                                </div>
-                                <label class="toggle-switch">
-                                    <input type="checkbox">
-                                    <span class="toggle-slider"></span>
-                                </label>
-                            </div>
-                            <div class="settings-row">
-                                <div class="settings-label">
-                                    <span class="settings-label-title">Animações</span>
-                                    <span class="settings-label-desc">Ativar animações e transições</span>
-                                </div>
-                                <label class="toggle-switch">
-                                    <input type="checkbox" checked>
-                                    <span class="toggle-slider"></span>
-                                </label>
-                            </div>
-                            <div class="settings-row">
-                                <div class="settings-label">
-                                    <span class="settings-label-title">Efeito de Vidro</span>
-                                    <span class="settings-label-desc">Ativar efeito de vidro</span>
-                                </div>
-                                <label class="toggle-switch">
-                                    <input type="checkbox" checked>
-                                    <span class="toggle-slider"></span>
-                                </label>
-                            </div>
-                            <div class="settings-row">
-                                <div class="settings-label">
-                                    <span class="settings-label-title">Fundo Animado</span>
-                                    <span class="settings-label-desc">Mostrar fundo animado</span>
-                                </div>
-                                <label class="toggle-switch">
-                                    <input type="checkbox" checked>
-                                    <span class="toggle-slider"></span>
-                                </label>
-                            </div>
-                        </div>
-
-                        <div class="btn-group">
-                            <button class="btn btn-primary" style="width: auto;">Aplicar Alterações</button>
-                            <button class="btn btn-secondary" style="width: auto;">Repor Padrão</button>
-                        </div>
-                    </div>
-
-                    <!-- Academic History Tab -->
-                    <div class="settings-tab-content" id="tab-billing">
-                        <div class="settings-section">
-                            <h3 class="settings-section-title">Resumo do TCC</h3>
-                            <div class="billing-plan-card" style="background: linear-gradient(135deg, rgba(5, 150, 105, 0.15), rgba(212, 165, 116, 0.15)); padding: 24px; border-radius: 16px; margin-bottom: 20px; border: 1px solid var(--glass-border);">
-                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-                                    <div>
-                                        <h4 style="font-size: 20px; font-weight: 600; margin-bottom: 4px;">Sistema de Gestão de TCC</h4>
-                                        <p style="color: var(--text-muted); font-size: 14px;">Orientador: por definir</p>
-                                    </div>
-                                    <div style="text-align: right;">
-                                        <span style="font-family: 'Space Mono', monospace; font-size: 32px; font-weight: 700;">75%</span>
-                                        <span style="color: var(--text-muted);">concluído</span>
-                                    </div>
-                                </div>
-                                <div style="display: flex; gap: 12px;">
-                                    <button class="btn btn-primary" style="width: auto; padding: 10px 20px;">Atualizar TCC</button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="settings-section">
-                            <h3 class="settings-section-title">Histórico Acadêmico</h3>
-                            <div class="table-wrapper" style="margin: 0;">
-                                <table class="data-table" style="min-width: 100%;">
-                                    <thead>
-                                        <tr>
-                                            <th>Data</th>
-                                            <th>Atividade</th>
-                                            <th>Responsável</th>
-                                            <th>Estado</th>
-                                            <th>Observação</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>12/05/2026</td>
-                                            <td>Proposta de TCC submetida</td>
-                                            <td>Estudante</td>
-                                            <td><span class="status-badge completed">Recebido</span></td>
-                                            <td>Registo inicial</td>
-                                        </tr>
-                                        <tr>
-                                            <td>18/05/2026</td>
-                                            <td>Parecer do orientador</td>
-                                            <td>Orientador</td>
-                                            <td><span class="status-badge completed">Validado</span></td>
-                                            <td>Acompanhamento concluído</td>
-                                        </tr>
-                                        <tr>
-                                            <td>24/05/2026</td>
-                                            <td>Correções solicitadas</td>
-                                            <td>Coordenação</td>
-                                            <td><span class="status-badge pending">Pendente</span></td>
-                                            <td>Aguardar atualização</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+          <div class="settings-section">
+            <h3 class="settings-section-title">Segurança</h3>
+            <div class="form-grid">
+              <div class="form-group-settings">
+                <label>Senha atual</label>
+                <input type="password" placeholder="Informe a senha atual">
+              </div>
+              <div class="form-group-settings">
+                <label>Nova senha</label>
+                <input type="password" placeholder="Informe a nova senha">
+              </div>
             </div>
-        </main>
-    </div>
+          </div>
 
-    <!-- Mobile Menu Toggle -->
-    <button class="mobile-menu-toggle">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/>
-        </svg>
-    </button>
+          <div class="btn-group">
+            <button class="btn btn-primary" type="button" style="width: auto;">Guardar Alterações</button>
+            <a class="btn btn-secondary" href="/PainelPrincipal" style="width: auto;">Cancelar</a>
+          </div>
+        </form>
+      </section>
+    </main>
+  </div>
 
-    
-    <footer class="site-footer">
-        <p>Copyright © 2026 Gestor TCC. Desenvolvido por <a href="/PainelPrincipal" target="_blank" rel="nofollow">H&B</a></p>
-    </footer>
+  <button class="mobile-menu-toggle">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <line x1="3" y1="12" x2="21" y2="12"/>
+      <line x1="3" y1="6" x2="21" y2="6"/>
+      <line x1="3" y1="18" x2="21" y2="18"/>
+    </svg>
+  </button>
 
-    <script src="/js/templatemo-glass-admin-script.js"></script>
+  <footer class="site-footer">
+    <p>Copyright © 2026 Gestor TCC. Desenvolvido por <a href="/PainelPrincipal" rel="nofollow">H&B</a></p>
+  </footer>
+
+  <script src="/js/templatemo-glass-admin-script.js"></script>
 </body>
 </html>

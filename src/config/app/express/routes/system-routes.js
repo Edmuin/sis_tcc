@@ -5,7 +5,7 @@ import { dashboard, roles, MeusDados, ConfigSobre, PainelPrincipal, Configuracoe
 const router = Router();
 
 // rotas das paginas principais
-router.get("/", dashboard);
+router.get("/", (req, res) => res.redirect("/auth/user-type"));
 router.get("/roles", roles);
 router.get("/tcc", modulePage);
 router.get("/MeusDados", MeusDados);

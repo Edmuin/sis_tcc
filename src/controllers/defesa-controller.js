@@ -17,7 +17,11 @@ const normalizeDefesaPayload = (body) => ({
   resultado: body.resultado,
 });
 
-const validateDefesaPayload = async (data, { partial = false } = {}) => {
+const resultadoFechaDefesa = (resultado) => {
+  return ["aprovado", "aprovado_com_correcoes", "reprovado"].includes(String(resultado || "").toLowerCase());
+};
+
+const validateDefesaPayload = async (data, { partial = false, currentId = null } = {}) => {
   const required = ["id_tcc", "id_banca", "data_defesa", "resultado"];
   const missing = partial ? [] : required.filter((field) => !hasValue(data[field]));
   const errors = missing.map((field) => `${field} é obrigatório`);
@@ -25,6 +29,9 @@ const validateDefesaPayload = async (data, { partial = false } = {}) => {
   if (hasValue(data.id_tcc)) {
     const tcc = await TccModel.findById(data.id_tcc);
     if (!tcc) errors.push("TCC não encontrado");
+    else if (!(currentId ? ["aprovado", "agendado_defesa", "defendido"] : ["aprovado"]).includes(tcc.estado)) {
+      errors.push("Só é possível agendar defesa para TCC aprovado");
+    }
   }
 
   if (hasValue(data.id_banca)) {
@@ -34,6 +41,24 @@ const validateDefesaPayload = async (data, { partial = false } = {}) => {
 
   if (hasValue(data.data_defesa) && Number.isNaN(Date.parse(data.data_defesa))) {
     errors.push("data_defesa inválida");
+  }
+
+  const defesas = await DefesaModel.findAll();
+
+  if (hasValue(data.id_tcc)) {
+    const alreadyScheduled = defesas.find((defesa) => (
+      String(defesa.id_tcc) === String(data.id_tcc) && String(defesa.id) !== String(currentId || "")
+    ));
+    if (alreadyScheduled) errors.push("Este TCC já tem uma defesa agendada");
+  }
+
+  if (hasValue(data.id_banca) && hasValue(data.data_defesa)) {
+    const conflicting = defesas.find((defesa) => (
+      String(defesa.id_banca) === String(data.id_banca) &&
+      String(defesa.data_defesa).slice(0, 10) === String(data.data_defesa).slice(0, 10) &&
+      String(defesa.id) !== String(currentId || "")
+    ));
+    if (conflicting) errors.push("Esta banca já tem uma defesa marcada para esta data");
   }
 
   return errors;
@@ -46,6 +71,10 @@ const wantsHtml = (req) => {
 const redirectOrJson = (req, res, redirectPath, payload, status = 200) => {
   if (wantsHtml(req)) return res.redirect(redirectPath);
   return res.status(status).json(payload);
+};
+
+const requestUserLabel = (req) => {
+  return req.user?.fullname || req.user?.email || req.headers["x-user-email"] || "Sistema";
 };
 
 export const index = async (req, res) => {
@@ -94,6 +123,15 @@ export const store = async (req, res) => {
     if (errors.length > 0) return validationError(res, errors.join("; "));
 
     const defesa = await DefesaModel.store(data);
+    const tcc = await TccModel.findById(data.id_tcc);
+    await TccModel.update(data.id_tcc, { estado: "agendado_defesa" });
+    await TccModel.addHistorico(data.id_tcc, {
+      estado_anterior: tcc?.estado || "aprovado",
+      estado_novo: "agendado_defesa",
+      acao: "Defesa agendada",
+      responsavel: requestUserLabel(req),
+      observacao: `Defesa marcada para ${data.data_defesa}.`,
+    });
     return redirectOrJson(req, res, `/Defesas/${defesa.id}`, { data: defesa }, 201);
   } catch (error) {
     console.error(error);
@@ -111,12 +149,27 @@ export const update = async (req, res) => {
       if (!hasValue(data[key])) delete data[key];
     });
 
-    const errors = await validateDefesaPayload(data, { partial: true });
+    const fullData = { ...current, ...data };
+    const errors = await validateDefesaPayload(fullData, { partial: true, currentId: req.params.id });
     if (errors.length > 0) return validationError(res, errors.join("; "));
 
     const result = await DefesaModel.update(req.params.id, data);
     if (!result || result.affectedRows === 0) {
       return res.status(404).json({ message: "Defesa não encontrada ou sem alterações." });
+    }
+
+    const tcc = await TccModel.findById(fullData.id_tcc);
+    const nextEstado = resultadoFechaDefesa(fullData.resultado) ? "defendido" : "agendado_defesa";
+    await TccModel.update(fullData.id_tcc, { estado: nextEstado });
+
+    if ((tcc?.estado || "") !== nextEstado || hasValue(data.resultado)) {
+      await TccModel.addHistorico(fullData.id_tcc, {
+        estado_anterior: tcc?.estado || "agendado_defesa",
+        estado_novo: nextEstado,
+        acao: resultadoFechaDefesa(fullData.resultado) ? "Defesa concluída" : "Defesa atualizada",
+        responsavel: requestUserLabel(req),
+        observacao: `Resultado da defesa: ${fullData.resultado}.`,
+      });
     }
 
     return redirectOrJson(req, res, `/Defesas/${req.params.id}`, { data: { id: req.params.id, ...data } });
@@ -128,9 +181,24 @@ export const update = async (req, res) => {
 
 export const destroy = async (req, res) => {
   try {
+    const current = await DefesaModel.findById(req.params.id);
     const result = await DefesaModel.deleteById(req.params.id);
     if (!result || result.affectedRows === 0) {
       return res.status(404).json({ message: "Defesa não encontrada." });
+    }
+
+    if (current?.id_tcc) {
+      const tcc = await TccModel.findById(current.id_tcc);
+      if (tcc?.estado === "agendado_defesa") {
+        await TccModel.update(current.id_tcc, { estado: "aprovado" });
+        await TccModel.addHistorico(current.id_tcc, {
+          estado_anterior: "agendado_defesa",
+          estado_novo: "aprovado",
+          acao: "Defesa eliminada",
+          responsavel: requestUserLabel(req),
+          observacao: "A defesa agendada foi removida.",
+        });
+      }
     }
 
     return redirectOrJson(req, res, "/Defesas", { data: { id: req.params.id } });

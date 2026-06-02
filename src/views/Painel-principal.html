@@ -88,31 +88,6 @@
                         </li>
                     </ul>
                 </li>
-
-                <li class="nav-section">
-                    <span class="nav-section-title">Conta</span>
-                    <ul>
-                        <li class="nav-item">
-                            <a href="/MeusDados" class="nav-link" data-route="/MeusDados">
-                                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-                                    <circle cx="12" cy="7" r="4"/>
-                                </svg>
-                                Meus Dados
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="/auth/form-login" class="nav-link">
-                                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
-                                    <polyline points="16 17 21 12 16 7"/>
-                                    <line x1="21" y1="12" x2="9" y2="12"/>
-                                </svg>
-                                Sair
-                            </a>
-                        </li>
-                    </ul>
-                </li>
             </ul>
 
             <div class="sidebar-footer">
@@ -170,10 +145,10 @@
                     <div class="stat-card-inner">
                         <div class="stat-info">
                             <h3>Total de TCCs</h3>
-                            <div class="stat-value">1,234</div>
+                            <div class="stat-value">0</div>
                             <span class="stat-change positive">
                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg>
-                                +12.5%
+                                A carregar...
                             </span>
                         </div>
                         <div class="stat-icon cyan">
@@ -187,11 +162,11 @@
                 <div class="glass-card glass-card-3d stat-card">
                     <div class="stat-card-inner">
                         <div class="stat-info">
-                            <h3>Total de Alunos</h3>
-                            <div class="stat-value">24,521</div>
+                            <h3>Submetidos</h3>
+                            <div class="stat-value">0</div>
                             <span class="stat-change positive">
                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg>
-                                +8.2%
+                                A carregar...
                             </span>
                         </div>
                         <div class="stat-icon magenta">
@@ -206,11 +181,11 @@
                 <div class="glass-card glass-card-3d stat-card">
                     <div class="stat-card-inner">
                         <div class="stat-info">
-                            <h3>Orientadores</h3>
-                            <div class="stat-value">16</div>
-                            <span class="stat-change negative">
+                            <h3>Aprovados</h3>
+                            <div class="stat-value">0</div>
+                            <span class="stat-change positive">
                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"/></svg>
-                                -3.1%
+                                A carregar...
                             </span>
                         </div>
                         <div class="stat-icon purple">
@@ -225,11 +200,11 @@
                 <div class="glass-card glass-card-3d stat-card">
                     <div class="stat-card-inner">
                         <div class="stat-info">
-                            <h3>Coordenadores</h3>
-                            <div class="stat-value">4</div>
+                            <h3>Próximas defesas</h3>
+                            <div class="stat-value">0</div>
                             <span class="stat-change positive">
                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg>
-                                +2.4%
+                                A carregar...
                             </span>
                         </div>
                         <div class="stat-icon success">
@@ -247,13 +222,12 @@
                 <div class="glass-card chart-card">
                     <div class="card-header">
                         <div>
-                            <h2 class="card-title">Análises de TCCs</h2>
-                            <p class="card-subtitle">Mensalmente</p>
+                            <h2 class="card-title">Submissões de TCC</h2>
+                            <p class="card-subtitle">Últimos seis meses</p>
                         </div>
                         <div class="card-actions">
-                            <button class="card-btn active">Mensalmente</button>
-                            <button class="card-btn">Semanalmente</button>
-                            <button class="card-btn">Diariamente</button>
+                            <a class="card-btn active" href="/tcc">Ver TCCs</a>
+                            <a class="card-btn" href="/Defesas">Ver defesas</a>
                         </div>
                     </div>
                     <div class="chart-wrapper">
@@ -288,44 +262,16 @@
                 <div class="glass-card activity-card">
                     <div class="card-header">
                         <div>
-                            <h2 class="card-title">Activades Recentes</h2>
-                            <p class="card-subtitle">Últimos TCCs</p>
+                            <h2 class="card-title">Próximas Defesas</h2>
+                            <p class="card-subtitle">Agenda futura</p>
                         </div>
                     </div>
                     <div class="activity-list">
                         <div class="activity-item">
                             <div class="activity-avatar" style="background: linear-gradient(135deg, var(--emerald-light), var(--emerald));">DS</div>
                             <div class="activity-content">
-                                <p class="activity-text"><strong>Utilizador</strong> Adicionou o TCC</p>
-                                <span class="activity-time">Há 2 minutos</span>
-                            </div>
-                        </div>
-                        <div class="activity-item">
-                            <div class="activity-avatar" style="background: linear-gradient(135deg, var(--gold), var(--amber));">DS</div>
-                            <div class="activity-content">
-                                <p class="activity-text"><strong>Utilizador</strong> Enviou o seu BI</p>
-                                <span class="activity-time">Há 15 minutos</span>
-                            </div>
-                        </div>
-                        <div class="activity-item">
-                            <div class="activity-avatar" style="background: linear-gradient(135deg, var(--coral), var(--gold));">DS</div>
-                            <div class="activity-content">
-                                <p class="activity-text"><strong>Utilizador</strong> Enviou o seu BI</p>
-                                <span class="activity-time">Há 1 hora</span>
-                            </div>
-                        </div>
-                        <div class="activity-item">
-                            <div class="activity-avatar" style="background: linear-gradient(135deg, var(--success), var(--emerald));">DS</div>
-                            <div class="activity-content">
-                                <p class="activity-text"><strong>Utilizador</strong> concluiu o cadastro</p>
-                                <span class="activity-time">Há 2 horas</span>
-                            </div>
-                        </div>
-                        <div class="activity-item">
-                            <div class="activity-avatar" style="background: linear-gradient(135deg, var(--warning), var(--gold));">DS</div>
-                            <div class="activity-content">
-                                <p class="activity-text"><strong>Utilizador</strong> solicitou revisão</p>
-                                <span class="activity-time">Há 3 horas</span>
+                                <p class="activity-text"><strong>A carregar defesas...</strong></p>
+                                <span class="activity-time">Aguarde</span>
                             </div>
                         </div>
                     </div>
@@ -339,8 +285,8 @@
                             <p class="card-subtitle">Últimos TCCs enviados</p>
                         </div>
                         <div class="card-actions">
-                            <button class="card-btn">Visualizar todos</button>
-                            <button class="card-btn">Exportar</button>
+                            <a class="card-btn" href="/tcc">Visualizar todos</a>
+                            <a class="card-btn" href="/Defesas/create">Marcar defesa</a>
                         </div>
                     </div>
                     <div class="table-wrapper">
@@ -348,41 +294,14 @@
                             <thead>
                                 <tr>
                                     <th>Alunos</th>
-                                    <th></th>
+                                    <th>Tema</th>
                                     <th>Data</th>
                                     <th>Status</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td><div class="table-user"><div class="table-avatar" style="background: linear-gradient(135deg, var(--emerald-light), var(--emerald));">JD</div><div class="table-user-info"><span class="table-user-name">Utilizador</span><span class="table-user-email">utilizador@gestortcc.local</span></div></div></td>
-                                    <td>Submissão de TCC</td>
-                                    <td>Jan 15, 2025</td>
-                                    <td><span class="status-badge completed">Concluído</span></td>
-                                </tr>
-                                <tr>
-                                    <td><div class="table-user"><div class="table-avatar" style="background: linear-gradient(135deg, var(--gold), var(--amber));">AS</div><div class="table-user-info"><span class="table-user-name">Utilizador</span><span class="table-user-email">utilizador@gestortcc.local</span></div></div></td>
-                                    <td>Validação institucional</td>
-                                    <td>Jan 14, 2025</td>
-                                    <td><span class="status-badge processing">Em processamento</span></td>
-                                </tr>
-                                <tr>
-                                    <td><div class="table-user"><div class="table-avatar" style="background: linear-gradient(135deg, var(--success), var(--emerald));">MJ</div><div class="table-user-info"><span class="table-user-name">Utilizador</span><span class="table-user-email">utilizador@gestortcc.local</span></div></div></td>
-                                    <td>Documento académico</td>
-                                    <td>Jan 13, 2025</td>
-                                    <td><span class="status-badge completed">Concluído</span></td>
-                                </tr>
-                                <tr>
-                                    <td><div class="table-user"><div class="table-avatar" style="background: linear-gradient(135deg, var(--coral), var(--gold));">DS</div><div class="table-user-info"><span class="table-user-name">Utilizador</span><span class="table-user-email">utilizador@gestortcc.local</span></div></div></td>
-                                    <td>Pedido de revisão</td>
-                                    <td>Jan 12, 2025</td>
-                                    <td><span class="status-badge pending">Pendente</span></td>
-                                </tr>
-                                <tr>
-                                    <td><div class="table-user"><div class="table-avatar" style="background: linear-gradient(135deg, var(--emerald), var(--gold));">DS</div><div class="table-user-info"><span class="table-user-name">Utilizador</span><span class="table-user-email">utilizador@gestortcc.local</span></div></div></td>
-                                    <td>Aprovação anual</td>
-                                    <td>Jan 11, 2025</td>
-                                    <td><span class="status-badge completed">Concluído</span></td>
+                                    <td colspan="4" class="empty-table-message">A carregar TCCs recentes...</td>
                                 </tr>
                             </tbody>
                         </table>

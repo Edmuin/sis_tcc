@@ -18,8 +18,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 document.getElementById('loginForm').addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    alert("teste");
-
     const email = document.getElementById('email').value.trim();
     const password = document.getElementById('password').value;
 
@@ -43,8 +41,7 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
             localStorage.setItem('user', JSON.stringify(data.user));
             localStorage.setItem('token', data.token);
 
-            alert('Redirecionando...');
-            window.location.href = '/';
+            window.location.href = data.redirectTo || '/PainelPrincipal';
         } else {
             console.log('Erro ao autenticar:', data.message);
             alert(data.message || "Erro ao autenticar.");

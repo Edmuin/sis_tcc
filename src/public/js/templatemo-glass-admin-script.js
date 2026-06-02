@@ -159,16 +159,122 @@
             title: "Conta",
             links: [
                 ["/MeusDados", "Meu Perfil"],
-                ["/auth/form-login", "Sair"],
+                ["/auth/logout", "Sair"],
             ],
         },
     ];
+
+    const navigationByRole = {
+        aluno: {
+            home: "/tcc",
+            links: ["/tcc", "/Estudantes", "/MeusDados", "/ConfigSobre", "/auth/logout"],
+        },
+        professor: {
+            home: "/tcc",
+            links: ["/tcc", "/Professores", "/MeusDados", "/ConfigSobre", "/auth/logout"],
+        },
+        tutor: {
+            home: "/tcc",
+            links: ["/tcc", "/Professores", "/MeusDados", "/ConfigSobre", "/auth/logout"],
+        },
+        coordenador: {
+            home: "/PainelPrincipal",
+            links: [
+                "/PainelPrincipal",
+                "/tcc",
+                "/Subdireccoes",
+                "/Bancas",
+                "/AreadeFormacao",
+                "/Curso",
+                "/users",
+                "/Perfis",
+                "/MeusDados",
+                "/ConfigSobre",
+                "/auth/logout",
+            ],
+        },
+        subdirecao: {
+            home: "/PainelPrincipal",
+            links: [
+                "/PainelPrincipal",
+                "/tcc",
+                "/Subdireccoes",
+                "/Bancas",
+                "/AreadeFormacao",
+                "/Curso",
+                "/users",
+                "/Perfis",
+                "/MeusDados",
+                "/ConfigSobre",
+                "/auth/logout",
+            ],
+        },
+        subdireção: {
+            home: "/PainelPrincipal",
+            links: [
+                "/PainelPrincipal",
+                "/tcc",
+                "/Subdireccoes",
+                "/Bancas",
+                "/AreadeFormacao",
+                "/Curso",
+                "/users",
+                "/Perfis",
+                "/MeusDados",
+                "/ConfigSobre",
+                "/auth/logout",
+            ],
+        },
+    };
+
+    function getCurrentUserRole() {
+        try {
+            const user = JSON.parse(localStorage.getItem("user") || "{}");
+            return user.role || "";
+        } catch (error) {
+            return "";
+        }
+    }
+
+    function getNavigationSectionsForRole() {
+        const role = getCurrentUserRole();
+        const rule = navigationByRole[role];
+
+        if (!rule || !rule.links) return navigationSections;
+
+        return navigationSections
+            .map((section) => ({
+                ...section,
+                links: section.links.filter(([href]) => rule.links.includes(href)),
+            }))
+            .filter((section) => section.links.length > 0);
+    }
+
+    function enforceRoleHome() {
+        const role = getCurrentUserRole();
+        const rule = navigationByRole[role];
+
+        if (!rule || !rule.links) return;
+
+        const isAllowed = rule.links.some((href) => (
+            window.location.pathname === href ||
+            (href !== "/" && window.location.pathname.startsWith(`${href}/`))
+        ));
+
+        if (!isAllowed && window.location.pathname !== rule.home) {
+            window.location.href = rule.home;
+        }
+    }
 
     function initStableNavigation() {
         const navMenu = document.querySelector('.nav-menu');
         if (!navMenu) return;
 
-        navMenu.innerHTML = navigationSections.map((section) => `
+        enforceRoleHome();
+
+        const sections = getNavigationSectionsForRole();
+
+        navMenu.innerHTML = sections.map((section) => `
             <li class="nav-section">
                 <span class="nav-section-title">${section.title}</span>
                 <ul>
@@ -198,6 +304,15 @@
 
     function initSettingsNavigation() {}
 
+    function initLogoutLinks() {
+        document.querySelectorAll('a[href="/auth/logout"]').forEach((link) => {
+            link.addEventListener("click", () => {
+                localStorage.removeItem("user");
+                localStorage.removeItem("token");
+            });
+        });
+    }
+
     function initNavigationIcons() {
         const icons = {
             '/PainelPrincipal': '<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>',
@@ -208,10 +323,12 @@
             '/Estudantes': '<path d="M17 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9.5" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/>',
             '/Professores': '<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/><path d="M12 14l2 3 2-3"/>',
             '/DetalhesTcc': '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M8 13h8"/><path d="M8 17h6"/>',
+            '/Agendar': '<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4"/><path d="M8 2v4"/><path d="M3 10h18"/>',
             '/Defesas': '<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4"/><path d="M8 2v4"/><path d="M3 10h18"/>',
             '/Subdireccoes': '<path d="M3 21h18"/><path d="M6 21V8l6-4 6 4v13"/><path d="M9 21v-6h6v6"/>',
             '/Bancas': '<path d="M4 21v-7"/><path d="M20 21v-7"/><path d="M12 21v-9"/><path d="M2 14h20"/><path d="M12 3l9 5H3z"/>',
             '/MeusDados': '<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',
+            '/users': '<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/>',
             '/ConfigUtilizadores': '<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/>',
             '/AreadeFormacao': '<path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M9 21v-7h6v7"/>',
             '/Curso': '<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5z"/>',
@@ -450,6 +567,7 @@
         initStableNavigation();
         initOperationalNavigation();
         initSettingsNavigation();
+        initLogoutLinks();
         initNavigationIcons();
         initFormValidation();
         initPasswordToggle();

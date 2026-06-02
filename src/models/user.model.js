@@ -17,6 +17,7 @@ export const tabela = {
   },
 };
 
+console.log("Tabela User:", tabela);
 const userRepo = Repository(tabela);
 
 export const UserModel = {
@@ -33,6 +34,7 @@ export const UserModel = {
   },
 
   async store(data) {
+    console.log(data)
     return await userRepo.store(data);
   },
 

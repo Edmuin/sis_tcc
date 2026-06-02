@@ -40,6 +40,17 @@
       </div>
       <div class="navbar-right">
         <a class="btn btn-secondary" data-edit-link href="/tcc">Editar</a>
+        <button class="nav-btn" id="theme-toggle" title="Alternar tema">
+          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/>
+              <path d="M4.93 4.93l1.41 1.41"/><path d="M17.66 17.66l1.41 1.41"/>
+              <path d="M2 12h2"/><path d="M20 12h2"/>
+              <path d="M6.34 17.66l-1.41 1.41"/><path d="M19.07 4.93l-1.41 1.41"/>
+          </svg>
+          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: none;">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+          </svg>
+        </button>
       </div>
     </nav>
 
@@ -60,6 +71,33 @@
       <div class="operational-actions" style="margin-top:18px;">
         <a class="btn btn-secondary" href="/tcc">Voltar</a>
         <button class="btn btn-primary" type="button" data-delete>Eliminar</button>
+      </div>
+      <div class="operational-actions" data-status-actions style="margin-top:12px;"></div>
+      <p class="operational-message" data-message></p>
+    </section>
+
+    <section class="glass-card table-card" style="max-width:860px; margin-top:20px;">
+      <div class="card-header">
+        <div>
+          <h2 class="card-title">Histórico do TCC</h2>
+          <p class="card-subtitle">Linha do tempo de estados e alterações</p>
+        </div>
+      </div>
+      <div class="table-wrapper">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Data</th>
+              <th>Ação</th>
+              <th>Estado</th>
+              <th>Responsável</th>
+              <th>Observação</th>
+            </tr>
+          </thead>
+          <tbody data-history>
+            <tr><td colspan="5" class="empty-table-message">A carregar histórico...</td></tr>
+          </tbody>
+        </table>
       </div>
     </section>
   </main>

@@ -56,11 +56,14 @@ function Repository(table) {
     },
 
     async store(entity) {
+      console.log("Dados da tabela:", table);
+      console.log("Colunas:", nomes_colunas);
+      console.log("Entidade a ser inserida:", entity);
       try {
         const values = nomes_colunas.map((coluna) => entity[coluna]);
 
         const [result] = await pool.query(
-          `INSERT INTO ${table.nome} ${colunas_sql} VALUES ${valores_sql}`,
+          `INSERT INTO ${table?.nome} ${colunas_sql} VALUES ${valores_sql}`,
           values
         );
         return { id: result.insertId, ...entity };

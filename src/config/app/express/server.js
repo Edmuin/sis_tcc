@@ -49,7 +49,7 @@ const startServer = async () => {
   });
 };
 app.get("/", (req, res) => {
-    res.sendFile(path.join(PATHS.views, "index_new.html"));
+    res.redirect("/auth/user-type");
 });
 
 app.use((req, res) => {
