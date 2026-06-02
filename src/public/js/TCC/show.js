@@ -18,6 +18,19 @@ const actionsByState = {
 
 let currentTcc = null;
 
+const getCurrentUserRole = () => {
+  try {
+    return String(JSON.parse(localStorage.getItem("user") || "{}").role || "")
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "");
+  } catch (error) {
+    return "";
+  }
+};
+
+const isSubdireccao = () => ["coordenador", "subdirecao"].includes(getCurrentUserRole());
+
 const escapeHtml = (value) => String(value ?? "")
   .replaceAll("&", "&amp;")
   .replaceAll("<", "&lt;")
@@ -66,6 +79,11 @@ function renderHistory(rows = []) {
 
 function renderStatusActions(row) {
   const container = document.querySelector("[data-status-actions]");
+  if (!isSubdireccao()) {
+    container.innerHTML = "";
+    return;
+  }
+
   if ((row.estado || "rascunho") === "aprovado") {
     container.innerHTML = `<a class="btn btn-secondary" href="/Defesas/create?tcc=${row.id}">Marcar defesa</a>`;
     return;
@@ -118,6 +136,8 @@ function renderStatusActions(row) {
         <tr><th>Data de submissão</th><td>${row.data_submissao ? String(row.data_submissao).slice(0, 10) : "-"}</td></tr>
         <tr><th>Alunos</th><td>${participantes.join("<br>") || row.estudante_nome || "-"}</td></tr>
         <tr><th>Orientador</th><td>${row.professor_nome || (row.id_professor ? `Professor ${row.id_professor}` : "-")}</td></tr>
+        <tr><th>Criado por</th><td>${escapeHtml(row.criado_por || "-")}${row.criado_em ? ` em ${formatDate(row.criado_em)}` : ""}</td></tr>
+        <tr><th>Acompanhamento</th><td>${escapeHtml(row.aviso_criacao || "-")}</td></tr>
         <tr><th>Relatório</th><td>${row.relatorio_pdf ? `<a class="card-btn" href="${row.relatorio_pdf}" target="_blank" rel="noopener">Abrir PDF</a>` : "-"}</td></tr>
       `;
       renderStatusActions(row);

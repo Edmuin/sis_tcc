@@ -11,8 +11,11 @@ import {
   store,
   update,
 } from "../../../../controllers/defesa-controller.js";
+import { allowRoles, requireAuth } from "../../../../middlewares/auth-middleware.js";
 
 const router = Router();
+
+router.use(requireAuth, allowRoles("coordenador", "subdirecao", "subdireção"));
 
 router.get("/", index);
 router.get("/create", create);

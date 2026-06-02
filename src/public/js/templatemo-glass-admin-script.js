@@ -182,6 +182,7 @@
             links: [
                 "/PainelPrincipal",
                 "/tcc",
+                "/Agendar",
                 "/Subdireccoes",
                 "/Bancas",
                 "/AreadeFormacao",
@@ -198,6 +199,7 @@
             links: [
                 "/PainelPrincipal",
                 "/tcc",
+                "/Agendar",
                 "/Subdireccoes",
                 "/Bancas",
                 "/AreadeFormacao",
@@ -214,6 +216,7 @@
             links: [
                 "/PainelPrincipal",
                 "/tcc",
+                "/Agendar",
                 "/Subdireccoes",
                 "/Bancas",
                 "/AreadeFormacao",

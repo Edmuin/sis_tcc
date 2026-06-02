@@ -8,6 +8,13 @@
       defendido: "Defendido",
      };
 
+     const escapeHtml = (value) => String(value ?? "")
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
+
      async function loadTccs() {
       const tbody = document.querySelector("[data-tcc-list]");
 
@@ -17,7 +24,7 @@
         const rows = result.data || [];
 
         if (rows.length === 0) {
-          tbody.innerHTML = '<tr><td colspan="8" class="empty-table-message">Nenhum TCC cadastrado.</td></tr>';
+          tbody.innerHTML = '<tr><td colspan="9" class="empty-table-message">Nenhum TCC cadastrado.</td></tr>';
           return;
         }
 
@@ -29,6 +36,7 @@
             <td>${row.data_submissao ? String(row.data_submissao).slice(0, 10) : "-"}</td>
             <td>${(row.estudantes_nomes || []).join(", ") || row.estudante_nome || "-"}</td>
             <td>${row.professor_nome || (row.id_professor ? `Professor ${row.id_professor}` : "-")}</td>
+            <td>${escapeHtml(row.criado_por || "-")}</td>
             <td>${row.relatorio_pdf ? `<a class="card-btn" href="${row.relatorio_pdf}" target="_blank" rel="noopener">PDF</a>` : "-"}</td>
             <td class="table-actions">
               <a class="card-btn" href="/tcc/${row.id}">Ver</a>
@@ -39,7 +47,7 @@
         `).join("");
       } catch (error) {
         console.error(error);
-        tbody.innerHTML = '<tr><td colspan="8" class="empty-table-message">Não foi possível carregar os TCCs.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="9" class="empty-table-message">Não foi possível carregar os TCCs.</td></tr>';
       }
     }
 

@@ -5,6 +5,31 @@ const estudantePrincipal = document.querySelector("[data-estudante-principal]");
 const estudantesAdicionais = document.querySelector("[data-estudantes-adicionais]");
 const professorSelect = document.querySelector("[data-professor-select]");
 
+const getCurrentUserRole = () => {
+  try {
+    return String(JSON.parse(localStorage.getItem("user") || "{}").role || "")
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "");
+  } catch (error) {
+    return "";
+  }
+};
+
+const isSubdireccao = () => ["coordenador", "subdirecao"].includes(getCurrentUserRole());
+
+const applyRoleFields = () => {
+  if (isSubdireccao()) return;
+
+  ["estado", "data_submissao"].forEach((name) => {
+    const field = form.elements[name];
+    if (!field) return;
+    field.disabled = true;
+    const group = field.closest(".form-group");
+    if (group) group.hidden = true;
+  });
+};
+
 const optionLabel = (item, fallback) => {
   const details = [item.numero_estudante, item.turma, item.especializacao].filter(Boolean).join(" - ");
   return details ? `${item.nome || fallback} (${details})` : item.nome || fallback;
@@ -46,6 +71,7 @@ async function loadOptions() {
 
 tipoSelect.addEventListener("change", updateTccType);
 updateTccType();
+applyRoleFields();
 loadOptions().catch((error) => {
   const message = document.querySelector("[data-message]");
   message.textContent = error.message;

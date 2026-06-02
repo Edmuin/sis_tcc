@@ -13,12 +13,15 @@ import {
   store,
   update,
 } from "../../../../controllers/tcc-controller.js";
+import { requireAuth } from "../../../../middlewares/auth-middleware.js";
 import { pdfUploadMiddleware } from "../../../../middlewares/upload-middleware.js";
 
 const router = Router();
 const tccPdfFields = pdfUploadMiddleware.fields([
   { name: "relatorio_pdf", maxCount: 1 },
 ]);
+
+router.use(requireAuth);
 
 router.get("/", index);
 router.get("/create", create);
