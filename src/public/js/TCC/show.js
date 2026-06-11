@@ -79,31 +79,16 @@ function renderHistory(rows = []) {
 
 function renderStatusActions(row) {
   const container = document.querySelector("[data-status-actions]");
-  if (!isSubdireccao()) {
-    container.innerHTML = "";
-    return;
-  }
+  container.innerHTML = "";
+}
 
-  if ((row.estado || "rascunho") === "aprovado") {
-    container.innerHTML = `<a class="btn btn-secondary" href="/Defesas/create?tcc=${row.id}">Marcar defesa</a>`;
-    return;
-  }
+function applyRoleActions() {
+  if (!isSubdireccao()) return;
 
-  if ((row.estado || "rascunho") === "agendado_defesa") {
-    container.innerHTML = '<a class="btn btn-secondary" href="/Defesas">Ver defesas</a>';
-    return;
-  }
-
-  const actions = actionsByState[row.estado || "rascunho"] || [];
-
-  if (actions.length === 0) {
-    container.innerHTML = "";
-    return;
-  }
-
-  container.innerHTML = actions.map(([action, label]) => (
-    `<button class="btn btn-secondary" type="button" data-status-action="${action}">${label}</button>`
-  )).join("");
+  const editLink = document.querySelector("[data-edit-link]");
+  const deleteButton = document.querySelector("[data-delete]");
+  if (editLink) editLink.hidden = true;
+  if (deleteButton) deleteButton.hidden = true;
 }
 
     async function loadTcc() {
@@ -118,6 +103,7 @@ function renderStatusActions(row) {
 
       const row = result.data;
       currentTcc = row;
+      applyRoleActions();
       const estudantes = row.estudantes || [];
       const participantes = estudantes.map((estudante) => {
         const nome = estudante.estudante_nome || `Estudante ${estudante.id_estudante}`;
@@ -145,6 +131,7 @@ function renderStatusActions(row) {
     }
 
     document.querySelector("[data-delete]").addEventListener("click", async () => {
+      if (isSubdireccao()) return;
       if (!confirm("Deseja eliminar este TCC?")) return;
 
       const response = await fetch(`/tcc/${id}`, { method: "DELETE", headers: { Accept: "application/json" } });

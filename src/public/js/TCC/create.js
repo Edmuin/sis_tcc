@@ -4,6 +4,7 @@ const colectivoGroup = document.querySelector("[data-colectivo-group]");
 const estudantePrincipal = document.querySelector("[data-estudante-principal]");
 const estudantesAdicionais = document.querySelector("[data-estudantes-adicionais]");
 const professorSelect = document.querySelector("[data-professor-select]");
+const professorGroup = document.querySelector("[data-professor-group]");
 
 const getCurrentUserRole = () => {
   try {
@@ -17,9 +18,13 @@ const getCurrentUserRole = () => {
 };
 
 const isSubdireccao = () => ["coordenador", "subdirecao"].includes(getCurrentUserRole());
+const isTutor = () => ["professor", "tutor"].includes(getCurrentUserRole());
 
 const applyRoleFields = () => {
-  if (isSubdireccao()) return;
+  if (isSubdireccao()) {
+    form.innerHTML = '<p class="operational-message" data-type="error">A Subdireção apenas pode visualizar os TCCs.</p>';
+    return;
+  }
 
   ["estado", "data_submissao"].forEach((name) => {
     const field = form.elements[name];
@@ -28,6 +33,12 @@ const applyRoleFields = () => {
     const group = field.closest(".form-group");
     if (group) group.hidden = true;
   });
+
+  if (isTutor() && professorGroup) {
+    professorGroup.hidden = true;
+    professorSelect.required = false;
+    professorSelect.disabled = true;
+  }
 };
 
 const optionLabel = (item, fallback) => {
@@ -84,6 +95,7 @@ form.addEventListener("submit", async (event) => {
       const data = new FormData(event.target);
       if (!event.target.elements.relatorio_pdf.files.length) data.delete("relatorio_pdf");
       if (tipoSelect.value !== "colectivo") data.delete("estudantes_ids");
+      if (isTutor()) data.delete("id_professor");
 
       try {
         const response = await fetch("/tcc", {

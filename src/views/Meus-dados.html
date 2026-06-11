@@ -64,10 +64,10 @@
 
       <section class="glass-card operational-panel" style="max-width: 960px;">
         <div class="profile-header">
-          <div class="profile-avatar-large">HB</div>
+          <div class="profile-avatar-large" data-profile-avatar>--</div>
           <div class="profile-info">
-            <h2>Utilizador</h2>
-            <p>admin@gestortcc.local - Administrador</p>
+            <h2 data-profile-name>Utilizador</h2>
+            <p data-profile-summary>A carregar dados do utilizador...</p>
           </div>
         </div>
 
@@ -77,23 +77,23 @@
             <div class="form-grid">
               <div class="form-group-settings">
                 <label>Nome completo</label>
-                <input type="text" value="H & B">
+                <input type="text" data-profile-field="fullname" readonly>
               </div>
               <div class="form-group-settings">
                 <label>E-mail</label>
-                <input type="email" value="admin@gestortcc.local">
+                <input type="email" data-profile-field="email" readonly>
               </div>
               <div class="form-group-settings">
                 <label>Telefone</label>
-                <input type="tel" value="+244 900 000 000">
+                <input type="tel" data-profile-field="telefone" readonly>
               </div>
               <div class="form-group-settings">
                 <label>Perfil</label>
-                <input type="text" value="Administrador">
+                <input type="text" data-profile-field="role" readonly>
               </div>
               <div class="form-group-settings full-width">
                 <label>Resumo</label>
-                <textarea>Utilizador do sistema académico para acompanhamento de TCCs.</textarea>
+                <textarea data-profile-field="resumo" readonly></textarea>
               </div>
             </div>
           </div>
@@ -103,19 +103,19 @@
             <div class="form-grid">
               <div class="form-group-settings">
                 <label>Curso</label>
-                <input type="text" value="Por definir">
+                <input type="text" data-profile-field="curso" readonly>
               </div>
               <div class="form-group-settings">
                 <label>Orientador</label>
-                <input type="text" value="Por definir">
+                <input type="text" data-profile-field="orientador" readonly>
               </div>
               <div class="form-group-settings">
                 <label>Número de processo</label>
-                <input type="text" value="Por definir">
+                <input type="text" data-profile-field="n_processo" readonly>
               </div>
               <div class="form-group-settings">
                 <label>Ano lectivo</label>
-                <input type="text" value="2026">
+                <input type="text" data-profile-field="ano_lectivo" readonly>
               </div>
             </div>
           </div>
@@ -156,5 +156,6 @@
   </footer>
 
   <script src="/js/templatemo-glass-admin-script.js"></script>
+  <script src="/js/profile.js"></script>
 </body>
 </html>

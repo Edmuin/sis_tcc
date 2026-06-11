@@ -15,6 +15,24 @@
       .replaceAll('"', "&quot;")
       .replaceAll("'", "&#039;");
 
+     const getCurrentUserRole = () => {
+      try {
+        return String(JSON.parse(localStorage.getItem("user") || "{}").role || "")
+          .toLowerCase()
+          .normalize("NFD")
+          .replace(/[\u0300-\u036f]/g, "");
+      } catch (error) {
+        return "";
+      }
+     };
+
+     const isSubdireccao = () => ["coordenador", "subdirecao"].includes(getCurrentUserRole());
+
+     const applyRoleActions = () => {
+      const createButton = document.querySelector("[data-create-tcc]");
+      if (createButton && isSubdireccao()) createButton.hidden = true;
+     };
+
      async function loadTccs() {
       const tbody = document.querySelector("[data-tcc-list]");
 
@@ -40,8 +58,10 @@
             <td>${row.relatorio_pdf ? `<a class="card-btn" href="${row.relatorio_pdf}" target="_blank" rel="noopener">PDF</a>` : "-"}</td>
             <td class="table-actions">
               <a class="card-btn" href="/tcc/${row.id}">Ver</a>
-              <a class="card-btn" href="/tcc/${row.id}/edit">Editar</a>
-              <button class="card-btn" type="button" data-delete="${row.id}">Eliminar</button>
+              ${isSubdireccao() ? "" : `
+                <a class="card-btn" href="/tcc/${row.id}/edit">Editar</a>
+                <button class="card-btn" type="button" data-delete="${row.id}">Eliminar</button>
+              `}
             </td>
           </tr>
         `).join("");
@@ -60,4 +80,5 @@
       else alert("Não foi possível eliminar o TCC.");
     });
 
+    applyRoleActions();
     loadTccs();

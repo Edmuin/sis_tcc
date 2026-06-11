@@ -1,4 +1,10 @@
 const id = window.location.pathname.split("/").filter(Boolean)[1];
+const resultadoLabels = {
+  agendada: "Agendada",
+  aprovado: "Aprovado",
+  aprovado_com_correcoes: "Aprovado com correções",
+  reprovado: "Reprovado",
+};
 
     async function loadDefesa() {
       const detail = document.querySelector("[data-detail]");
@@ -17,9 +23,9 @@ const id = window.location.pathname.split("/").filter(Boolean)[1];
         <tr><th>ID</th><td>${row.id}</td></tr>
         <tr><th>TCC</th><td>${row.tcc_tema || "-"}</td></tr>
         <tr><th>Banca</th><td>Sala ${row.banca_sala || "-"}</td></tr>
-        <tr><th>Data da banca</th><td>${row.banca_data || "-"}</td></tr>
-        <tr><th>Data da defesa</th><td>${row.data_defesa || "-"}</td></tr>
-        <tr><th>Resultado</th><td>${row.resultado || "-"}</td></tr>
+        <tr><th>Data da banca</th><td>${row.banca_data ? String(row.banca_data).slice(0, 10) : "-"}</td></tr>
+        <tr><th>Data da defesa</th><td>${row.data_defesa ? String(row.data_defesa).slice(0, 10) : "-"}</td></tr>
+        <tr><th>Resultado</th><td>${resultadoLabels[row.resultado] || row.resultado || "-"}</td></tr>
         <tr><th>Criada em</th><td>${row.created_at || "-"}</td></tr>
         <tr><th>Atualizada em</th><td>${row.updated_at || "-"}</td></tr>
       `;

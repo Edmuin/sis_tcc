@@ -2,6 +2,13 @@ const id = window.location.pathname.split("/").filter(Boolean)[1];
     const form = document.querySelector("[data-defesa-form]");
     const message = document.querySelector("[data-message]");
 
+    const escapeHtml = (value) => String(value ?? "")
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
+
     async function loadOptions(selectedTccId, selectedBancaId) {
       const tccSelect = document.querySelector("[data-tcc-select]");
       const bancaSelect = document.querySelector("[data-banca-select]");
@@ -12,18 +19,22 @@ const id = window.location.pathname.split("/").filter(Boolean)[1];
           fetch("/Bancas/api", { headers: { Accept: "application/json" } }),
         ]);
         const [tccResult, bancaResult] = await Promise.all([tccResponse.json(), bancaResponse.json()]);
+        if (!tccResponse.ok) throw new Error(tccResult.message || "Não foi possível carregar TCCs.");
+        if (!bancaResponse.ok) throw new Error(bancaResult.message || "Não foi possível carregar bancas.");
 
         const tccsDisponiveis = (tccResult.data || []).filter((row) => (
-          row.estado === "aprovado" || row.estado === "agendado_defesa" || String(row.id) === String(selectedTccId)
+          ["aprovado", "agendado_defesa", "defendido"].includes(row.estado) || String(row.id) === String(selectedTccId)
         ));
         tccSelect.innerHTML = '<option value="">Selecione um TCC aprovado</option>' + tccsDisponiveis.map((row) => (
-          `<option value="${row.id}" ${String(row.id) === String(selectedTccId) ? "selected" : ""}>${row.tema || `TCC ${row.id}`}</option>`
+          `<option value="${row.id}" ${String(row.id) === String(selectedTccId) ? "selected" : ""}>${escapeHtml(row.tema || `TCC ${row.id}`)}</option>`
         )).join("");
         bancaSelect.innerHTML = '<option value="">Selecione uma banca</option>' + (bancaResult.data || []).map((row) => (
-          `<option value="${row.id}" ${String(row.id) === String(selectedBancaId) ? "selected" : ""}>Sala ${row.sala || "-"}${row.data ? ` - ${row.data}` : ""}</option>`
+          `<option value="${row.id}" ${String(row.id) === String(selectedBancaId) ? "selected" : ""}>Sala ${escapeHtml(row.sala || "-")}${row.data ? ` - ${escapeHtml(String(row.data).slice(0, 10))}` : ""}</option>`
         )).join("");
       } catch (error) {
         console.error(error);
+        message.textContent = error.message || "Não foi possível carregar as opções.";
+        message.dataset.type = "error";
         tccSelect.innerHTML = '<option value="">Não foi possível carregar TCCs</option>';
         bancaSelect.innerHTML = '<option value="">Não foi possível carregar bancas</option>';
       }
@@ -39,12 +50,12 @@ const id = window.location.pathname.split("/").filter(Boolean)[1];
         return;
       }
 
+      await loadOptions(result.data.id_tcc, result.data.id_banca);
       Object.entries(result.data).forEach(([key, value]) => {
         if (!form.elements[key]) return;
         form.elements[key].value = key === "data_defesa" && value ? String(value).slice(0, 10) : value ?? "";
       });
       document.querySelector("[data-show-link]").href = `/Defesas/${id}`;
-      await loadOptions(result.data.id_tcc, result.data.id_banca);
     }
 
     form.addEventListener("submit", async (event) => {

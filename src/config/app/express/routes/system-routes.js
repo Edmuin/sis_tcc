@@ -1,6 +1,7 @@
 import { Router } from "express";
 
-import { dashboard, roles, MeusDados, ConfigSobre, PainelPrincipal, Configuracoes, AreadeFormacao, modulePage} from "../../../../controllers/system-controller.js";
+import { dashboard, roles, MeusDados, MeusDadosApi, ConfigSobre, PainelPrincipal, Configuracoes, AreadeFormacao, modulePage} from "../../../../controllers/system-controller.js";
+import { requireAuth } from "../../../../middlewares/auth-middleware.js";
 
 const router = Router();
 
@@ -8,7 +9,8 @@ const router = Router();
 router.get("/", (req, res) => res.redirect("/auth/user-type"));
 router.get("/roles", roles);
 router.get("/tcc", modulePage);
-router.get("/MeusDados", MeusDados);
+router.get("/MeusDados", requireAuth, MeusDados);
+router.get("/MeusDados/api", requireAuth, MeusDadosApi);
 router.get("/ConfigSobre", ConfigSobre);
 router.get("/ConfigUtilizadores", modulePage);
 router.get("/Agendar", (req, res) => res.redirect("/Defesas"));

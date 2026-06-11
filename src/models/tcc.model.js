@@ -119,7 +119,11 @@ export const TccModel = {
   },
 
   async store(data) {
-    return await tccRepo.store({ ...data, tipo: data.tipo || "individual" });
+    return await tccRepo.store({
+      ...data,
+      tipo: data.tipo || "individual",
+      estado: data.estado || "rascunho",
+    });
   },
 
   async update(id, data) {

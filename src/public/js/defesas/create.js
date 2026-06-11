@@ -1,5 +1,12 @@
 const selectedTccId = new URLSearchParams(window.location.search).get("tcc");
 
+const escapeHtml = (value) => String(value ?? "")
+  .replaceAll("&", "&amp;")
+  .replaceAll("<", "&lt;")
+  .replaceAll(">", "&gt;")
+  .replaceAll('"', "&quot;")
+  .replaceAll("'", "&#039;");
+
 async function loadOptions() {
       const tccSelect = document.querySelector("[data-tcc-select]");
       const bancaSelect = document.querySelector("[data-banca-select]");
@@ -11,15 +18,20 @@ async function loadOptions() {
         ]);
         const [tccResult, bancaResult] = await Promise.all([tccResponse.json(), bancaResponse.json()]);
 
+        if (!tccResponse.ok) throw new Error(tccResult.message || "Não foi possível carregar TCCs.");
+        if (!bancaResponse.ok) throw new Error(bancaResult.message || "Não foi possível carregar bancas.");
+
         const tccsAprovados = (tccResult.data || []).filter((row) => row.estado === "aprovado");
         tccSelect.innerHTML = '<option value="">Selecione um TCC aprovado</option>' + tccsAprovados.map((row) => (
-          `<option value="${row.id}" ${String(row.id) === String(selectedTccId || "") ? "selected" : ""}>${row.tema || `TCC ${row.id}`}</option>`
+          `<option value="${row.id}" ${String(row.id) === String(selectedTccId || "") ? "selected" : ""}>${escapeHtml(row.tema || `TCC ${row.id}`)}</option>`
         )).join("");
         bancaSelect.innerHTML = '<option value="">Selecione uma banca</option>' + (bancaResult.data || []).map((row) => (
-          `<option value="${row.id}">Sala ${row.sala || "-"}${row.data ? ` - ${row.data}` : ""}</option>`
+          `<option value="${row.id}">Sala ${escapeHtml(row.sala || "-")}${row.data ? ` - ${escapeHtml(String(row.data).slice(0, 10))}` : ""}</option>`
         )).join("");
       } catch (error) {
         console.error(error);
+        document.querySelector("[data-message]").textContent = error.message || "Não foi possível carregar as opções.";
+        document.querySelector("[data-message]").dataset.type = "error";
         tccSelect.innerHTML = '<option value="">Não foi possível carregar TCCs</option>';
         bancaSelect.innerHTML = '<option value="">Não foi possível carregar bancas</option>';
       }

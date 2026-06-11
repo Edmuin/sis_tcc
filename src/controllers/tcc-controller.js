@@ -2,8 +2,10 @@ import path from "path";
 
 import { EstudanteModel } from "../models/estudante.model.js";
 import { ProfessorModel } from "../models/professor.model.js";
+import { CursoModel } from "../models/curso.model.js";
 import { TccModel } from "../models/tcc.model.js";
 import { UserModel } from "../models/user.model.js";
+import { RoleService } from "../services/role-service.js";
 import { normalizeOptionalText, normalizeText } from "../utils/validation.js";
 
 const tccViewsPath = (...segments) => path.join(process.cwd(), "src/views/TCC", ...segments);
@@ -65,6 +67,26 @@ const denyAccess = (res, message = "Não tem permissão para aceder a este TCC."
   return res.status(403).json({ message });
 };
 
+const denyHtml = (res, message = "Não tem permissão para executar esta ação.") => {
+  return res.status(403).send(`
+    <!DOCTYPE html>
+    <html lang="pt">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Acesso negado - Gestor TCC</title>
+    </head>
+    <body>
+      <main style="font-family: Arial, sans-serif; max-width: 520px; margin: 80px auto; line-height: 1.5;">
+        <h1>Acesso negado</h1>
+        <p>${message}</p>
+        <a href="/tcc">Voltar aos TCCs</a>
+      </main>
+    </body>
+    </html>
+  `);
+};
+
 const findCurrentEstudante = async (user) => {
   if (!user) return null;
 
@@ -81,6 +103,61 @@ const findCurrentProfessor = async (user) => {
 
   const professores = await ProfessorModel.findAll();
   return professores.find((professor) => String(professor.id_user) === String(user.id)) || null;
+};
+
+const resolveCursoId = async (value) => {
+  if (!hasValue(value)) return null;
+
+  const numericId = Number(value);
+  if (Number.isInteger(numericId) && numericId > 0) {
+    const curso = await CursoModel.findById(numericId);
+    if (curso) return numericId;
+  }
+
+  const cursos = await CursoModel.findAll();
+  const curso = cursos.find((item) => normalizeRole(item.nome) === normalizeRole(value));
+  return curso?.id || null;
+};
+
+const syncAcademicProfiles = async () => {
+  const [users, roles, estudantes, professores] = await Promise.all([
+    UserModel.findAll(),
+    RoleService.roles(),
+    EstudanteModel.findAll(),
+    ProfessorModel.findAll(),
+  ]);
+  const rolesById = roles.reduce((acc, role) => {
+    acc[role.id] = role.nome;
+    return acc;
+  }, {});
+  const estudanteUserIds = new Set(estudantes.map((estudante) => String(estudante.id_user)));
+  const professorUserIds = new Set(professores.map((professor) => String(professor.id_user)));
+
+  for (const user of users) {
+    const role = normalizeRole(rolesById[user.role_id] || user.role);
+
+    if (role === "aluno" && !estudanteUserIds.has(String(user.id))) {
+      const idCurso = await resolveCursoId(user.curso);
+      if (!idCurso) continue;
+
+      await EstudanteModel.store({
+        id_user: user.id,
+        numero_estudante: Number(user.n_processo) || user.id,
+        numero_processo: user.n_processo || null,
+        turma: null,
+        ano_lectivo: String(new Date().getFullYear()),
+        id_curso: idCurso,
+      });
+    }
+
+    if (["professor", "tutor"].includes(role) && !professorUserIds.has(String(user.id))) {
+      await ProfessorModel.store({
+        id_user: user.id,
+        especializacao: user.curso || null,
+        categoria: "Tutor",
+      });
+    }
+  }
 };
 
 const getTccAccessContext = async (req) => {
@@ -310,6 +387,8 @@ export const index = async (req, res) => {
 };
 
 export const create = async (req, res) => {
+  const context = await getTccAccessContext(req);
+  if (context.isSubdireccao) return denyHtml(res, "A Subdireção apenas pode visualizar os TCCs.");
   res.sendFile(tccViewsPath("create.html"));
 };
 
@@ -318,6 +397,8 @@ export const show = async (req, res) => {
 };
 
 export const edit = async (req, res) => {
+  const context = await getTccAccessContext(req);
+  if (context.isSubdireccao) return denyHtml(res, "A Subdireção apenas pode visualizar os TCCs.");
   res.sendFile(tccViewsPath("edit.html"));
 };
 
@@ -335,6 +416,7 @@ export const list = async (req, res) => {
 export const options = async (req, res) => {
   try {
     const context = await getTccAccessContext(req);
+    await syncAcademicProfiles();
     const [estudantes, professores, users] = await Promise.all([
       EstudanteModel.findAll(),
       ProfessorModel.findAll(),
@@ -397,6 +479,7 @@ export const store = async (req, res) => {
     if (req.fileValidationError) return validationError(res, req.fileValidationError);
 
     const context = await getTccAccessContext(req);
+    if (context.isSubdireccao) return denyAccess(res, "A Subdireção apenas pode visualizar os TCCs.");
     const data = {
       ...normalizeTccPayload(req.body),
       ...uploadedTccFiles(req.files),
@@ -433,6 +516,7 @@ export const update = async (req, res) => {
     const current = await TccModel.findById(req.params.id);
     if (!current) return res.status(404).json({ message: "TCC não encontrado." });
     const context = await getTccAccessContext(req);
+    if (context.isSubdireccao) return denyAccess(res, "A Subdireção apenas pode visualizar os TCCs.");
     if (!canAccessTcc(context, current)) return denyAccess(res);
 
     const data = {
@@ -480,39 +564,7 @@ export const update = async (req, res) => {
 
 export const changeStatus = async (req, res) => {
   try {
-    const context = await getTccAccessContext(req);
-    if (!context.isSubdireccao) return denyAccess(res, "Apenas a Subdireção pode alterar o estado do TCC ou marcar defesa.");
-
-    const current = await TccModel.findById(req.params.id);
-    if (!current) return res.status(404).json({ message: "TCC não encontrado." });
-
-    const action = TCC_ACOES[req.body.acao];
-    if (!action) return validationError(res, "Ação de estado inválida.");
-
-    const currentState = current.estado || "rascunho";
-    if (!action.allowedFrom.includes(currentState)) {
-      return validationError(res, `Não é possível executar esta ação a partir do estado ${currentState}.`);
-    }
-
-    const data = {
-      estado: action.estado,
-      observacao: hasValue(req.body.observacao) ? req.body.observacao : current.observacao,
-    };
-
-    if (req.body.acao === "submeter" && !current.data_submissao) {
-      data.data_submissao = new Date();
-    }
-
-    await TccModel.update(req.params.id, data);
-    await TccModel.addHistorico(req.params.id, {
-      estado_anterior: currentState,
-      estado_novo: action.estado,
-      acao: TCC_ACAO_LABELS[req.body.acao] || req.body.acao,
-      responsavel: requestUserLabel(req),
-      observacao: data.observacao || null,
-    });
-    const tcc = await TccModel.findById(req.params.id);
-    return res.json({ data: tcc });
+    return denyAccess(res, "A Subdireção apenas pode visualizar os TCCs.");
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Não foi possível atualizar o estado do TCC." });
@@ -524,6 +576,7 @@ export const destroy = async (req, res) => {
     const context = await getTccAccessContext(req);
     const current = await TccModel.findById(req.params.id);
     if (!current) return res.status(404).json({ message: "TCC não encontrado." });
+    if (context.isSubdireccao) return denyAccess(res, "A Subdireção apenas pode visualizar os TCCs.");
     if (!canAccessTcc(context, current)) return denyAccess(res, "Não tem permissão para eliminar este TCC.");
 
     const result = await TccModel.deleteById(req.params.id);

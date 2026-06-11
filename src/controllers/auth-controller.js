@@ -1,5 +1,9 @@
 import path from "path";
 
+import { CursoModel } from "../models/curso.model.js";
+import { EstudanteModel } from "../models/estudante.model.js";
+import { ProfessorModel } from "../models/professor.model.js";
+import { UserModel } from "../models/user.model.js";
 import { AuthService } from "../services/auth-service.js";
 import { UserService } from "../services/user-service.js";
 import { RoleService } from "../services/role-service.js";
@@ -21,6 +25,46 @@ const allowedRoles = ["aluno", "tutor", "professor", "coordenador", "subdirecao"
 const allowedGenero = ["masculino", "feminino"];
 
 const validationError = (res, message) => res.status(400).send({ message });
+
+const resolveCursoId = async (value) => {
+    if (!hasValue(value)) return null;
+
+    const numericId = Number(value);
+    if (Number.isInteger(numericId) && numericId > 0) {
+        const curso = await CursoModel.findById(numericId);
+        if (curso) return numericId;
+    }
+
+    const cursos = await CursoModel.findAll();
+    const curso = cursos.find((item) => normalizeRole(item.nome) === normalizeRole(value));
+    return curso?.id || null;
+};
+
+const createAcademicProfile = async (user, payload, role) => {
+    const normalizedRole = normalizeRole(role);
+
+    if (normalizedRole === "aluno") {
+        const idCurso = await resolveCursoId(payload.curso);
+        if (!idCurso) return;
+
+        await EstudanteModel.store({
+            id_user: user.id,
+            numero_estudante: Number(payload.n_processo) || user.id,
+            numero_processo: payload.n_processo,
+            turma: null,
+            ano_lectivo: String(new Date().getFullYear()),
+            id_curso: idCurso,
+        });
+    }
+
+    if (["professor", "tutor"].includes(normalizedRole)) {
+        await ProfessorModel.store({
+            id_user: user.id,
+            especializacao: payload.curso || null,
+            categoria: "Tutor",
+        });
+    }
+};
 
 const normalizeUserPayload = (body) => ({
     fullname: normalizeText(body.fullname),
@@ -163,7 +207,7 @@ export const signup_coordenador = async (req, res) => {
 
 export const register = async (req, res) => {
     try {
-        const { role } = req.session.role || {};
+        const role = normalizeRole(req.session.role?.role || req.body.role);
         const normalizedRole = normalizeRole(role);
         const payload = normalizeUserPayload(req.body);
         const errors = validateUserPayload(payload, normalizedRole);
@@ -172,8 +216,12 @@ export const register = async (req, res) => {
         const role_id = await RoleService.getRoleByName(role);
         if (!role_id) return res.status(400).send("Tipo de utilizador inválido");
 
+        const existingUser = await UserModel.findByEmail(payload.email);
+        if (existingUser) return res.status(400).send("Já existe um utilizador com este email.");
+
         const password = Math.random().toString(36).slice(-8); // Gerar uma senha aleatória de 8 caracteres
         const user = await UserService.gravar({ ...payload, role_id: role_id.id, password });
+        await createAcademicProfile(user, payload, role);
 
         const message = `Caro(a) ${user.fullname}, a sua conta foi criada com sucesso! A sua senha é: ${password}`;
         const dateScheduled= generateDateWith30s();

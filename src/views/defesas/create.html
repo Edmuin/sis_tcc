@@ -78,7 +78,12 @@
           </div>
           <div class="form-group">
             <label class="form-label">Resultado</label>
-            <input class="form-input" name="resultado" type="text" placeholder="Ex.: Agendada, Aprovado, Reprovado" required>
+            <select class="form-input" name="resultado" required>
+              <option value="agendada">Agendada</option>
+              <option value="aprovado">Aprovado</option>
+              <option value="aprovado_com_correcoes">Aprovado com correções</option>
+              <option value="reprovado">Reprovado</option>
+            </select>
           </div>
           <div class="operational-actions">
             <button class="btn btn-primary" type="submit">Criar Defesa</button>

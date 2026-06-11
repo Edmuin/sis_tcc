@@ -1,4 +1,11 @@
- async function loadDefesas() {
+ const resultadoLabels = {
+      agendada: "Agendada",
+      aprovado: "Aprovado",
+      aprovado_com_correcoes: "Aprovado com correções",
+      reprovado: "Reprovado",
+    };
+
+    async function loadDefesas() {
       const tbody = document.querySelector("[data-defesa-list]");
 
       try {
@@ -15,8 +22,8 @@
           <tr>
             <td>${row.tcc_tema || "-"}</td>
             <td>${row.banca_sala || "-"}</td>
-            <td>${row.data_defesa || "-"}</td>
-            <td>${row.resultado || "-"}</td>
+            <td>${row.data_defesa ? String(row.data_defesa).slice(0, 10) : "-"}</td>
+            <td>${resultadoLabels[row.resultado] || row.resultado || "-"}</td>
             <td class="table-actions">
               <a class="card-btn" href="/Defesas/${row.id}">Ver</a>
               <a class="card-btn" href="/Defesas/${row.id}/edit">Editar</a>
