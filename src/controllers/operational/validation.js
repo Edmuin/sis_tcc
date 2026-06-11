@@ -1,4 +1,4 @@
-export const hasValue = (value) => value !== undefined && value !== null && value !== "";
+export const hasValue = (value) => value !== undefined && value !== null && String(value).trim() !== "";
 
 export const missingFields = (data, fields) => fields.filter((field) => !hasValue(data[field]));
 

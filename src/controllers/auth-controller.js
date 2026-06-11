@@ -4,6 +4,7 @@ import { AuthService } from "../services/auth-service.js";
 import { UserService } from "../services/user-service.js";
 import { RoleService } from "../services/role-service.js";
 import { generateToken } from "../utils/token/jwt.js";
+import { hasValue, isValidEmail, isValidPhone, normalizeRole, normalizeText } from "../utils/validation.js";
 import axios from "axios";
 import { generateDateWith30s } from "../utils/date.js";
 
@@ -16,13 +17,79 @@ const redirectByRole = {
     subdireção: "/PainelPrincipal",
 };
 
+const allowedRoles = ["aluno", "tutor", "professor", "coordenador", "subdirecao"];
+const allowedGenero = ["masculino", "feminino"];
+
+const validationError = (res, message) => res.status(400).send({ message });
+
+const normalizeUserPayload = (body) => ({
+    fullname: normalizeText(body.fullname),
+    email: normalizeText(body.email).toLowerCase(),
+    telefone: normalizeText(body.telefone),
+    idade: body.idade,
+    genero: normalizeText(body.genero),
+    n_processo: normalizeText(body.n_processo),
+    n_mecanografico: normalizeText(body.n_mecanografico),
+    curso: normalizeText(body.curso),
+    area_formacao: normalizeText(body.area_formacao),
+});
+
+const validateUserPayload = (data, role) => {
+    const errors = [];
+    const normalizedRole = normalizeRole(role);
+
+    if (!hasValue(data.fullname)) errors.push("nome completo é obrigatório");
+    else if (data.fullname.length < 3) errors.push("nome completo deve ter pelo menos 3 caracteres");
+
+    if (!hasValue(data.email)) errors.push("email é obrigatório");
+    else if (!isValidEmail(data.email)) errors.push("email inválido");
+
+    if (!hasValue(data.telefone)) errors.push("telefone é obrigatório");
+    else if (!isValidPhone(data.telefone)) errors.push("telefone inválido");
+
+    if (!hasValue(data.idade)) errors.push("idade é obrigatória");
+    else {
+        const idade = Number(data.idade);
+        if (!Number.isInteger(idade) || idade < 15 || idade > 100) errors.push("idade deve estar entre 15 e 100 anos");
+    }
+
+    if (!hasValue(data.genero)) errors.push("género é obrigatório");
+    else if (!allowedGenero.includes(normalizeRole(data.genero))) errors.push("género inválido");
+
+    if (!allowedRoles.includes(normalizedRole)) errors.push("tipo de utilizador inválido");
+
+    if (normalizedRole === "aluno") {
+        if (!hasValue(data.n_processo)) errors.push("nº de processo é obrigatório para aluno");
+        if (!hasValue(data.curso)) errors.push("curso é obrigatório para aluno");
+    }
+
+    if (["professor", "tutor"].includes(normalizedRole) && !hasValue(data.n_mecanografico)) {
+        errors.push("nº mecanográfico é obrigatório para professor");
+    }
+
+    if (["coordenador", "subdirecao"].includes(normalizedRole)) {
+        if (!hasValue(data.n_mecanografico)) errors.push("nº mecanográfico é obrigatório para Subdireção");
+        if (!hasValue(data.area_formacao)) errors.push("área de formação é obrigatória para Subdireção");
+    }
+
+    return errors;
+};
+
 export const signin = async (req, res) => {
     res.sendFile(path.join(process.cwd(), "src/views/auth/sign_in.html"));
 };
 
 export const login = async (req, res) => {
     try {
-        const { email, password } = req.body;
+        const email = normalizeText(req.body.email).toLowerCase();
+        const password = String(req.body.password || "");
+        if (!hasValue(email) || !hasValue(password)) {
+            return validationError(res, "Email e palavra-passe são obrigatórios.");
+        }
+        if (!isValidEmail(email)) {
+            return validationError(res, "Email inválido.");
+        }
+
         const user = await UserService.buscarPorEmail(email);
         if (!user) {
             return res.status(404).send({message: "Credenciais inválidas"});
@@ -54,8 +121,13 @@ export const userType = async (req, res) => {
 
 export const selectType = async (req, res) => {
     try {
-        const { role } = req.body;
-        req.session.role = { role };
+        const role = normalizeRole(req.body.role);
+        if (!allowedRoles.includes(role)) {
+            return res.status(400).send("Tipo de utilizador inválido");
+        }
+
+        const storedRole = role === "professor" ? "tutor" : role;
+        req.session.role = { role: storedRole };
         switch (role) {
             case "aluno":
                 res.redirect("/auth/sign-up/aluno");
@@ -91,11 +163,17 @@ export const signup_coordenador = async (req, res) => {
 
 export const register = async (req, res) => {
     try {
-        const { fullname, email, telefone, idade, genero, n_processo, n_mecanografico, curso, area_formacao } = req.body;
-        const { role } = req.session.role;
+        const { role } = req.session.role || {};
+        const normalizedRole = normalizeRole(role);
+        const payload = normalizeUserPayload(req.body);
+        const errors = validateUserPayload(payload, normalizedRole);
+        if (errors.length > 0) return res.status(400).send(errors.join("; "));
+
         const role_id = await RoleService.getRoleByName(role);
+        if (!role_id) return res.status(400).send("Tipo de utilizador inválido");
+
         const password = Math.random().toString(36).slice(-8); // Gerar uma senha aleatória de 8 caracteres
-        const user = await UserService.gravar({ fullname, email, telefone, idade, genero, role_id: role_id.id, n_processo, curso, area_formacao, n_mecanografico, password });
+        const user = await UserService.gravar({ ...payload, role_id: role_id.id, password });
 
         const message = `Caro(a) ${user.fullname}, a sua conta foi criada com sucesso! A sua senha é: ${password}`;
         const dateScheduled= generateDateWith30s();
@@ -125,6 +203,7 @@ export const register = async (req, res) => {
 
         res.redirect("/auth/sign-in");
     } catch (err) {
+        if (err?.code === "ER_DUP_ENTRY") return res.status(400).send("Já existe um utilizador com este email.");
         res.status(400).send(err.message);
     }
 };

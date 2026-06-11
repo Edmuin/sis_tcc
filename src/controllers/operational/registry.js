@@ -1,4 +1,5 @@
 import { BancaModel } from "../../models/banca.model.js";
+import { AreaFormacaoModel } from "../../models/area_formacao.model.js";
 import { CursoModel } from "../../models/curso.model.js";
 import { DefesaModel } from "../../models/defesa.model.js";
 import { EstudanteModel } from "../../models/estudante.model.js";
@@ -45,8 +46,17 @@ export const resources = {
   },
   tccs: {
     model: TccModel,
-    required: ["id_estudante", "id_professor"],
+    required: ["tema", "objectivo", "id_estudante", "id_professor"],
   },
+};
+
+const DEFESA_RESULTADOS = ["agendada", "aprovado", "aprovado_com_correcoes", "reprovado"];
+
+const isPastDate = (value) => {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const date = new Date(value);
+  return !Number.isNaN(date.getTime()) && date < today;
 };
 
 export const indexById = (rows) => {
@@ -86,8 +96,26 @@ const resourceValidators = {
   users: async (data) => {
     const errors = [];
     if (hasValue(data.email) && !validEmail(data.email)) errors.push("email inválido");
-    if (hasValue(data.idade) && Number(data.idade) < 0) errors.push("idade deve ser positiva");
+    if (hasValue(data.fullname) && String(data.fullname).trim().length < 3) errors.push("fullname deve ter pelo menos 3 caracteres");
+    if (hasValue(data.idade)) {
+      const idade = Number(data.idade);
+      if (!Number.isInteger(idade) || idade < 15 || idade > 100) errors.push("idade deve estar entre 15 e 100 anos");
+    }
     if (hasValue(data.role_id) && !(await existsById(RoleModel, data.role_id))) errors.push("role_id não encontrado");
+    return errors;
+  },
+  roles: async (data) => {
+    const errors = [];
+    if (hasValue(data.nome) && String(data.nome).trim().length < 2) errors.push("nome deve ter pelo menos 2 caracteres");
+    if (hasValue(data.nome) && String(data.nome).length > 255) errors.push("nome deve ter no máximo 255 caracteres");
+    return errors;
+  },
+  cursos: async (data) => {
+    const errors = [];
+    if (hasValue(data.nome) && String(data.nome).trim().length < 2) errors.push("nome deve ter pelo menos 2 caracteres");
+    if (hasValue(data.nome) && String(data.nome).length > 50) errors.push("nome deve ter no máximo 50 caracteres");
+    if (hasValue(data.descricao) && String(data.descricao).length > 255) errors.push("descrição deve ter no máximo 255 caracteres");
+    if (hasValue(data.area_formacao_id) && !(await existsById(AreaFormacaoModel, data.area_formacao_id))) errors.push("area_formacao_id não encontrado");
     return errors;
   },
   estudantes: async (data) => {
@@ -111,6 +139,7 @@ const resourceValidators = {
     const errors = [];
     if (hasValue(data.sala) && !positiveInteger(data.sala)) errors.push("sala deve ser positiva");
     if (hasValue(data.data) && !validDate(data.data)) errors.push("data inválida");
+    if (hasValue(data.data) && validDate(data.data) && isPastDate(data.data)) errors.push("data da banca não pode estar no passado");
     return errors;
   },
   defesas: async (data) => {
@@ -118,13 +147,22 @@ const resourceValidators = {
     if (hasValue(data.id_tcc) && !(await existsById(TccModel, data.id_tcc))) errors.push("id_tcc não encontrado");
     if (hasValue(data.id_banca) && !(await existsById(BancaModel, data.id_banca))) errors.push("id_banca não encontrado");
     if (hasValue(data.data_defesa) && !validDate(data.data_defesa)) errors.push("data_defesa inválida");
+    if (hasValue(data.data_defesa) && validDate(data.data_defesa) && isPastDate(data.data_defesa)) errors.push("data_defesa não pode estar no passado");
+    if (hasValue(data.resultado) && !DEFESA_RESULTADOS.includes(String(data.resultado).toLowerCase())) {
+      errors.push(`resultado deve ser um destes valores: ${DEFESA_RESULTADOS.join(", ")}`);
+    }
     return errors;
   },
   tccs: async (data) => {
     const errors = [];
+    if (hasValue(data.tema) && String(data.tema).trim().length < 3) errors.push("tema deve ter pelo menos 3 caracteres");
+    if (hasValue(data.tema) && String(data.tema).length > 255) errors.push("tema deve ter no máximo 255 caracteres");
+    if (hasValue(data.objectivo) && String(data.objectivo).trim().length < 10) errors.push("objectivo deve ter pelo menos 10 caracteres");
+    if (hasValue(data.objectivo) && String(data.objectivo).length > 255) errors.push("objectivo deve ter no máximo 255 caracteres");
     if (hasValue(data.id_estudante) && !(await existsById(EstudanteModel, data.id_estudante))) errors.push("id_estudante não encontrado");
     if (hasValue(data.id_professor) && !(await existsById(ProfessorModel, data.id_professor))) errors.push("id_professor não encontrado");
     if (hasValue(data.data_submissao) && !validDate(data.data_submissao)) errors.push("data_submissao inválida");
+    if (hasValue(data.data_submissao) && validDate(data.data_submissao) && new Date(data.data_submissao) > new Date()) errors.push("data_submissao não pode estar no futuro");
     return errors;
   },
 };

@@ -2,16 +2,17 @@ import path from "path";
 
 import { AreaFormacaoModel } from "../models/area_formacao.model.js";
 import { CursoModel } from "../models/curso.model.js";
+import { normalizeOptionalText, normalizeText } from "../utils/validation.js";
 
 const cursoViewsPath = (...segments) => path.join(process.cwd(), "src/views/curso", ...segments);
 
-const hasValue = (value) => value !== undefined && value !== null && value !== "";
+const hasValue = (value) => value !== undefined && value !== null && String(value).trim() !== "";
 
 const validationError = (res, message) => res.status(400).json({ message });
 
 const normalizeCursoPayload = (body) => ({
-  nome: body.nome,
-  descricao: body.descricao,
+  nome: normalizeText(body.nome),
+  descricao: normalizeOptionalText(body.descricao),
   area_formacao_id: body.area_formacao_id,
 });
 
@@ -22,6 +23,12 @@ const validateCursoPayload = async (data, { partial = false } = {}) => {
 
   if (hasValue(data.nome) && String(data.nome).trim().length < 2) {
     errors.push("nome deve ter pelo menos 2 caracteres");
+  }
+  if (hasValue(data.nome) && String(data.nome).length > 50) {
+    errors.push("nome deve ter no máximo 50 caracteres");
+  }
+  if (hasValue(data.descricao) && String(data.descricao).length > 255) {
+    errors.push("descrição deve ter no máximo 255 caracteres");
   }
 
   if (hasValue(data.area_formacao_id)) {
@@ -95,6 +102,7 @@ export const store = async (req, res) => {
     return redirectOrJson(req, res, `/Curso/${curso.id}`, { data: curso }, 201);
   } catch (error) {
     console.error(error);
+    if (error?.code === "ER_DUP_ENTRY") return validationError(res, "Já existe um curso com este nome.");
     res.status(500).json({ message: "Não foi possível criar o curso." });
   }
 };
@@ -120,6 +128,7 @@ export const update = async (req, res) => {
     return redirectOrJson(req, res, `/Curso/${req.params.id}`, { data: { id: req.params.id, ...data } });
   } catch (error) {
     console.error(error);
+    if (error?.code === "ER_DUP_ENTRY") return validationError(res, "Já existe um curso com este nome.");
     res.status(500).json({ message: "Não foi possível atualizar o curso." });
   }
 };

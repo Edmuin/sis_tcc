@@ -1,10 +1,11 @@
 import path from "path";
 
 import { BancaModel } from "../models/banca.model.js";
+import { isPositiveInteger } from "../utils/validation.js";
 
 const bancaViewsPath = (...segments) => path.join(process.cwd(), "src/views/banca", ...segments);
 
-const hasValue = (value) => value !== undefined && value !== null && value !== "";
+const hasValue = (value) => value !== undefined && value !== null && String(value).trim() !== "";
 
 const validationError = (res, message) => res.status(400).json({ message });
 
@@ -18,12 +19,21 @@ const validateBancaPayload = (data, { partial = false } = {}) => {
   const missing = partial ? [] : required.filter((field) => !hasValue(data[field]));
   const errors = missing.map((field) => `${field} é obrigatório`);
 
-  if (hasValue(data.sala) && Number(data.sala) <= 0) {
-    errors.push("sala deve ser positiva");
+  if (hasValue(data.sala) && !isPositiveInteger(data.sala)) {
+    errors.push("sala deve ser um número inteiro positivo");
   }
 
   if (hasValue(data.data) && Number.isNaN(Date.parse(data.data))) {
     errors.push("data inválida");
+  }
+
+  if (hasValue(data.data)) {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const dataBanca = new Date(data.data);
+    if (!Number.isNaN(dataBanca.getTime()) && dataBanca < today) {
+      errors.push("data da banca não pode estar no passado");
+    }
   }
 
   return errors;

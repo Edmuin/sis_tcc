@@ -4,10 +4,11 @@ import { EstudanteModel } from "../models/estudante.model.js";
 import { ProfessorModel } from "../models/professor.model.js";
 import { TccModel } from "../models/tcc.model.js";
 import { UserModel } from "../models/user.model.js";
+import { normalizeOptionalText, normalizeText } from "../utils/validation.js";
 
 const tccViewsPath = (...segments) => path.join(process.cwd(), "src/views/TCC", ...segments);
 
-const hasValue = (value) => value !== undefined && value !== null && value !== "";
+const hasValue = (value) => value !== undefined && value !== null && String(value).trim() !== "";
 
 const validationError = (res, message) => res.status(400).json({ message });
 
@@ -169,11 +170,11 @@ const normalizeTccDataForAccess = async (req, data, estudantesIds, context, curr
 
 const normalizeTccPayload = (body) => {
   return {
-    tema: body.tema,
-    objectivo: body.objectivo,
+    tema: normalizeText(body.tema),
+    objectivo: normalizeText(body.objectivo),
     tipo: body.tipo || "individual",
     estado: body.estado,
-    observacao: body.observacao,
+    observacao: normalizeOptionalText(body.observacao),
     data_submissao: body.data_submissao || null,
     id_estudante: body.id_estudante,
     id_professor: body.id_professor,
@@ -207,9 +208,23 @@ const normalizeEstudantesIds = (body, tipo) => {
 };
 
 const validateTccPayload = async (data, estudantesIds, { partial = false } = {}) => {
-  const required = ["id_estudante", "id_professor"];
+  const required = ["tema", "objectivo", "id_estudante", "id_professor"];
   const missing = partial ? [] : required.filter((field) => !hasValue(data[field]));
   const errors = missing.map((field) => `${field} é obrigatório`);
+
+  if (hasValue(data.tema)) {
+    if (String(data.tema).length < 3) errors.push("tema deve ter pelo menos 3 caracteres");
+    if (String(data.tema).length > 255) errors.push("tema deve ter no máximo 255 caracteres");
+  }
+
+  if (hasValue(data.objectivo)) {
+    if (String(data.objectivo).length < 10) errors.push("objectivo deve ter pelo menos 10 caracteres");
+    if (String(data.objectivo).length > 255) errors.push("objectivo deve ter no máximo 255 caracteres");
+  }
+
+  if (hasValue(data.observacao) && String(data.observacao).length > 1000) {
+    errors.push("observação deve ter no máximo 1000 caracteres");
+  }
 
   if (hasValue(data.tipo) && !["individual", "colectivo"].includes(data.tipo)) {
     errors.push("tipo deve ser individual ou colectivo");
@@ -229,6 +244,14 @@ const validateTccPayload = async (data, estudantesIds, { partial = false } = {})
 
   if (hasValue(data.data_submissao) && Number.isNaN(Date.parse(data.data_submissao))) {
     errors.push("data_submissao inválida");
+  }
+
+  if (hasValue(data.data_submissao)) {
+    const now = new Date();
+    const submissao = new Date(data.data_submissao);
+    if (!Number.isNaN(submissao.getTime()) && submissao > now) {
+      errors.push("data_submissao não pode estar no futuro");
+    }
   }
 
   if (hasValue(data.id_estudante) && !(await EstudanteModel.findById(data.id_estudante))) {
@@ -397,6 +420,7 @@ export const store = async (req, res) => {
     return redirectOrJson(req, res, `/tcc/${tcc.id}`, { data: tcc }, 201);
   } catch (error) {
     console.error(error);
+    if (error?.code === "ER_DUP_ENTRY") return validationError(res, "Já existe um TCC com este tema.");
     if (error.status === 403) return denyAccess(res, error.message);
     res.status(500).json({ message: "Não foi possível criar o TCC." });
   }
@@ -448,6 +472,7 @@ export const update = async (req, res) => {
     return redirectOrJson(req, res, `/tcc/${req.params.id}`, { data: { id: req.params.id, ...normalized.data } });
   } catch (error) {
     console.error(error);
+    if (error?.code === "ER_DUP_ENTRY") return validationError(res, "Já existe um TCC com este tema.");
     if (error.status === 403) return denyAccess(res, error.message);
     res.status(500).json({ message: "Não foi possível atualizar o TCC." });
   }

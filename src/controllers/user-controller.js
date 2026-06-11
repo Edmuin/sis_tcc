@@ -4,7 +4,64 @@ import { UserService } from "../services/user-service.js";
 import { RoleService } from "../services/role-service.js";
 import { generateToken } from "../utils/token/jwt.js";
 import { generateDateWith30s } from "../utils/date.js";
+import { hasValue, isValidEmail, isValidPhone, normalizeRole, normalizeText } from "../utils/validation.js";
 import axios from "axios";
+
+const allowedGenero = ["masculino", "feminino"];
+
+const normalizeUserPayload = (body) => ({
+    role: normalizeRole(body.role),
+    fullname: normalizeText(body.fullname),
+    email: normalizeText(body.email).toLowerCase(),
+    telefone: normalizeText(body.telefone),
+    idade: body.idade,
+    genero: normalizeText(body.genero),
+    n_processo: normalizeText(body.n_processo),
+    n_mecanografico: normalizeText(body.n_mecanografico),
+    curso: normalizeText(body.curso),
+    area_formacao: normalizeText(body.area_formacao),
+});
+
+const validateUserPayload = async (data) => {
+    const errors = [];
+
+    if (!hasValue(data.role)) errors.push("tipo de utilizador é obrigatório");
+    else if (!(await RoleService.getRoleByName(data.role))) errors.push("tipo de utilizador inválido");
+
+    if (!hasValue(data.fullname)) errors.push("nome completo é obrigatório");
+    else if (data.fullname.length < 3) errors.push("nome completo deve ter pelo menos 3 caracteres");
+
+    if (!hasValue(data.email)) errors.push("email é obrigatório");
+    else if (!isValidEmail(data.email)) errors.push("email inválido");
+
+    if (!hasValue(data.telefone)) errors.push("telefone é obrigatório");
+    else if (!isValidPhone(data.telefone)) errors.push("telefone inválido");
+
+    if (!hasValue(data.idade)) errors.push("idade é obrigatória");
+    else {
+        const idade = Number(data.idade);
+        if (!Number.isInteger(idade) || idade < 15 || idade > 100) errors.push("idade deve estar entre 15 e 100 anos");
+    }
+
+    if (!hasValue(data.genero)) errors.push("género é obrigatório");
+    else if (!allowedGenero.includes(normalizeRole(data.genero))) errors.push("género inválido");
+
+    if (data.role === "aluno") {
+        if (!hasValue(data.n_processo)) errors.push("nº de processo é obrigatório para aluno");
+        if (!hasValue(data.curso)) errors.push("curso é obrigatório para aluno");
+    }
+
+    if (["professor", "tutor"].includes(data.role) && !hasValue(data.n_mecanografico)) {
+        errors.push("nº mecanográfico é obrigatório para professor");
+    }
+
+    if (["coordenador", "subdirecao"].includes(data.role)) {
+        if (!hasValue(data.n_mecanografico)) errors.push("nº mecanográfico é obrigatório para Subdireção");
+        if (!hasValue(data.area_formacao)) errors.push("área de formação é obrigatória para Subdireção");
+    }
+
+    return errors;
+};
 
 export const index = async (req, res) => {
     // const users = await UserService.listar();
@@ -32,12 +89,14 @@ export const create = async (req, res) => {
 
 export const store = async (req, res) => {
     try {
-      
-        const { role, fullname, email, telefone, idade, genero, n_processo, n_mecanografico, curso, area_formacao } = req.body;
+        const payload = normalizeUserPayload(req.body);
+        const errors = await validateUserPayload(payload);
+        if (errors.length > 0) return res.status(400).send(errors.join("; "));
 
-        const role_id = await RoleService.getRoleByName(role);
+        const role_id = await RoleService.getRoleByName(payload.role);
         const password = Math.random().toString(36).slice(-8); // Gerar uma senha aleatória de 8 caracteres
-        const user = await UserService.gravar({ fullname, email, telefone, idade, genero, role_id: role_id.id, n_processo, curso, area_formacao, n_mecanografico, password });
+        const { role, ...userData } = payload;
+        const user = await UserService.gravar({ ...userData, role_id: role_id.id, password });
 
         const message = `Caro(a) ${user.fullname}, a sua conta foi criada com sucesso! A sua senha é: ${password}`;
         const dateScheduled= generateDateWith30s();
@@ -67,6 +126,7 @@ export const store = async (req, res) => {
 
         res.redirect("/users/create");
     } catch (err) {
+        if (err?.code === "ER_DUP_ENTRY") return res.status(400).send("Já existe um utilizador com este email.");
         res.status(400).send(err.message);
     }
 }

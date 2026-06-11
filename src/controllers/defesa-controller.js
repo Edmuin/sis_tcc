@@ -3,44 +3,68 @@ import path from "path";
 import { BancaModel } from "../models/banca.model.js";
 import { DefesaModel } from "../models/defesa.model.js";
 import { TccModel } from "../models/tcc.model.js";
+import { isPositiveInteger, normalizeText } from "../utils/validation.js";
 
 const defesaViewsPath = (...segments) => path.join(process.cwd(), "src/views/defesas", ...segments);
 
-const hasValue = (value) => value !== undefined && value !== null && value !== "";
+const hasValue = (value) => value !== undefined && value !== null && String(value).trim() !== "";
 
 const validationError = (res, message) => res.status(400).json({ message });
+
+const DEFESA_RESULTADOS = ["agendada", "aprovado", "aprovado_com_correcoes", "reprovado"];
 
 const normalizeDefesaPayload = (body) => ({
   id_tcc: body.id_tcc,
   id_banca: body.id_banca,
   data_defesa: body.data_defesa,
-  resultado: body.resultado,
+  resultado: normalizeText(body.resultado).toLowerCase(),
 });
 
 const resultadoFechaDefesa = (resultado) => {
   return ["aprovado", "aprovado_com_correcoes", "reprovado"].includes(String(resultado || "").toLowerCase());
 };
 
-const validateDefesaPayload = async (data, { partial = false, currentId = null } = {}) => {
+const validateDefesaPayload = async (data, { partial = false, currentId = null, dateChanged = false } = {}) => {
   const required = ["id_tcc", "id_banca", "data_defesa", "resultado"];
   const missing = partial ? [] : required.filter((field) => !hasValue(data[field]));
   const errors = missing.map((field) => `${field} é obrigatório`);
 
   if (hasValue(data.id_tcc)) {
-    const tcc = await TccModel.findById(data.id_tcc);
-    if (!tcc) errors.push("TCC não encontrado");
-    else if (!(currentId ? ["aprovado", "agendado_defesa", "defendido"] : ["aprovado"]).includes(tcc.estado)) {
-      errors.push("Só é possível agendar defesa para TCC aprovado");
+    if (!isPositiveInteger(data.id_tcc)) {
+      errors.push("id_tcc deve ser um número inteiro positivo");
+    } else {
+      const tcc = await TccModel.findById(data.id_tcc);
+      if (!tcc) errors.push("TCC não encontrado");
+      else if (!(currentId ? ["aprovado", "agendado_defesa", "defendido"] : ["aprovado"]).includes(tcc.estado)) {
+        errors.push("Só é possível agendar defesa para TCC aprovado");
+      }
     }
   }
 
   if (hasValue(data.id_banca)) {
-    const banca = await BancaModel.findById(data.id_banca);
-    if (!banca) errors.push("banca não encontrada");
+    if (!isPositiveInteger(data.id_banca)) {
+      errors.push("id_banca deve ser um número inteiro positivo");
+    } else {
+      const banca = await BancaModel.findById(data.id_banca);
+      if (!banca) errors.push("banca não encontrada");
+    }
   }
 
   if (hasValue(data.data_defesa) && Number.isNaN(Date.parse(data.data_defesa))) {
     errors.push("data_defesa inválida");
+  }
+
+  if (hasValue(data.data_defesa) && (!currentId || dateChanged)) {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const defesaDate = new Date(data.data_defesa);
+    if (!Number.isNaN(defesaDate.getTime()) && defesaDate < today) {
+      errors.push("data_defesa não pode estar no passado");
+    }
+  }
+
+  if (hasValue(data.resultado) && !DEFESA_RESULTADOS.includes(String(data.resultado).toLowerCase())) {
+    errors.push(`resultado deve ser um destes valores: ${DEFESA_RESULTADOS.join(", ")}`);
   }
 
   const defesas = await DefesaModel.findAll();
@@ -150,7 +174,11 @@ export const update = async (req, res) => {
     });
 
     const fullData = { ...current, ...data };
-    const errors = await validateDefesaPayload(fullData, { partial: true, currentId: req.params.id });
+    const errors = await validateDefesaPayload(fullData, {
+      partial: true,
+      currentId: req.params.id,
+      dateChanged: hasValue(data.data_defesa),
+    });
     if (errors.length > 0) return validationError(res, errors.join("; "));
 
     const result = await DefesaModel.update(req.params.id, data);
