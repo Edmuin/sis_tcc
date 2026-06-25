@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - 3D Glassmorphism Dashboard</title>
+    <meta name="description" content="3D Glassmorphism Dashboard Template by TemplateMo">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/templatemo-glass-admin-style.css">
+    <!--
+
+TemplateMo 607 Glass Admin
+
+https://templatemo.com/tm-607-glass-admin
+
+-->
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="background"></div>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+
+    <div class="login-page">
+        <!-- Theme Toggle -->
+        <button class="theme-toggle-float" id="theme-toggle" title="Toggle Light/Dark Mode">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/>
+                <path d="M4.93 4.93l1.41 1.41"/><path d="M17.66 17.66l1.41 1.41"/>
+                <path d="M2 12h2"/><path d="M20 12h2"/>
+                <path d="M6.34 17.66l-1.41 1.41"/><path d="M19.07 4.93l-1.41 1.41"/>
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: none;">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+            </svg>
+        </button>
+
+        <div class="login-container">
+            <div class="login-card">
+                <div class="login-header">
+                    <div class="login-logo">G</div>
+                    <h1 class="login-title">Cadastro de Aluno</h1>
+                    <p class="login-subtitle">Crie o seu perfil de aluno</p>
+                </div>
+
+                <form action="/auth/register" method="POST" class="login-form">
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="fullname">Nome Completo</label>
+                        <input type="text" id="fullname" name="fullname" class="form-input" placeholder="Nome Completo" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="email">E-mail</label>
+                        <input type="email" id="email" name="email" class="form-input" placeholder="E-mail" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="Telefone">Telefone</label>
+                        <input type="number" id="telefone" name="telefone" class="form-input" placeholder="Telefone" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="Idade">Idade</label>
+                        <input type="number" id="idade" name="idade" class="form-input" placeholder="Idade" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="genero">Género</label>
+                        <select id="genero" name="genero" class="form-input" required>
+                            <option disabled selected value="">Selecione...</option>
+                            <option value="Masculino">Masculino</option>
+                            <option value="Feminino">Feminino</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="NumeroProcesso">Nº de Processo</label>
+                        <input type="text" id="n_processo" name="n_processo" class="form-input" placeholder="Nº de Processo" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Curso</label>
+                        <select id="curso" name="curso" class="form-input">
+                            <option disabled selected value="">Selecione o curso...</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">
+                        Criar Conta
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="5" y1="12" x2="19" y2="12"/>
+                            <polyline points="12 5 19 12 12 19"/>
+                        </svg>
+                    </button>
+                </form>
+
+                <div class="divider">
+                    <span>ou entre com</span>
+                </div>
+
+                <p class="login-footer">
+                    Já possui uma conta? <a href="/auth/sign-in">Entrar</a>
+                </p>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="site-footer">
+            <p>Copyright © 2026 Your Company. Designed by <a href="https://templatemo.com" target="_blank" rel="nofollow">Helder & BV</a></p>
+        </footer>
+    </div>
+
+    <script src="/js/templatemo-glass-admin-script.js"></script>
+    <!-- TemplateMo 607 Glass Admin -->
+</body>
+</html>
