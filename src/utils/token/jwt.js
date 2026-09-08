@@ -2,12 +2,13 @@ import jwt from "jsonwebtoken";
 
 
 const secretAndExpiresIn = {
-    secret: "A6vPuutAR5ihwYzR3iDUQXwab6sxAMML98uj9wfc8",
+    secret: process.env.JWT_SECRET || (process.env.NODE_ENV === "production" ? null : "development-only-change-me"),
     expiresIn: "24H" // 1 hora,
 };
 
 // Exemplo de payload do token com tempo de expiração de 30 minutos
 export const generateToken = (credentials, expiresDate) => {
+    if (!secretAndExpiresIn.secret) throw new Error("JWT_SECRET é obrigatório em produção.");
     const options = {
         subject: credentials.email,
         expiresIn: secretAndExpiresIn.expiresIn
@@ -21,6 +22,7 @@ export const generateToken = (credentials, expiresDate) => {
 
 export const verifyToken = (token) => {
     try {
+    if (!secretAndExpiresIn.secret) return false;
         const tokenDecoded = jwt.verify(token, secretAndExpiresIn.secret);
         if (!tokenDecoded) return false;
         return true;
@@ -33,6 +35,7 @@ export const verifyToken = (token) => {
 
 export const decodeToken = (token) => {
     try {
+    if (!secretAndExpiresIn.secret) return null;
         const tokenDecoded = jwt.verify(token, secretAndExpiresIn.secret);
         if (!tokenDecoded) return null;
         return { ...tokenDecoded };

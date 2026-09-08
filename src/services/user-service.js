@@ -13,6 +13,12 @@ export const UserService = {
     return novo;
   },
 
+  async atualizar(id, dados) {
+    const result = await UserModel.update(id, dados);
+    if (!result || result.affectedRows === 0) throw new Error("Usuário não encontrado.");
+    return await UserModel.findById(id);
+  },
+
   async buscarPorId(id) {
     const user = await UserModel.findById(id);
     if (!user) throw new Error("Usuário não encontrado.");

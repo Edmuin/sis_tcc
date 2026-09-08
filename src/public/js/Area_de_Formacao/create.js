@@ -1,7 +1,9 @@
 document.querySelector("[data-area-form]").addEventListener("submit", async (event) => {
       event.preventDefault();
       const message = document.querySelector("[data-message]");
+      const submit = event.target.querySelector("button[type=submit]");
       const data = Object.fromEntries(new FormData(event.target).entries());
+      if (submit) { submit.disabled = true; submit.textContent = "A guardar..."; }
 
       try {
         const response = await fetch("/AreadeFormacao", {
@@ -16,5 +18,7 @@ document.querySelector("[data-area-form]").addEventListener("submit", async (eve
       } catch (error) {
         message.textContent = error.message;
         message.dataset.type = "error";
+      } finally {
+        if (submit) { submit.disabled = false; submit.textContent = "Criar Área"; }
       }
     });

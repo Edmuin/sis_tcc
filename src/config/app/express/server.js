@@ -15,13 +15,20 @@ import defesaRoutes from "./routes/defesa-routes.js";
 import { criarTodasTabelas } from "../../database/index.js";
 import { configSession } from "./session/index.js";
 import operationalRoutes from "./routes/operational-routes.js";
+import { allowRoles, populateUser, requireAuth } from "../../../middlewares/auth-middleware.js";
+import helmet from "helmet";
+import rateLimit from "express-rate-limit";
+import { downloadUpload } from "../../../controllers/upload-controller.js";
+import { sameOrigin } from "../../../middlewares/same-origin-middleware.js";
+import workflowRoutes from "./routes/workflow-routes.js";
 
 dotenv.config();
 
 const app = express();
 
 app.use(express.static(PATHS.public));
-app.use("/uploads", express.static(path.resolve("uploads")));
+app.use(helmet({ contentSecurityPolicy: false }));
+app.use("/auth/login", rateLimit({ windowMs: 15 * 60 * 1000, max: 20, standardHeaders: true, legacyHeaders: false }));
 
 // Middlewares para ler formulários
 
@@ -29,18 +36,39 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 configSession(app);
+app.use(populateUser);
+app.use(sameOrigin);
+app.get("/uploads/:filename", requireAuth, downloadUpload);
 
 const port = process.env.PORT || 3000;
+const coordinatorOrTeacherRead = (req, res, next) => {
+    if (["coordenador", "administrador"].includes(req.user?.role)) return next();
+    if (["tutor", "juri"].includes(req.user?.role) && req.method === "GET") return next();
+    return res.status(403).send("Não tem permissão para aceder a este recurso.");
+};
 
-app.use("/tcc", tccRoutes);
-app.use("/AreadeFormacao", areaFormacaoRoutes);
-app.use("/Curso", cursoRoutes);
-app.use("/Bancas", bancaRoutes);
-app.use("/Defesas", defesaRoutes);
-app.use("/", systemRoutes);
+app.use("/tcc", requireAuth, (req, res, next) => {
+    if (req.user?.role === "juri" && req.method !== "GET") return res.status(403).send("O júri tem acesso apenas para consulta.");
+    return allowRoles("aluno", "tutor", "coordenador", "juri", "administrador")(req, res, next);
+}, tccRoutes);
+app.use("/AreadeFormacao", requireAuth, coordinatorOrTeacherRead, areaFormacaoRoutes);
+app.use("/Curso", requireAuth, coordinatorOrTeacherRead, cursoRoutes);
+app.use("/Bancas", requireAuth, coordinatorOrTeacherRead, bancaRoutes);
+app.use("/Defesas", requireAuth, coordinatorOrTeacherRead, defesaRoutes);
 app.use("/auth", authRoutes);
 app.use("/users", userRoutes);
 app.use("/api", operationalRoutes);
+app.use("/workflow", workflowRoutes);
+app.get("/health", async (req, res) => {
+    try {
+        const { pool } = await import("../../database/mysql/db.js");
+        await pool.query("SELECT 1");
+        return res.json({ status: "ok", service: "sis-tcc", database: "ok" });
+    } catch (error) {
+        return res.status(503).json({ status: "degraded", service: "sis-tcc", database: "unavailable" });
+    }
+});
+app.use("/", systemRoutes);
 
 const startServer = async () => {
   await criarTodasTabelas();
@@ -77,6 +105,12 @@ app.use((req, res) => {
         </body>
         </html>
     `);
+});
+
+app.use((error, req, res, next) => {
+    console.error("Erro não tratado:", error);
+    if (res.headersSent) return next(error);
+    return res.status(500).json({ message: "Ocorreu um erro interno no servidor." });
 });
 
 export default { app, startServer };

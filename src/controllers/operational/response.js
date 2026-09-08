@@ -1,4 +1,4 @@
-export const success = (res, data, status = 200) => res.status(status).json({ data });
+export const success = (res, data, status = 200, meta) => res.status(status).json(meta ? { data, meta } : { data });
 
 export const failure = (res, error) => {
   console.error(error);

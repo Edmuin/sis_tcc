@@ -5,6 +5,9 @@ import { RoleService } from "../services/role-service.js";
 import { generateToken } from "../utils/token/jwt.js";
 import { generateDateWith30s } from "../utils/date.js";
 import axios from "axios";
+import bcrypt from "bcryptjs";
+import { EstudanteModel } from "../models/estudante.model.js";
+import { ProfessorModel } from "../models/professor.model.js";
 
 export const index = async (req, res) => {
     // const users = await UserService.listar();
@@ -34,10 +37,17 @@ export const store = async (req, res) => {
     try {
       
         const { role, fullname, email, telefone, idade, genero, n_processo, n_mecanografico, curso, area_formacao } = req.body;
+        const normalizedNMechanographic = role === "aluno" ? null : n_mecanografico;
 
         const role_id = await RoleService.getRoleByName(role);
-        const password = Math.random().toString(36).slice(-8); // Gerar uma senha aleatória de 8 caracteres
-        const user = await UserService.gravar({ fullname, email, telefone, idade, genero, role_id: role_id.id, n_processo, curso, area_formacao, n_mecanografico, password });
+        const password = Math.random().toString(36).slice(-8);
+        const hashedPassword = await bcrypt.hash(password, 12);
+        const user = await UserService.gravar({ fullname, email, telefone, idade, genero, role_id: role_id.id, n_processo, curso, area_formacao, n_mecanografico: normalizedNMechanographic, password: hashedPassword });
+        if (role === "aluno") {
+            await EstudanteModel.store({ id_user: user.id, numero_estudante: Number(n_processo) > 0 ? Number(n_processo) : user.id, numero_processo: n_processo || null, turma: null, ano_lectivo: null, id_curso: Number(curso) });
+        } else if (role === "tutor") {
+            await ProfessorModel.store({ id_user: user.id, especializacao: null, categoria: null });
+        }
 
         const message = `Caro(a) ${user.fullname}, a sua conta foi criada com sucesso! A sua senha é: ${password}`;
         const dateScheduled= generateDateWith30s();
@@ -48,10 +58,12 @@ export const store = async (req, res) => {
             "to": user.telefone,
             "schedule": dateScheduled
         };
+        const smsToken = process.env.UMBALA_API_TOKEN;
+        if (!smsToken) return res.redirect("/users/create");
         const config = {
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": "Token be4829cc-f4d8-4a06-bf58-3e9dcc09c364"
+                "Authorization": `Token ${smsToken}`
             }
         };
 
@@ -78,7 +90,7 @@ export const edit = async (req, res) => {
 };
 
 export const findById = async (req, res) => {
-    const id = req.session.userId;
+    const id = req.params.id || req.session.userId;
     console.log("Buscando usuário com ID:", id);
     const user = await UserService.buscarPorId(id);
     if (user) {
@@ -88,11 +100,24 @@ export const findById = async (req, res) => {
     }
 };
 
+export const findByIdParam = async (req, res) => {
+    try {
+        const user = await UserService.buscarPorId(req.params.id);
+        const { password: _password, ...safeUser } = user;
+        return res.json(safeUser);
+    } catch (error) {
+        return res.status(404).json({ error: "Usuário não encontrado" });
+    }
+};
+
 export const update = async (req, res) => {
     try {
-        const { name, email } = req.body;
-        const avatar = req.file ? req.file.filename : null;
-        await UserService.gravar({ name, email, avatar });
+    const userId = req.params.id || req.session.userId;
+    if (!userId) return res.status(400).send("Utilizador não identificado.");
+        const allowedFields = ["fullname", "email", "telefone", "idade", "genero", "n_processo", "curso", "area_formacao", "n_mecanografico"];
+        const data = Object.fromEntries(Object.entries(req.body).filter(([field]) => allowedFields.includes(field)));
+        if (!data.fullname || !data.email) return res.status(400).send("Nome completo e email são obrigatórios.");
+        await UserService.atualizar(userId, data);
         res.redirect("/users");
     } catch (err) {
         res.status(400).send(err.message);

@@ -119,8 +119,8 @@
                 <div class="user-profile">
                     <div class="user-avatar">HB</div>
                     <div class="user-info">
-                        <div class="user-name">H & B</div>
-                        <div class="user-role">Administrador</div>
+                        <div class="user-name">Utilizador</div>
+                        <div class="user-role">Perfil</div>
                     </div>
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <polyline points="6 9 12 15 18 9"/>
@@ -339,8 +339,7 @@
                             <p class="card-subtitle">Últimos TCCs enviados</p>
                         </div>
                         <div class="card-actions">
-                            <button class="card-btn">Visualizar todos</button>
-                            <button class="card-btn">Exportar</button>
+                            <a class="card-btn" href="/tcc">Visualizar todos</a>
                         </div>
                     </div>
                     <div class="table-wrapper">
@@ -353,38 +352,7 @@
                                     <th>Status</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr>
-                                    <td><div class="table-user"><div class="table-avatar" style="background: linear-gradient(135deg, var(--emerald-light), var(--emerald));">JD</div><div class="table-user-info"><span class="table-user-name">Utilizador</span><span class="table-user-email">utilizador@gestortcc.local</span></div></div></td>
-                                    <td>Submissão de TCC</td>
-                                    <td>Jan 15, 2025</td>
-                                    <td><span class="status-badge completed">Concluído</span></td>
-                                </tr>
-                                <tr>
-                                    <td><div class="table-user"><div class="table-avatar" style="background: linear-gradient(135deg, var(--gold), var(--amber));">AS</div><div class="table-user-info"><span class="table-user-name">Utilizador</span><span class="table-user-email">utilizador@gestortcc.local</span></div></div></td>
-                                    <td>Validação institucional</td>
-                                    <td>Jan 14, 2025</td>
-                                    <td><span class="status-badge processing">Em processamento</span></td>
-                                </tr>
-                                <tr>
-                                    <td><div class="table-user"><div class="table-avatar" style="background: linear-gradient(135deg, var(--success), var(--emerald));">MJ</div><div class="table-user-info"><span class="table-user-name">Utilizador</span><span class="table-user-email">utilizador@gestortcc.local</span></div></div></td>
-                                    <td>Documento académico</td>
-                                    <td>Jan 13, 2025</td>
-                                    <td><span class="status-badge completed">Concluído</span></td>
-                                </tr>
-                                <tr>
-                                    <td><div class="table-user"><div class="table-avatar" style="background: linear-gradient(135deg, var(--coral), var(--gold));">DS</div><div class="table-user-info"><span class="table-user-name">Utilizador</span><span class="table-user-email">utilizador@gestortcc.local</span></div></div></td>
-                                    <td>Pedido de revisão</td>
-                                    <td>Jan 12, 2025</td>
-                                    <td><span class="status-badge pending">Pendente</span></td>
-                                </tr>
-                                <tr>
-                                    <td><div class="table-user"><div class="table-avatar" style="background: linear-gradient(135deg, var(--emerald), var(--gold));">DS</div><div class="table-user-info"><span class="table-user-name">Utilizador</span><span class="table-user-email">utilizador@gestortcc.local</span></div></div></td>
-                                    <td>Aprovação anual</td>
-                                    <td>Jan 11, 2025</td>
-                                    <td><span class="status-badge completed">Concluído</span></td>
-                                </tr>
-                            </tbody>
+                            <tbody><tr><td colspan="4" class="empty-table-message">A carregar dados...</td></tr></tbody>
                         </table>
                     </div>
                 </div>
@@ -399,7 +367,7 @@
 
     
     <footer class="site-footer" style="display: flex;">
-        <p style="justify-content: center;">Copyright © 2026 Gestor TCC. Desenvolvido por <a href="index_new.html" target="_blank" rel="nofollow">H & B</a></p>
+        <p style="justify-content: center;">Gestor TCC · Plataforma académica</p>
     </footer>
 
     <script src="/js/api-client.js"></script>

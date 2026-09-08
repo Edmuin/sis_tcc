@@ -41,3 +41,26 @@ export const dashboardSummary = async (req, res) => {
     failure(res, error);
   }
 };
+
+export const coordinationReport = async (req, res) => {
+  try {
+    if (!["coordenador", "administrador"].includes(req.user?.role)) {
+      return res.status(403).json({ message: "Relatório reservado à coordenação." });
+    }
+    const [[statusRows], [withoutTutor], [pendingProposals], [lateStages]] = await Promise.all([
+      import("../../config/database/mysql/db.js").then(({ pool }) => pool.query("SELECT estado, COUNT(*) AS total FROM tcc GROUP BY estado")),
+      import("../../config/database/mysql/db.js").then(({ pool }) => pool.query("SELECT COUNT(*) AS total FROM estudante e LEFT JOIN tcc t ON t.id_estudante = e.id WHERE t.id IS NULL")),
+      import("../../config/database/mysql/db.js").then(({ pool }) => pool.query("SELECT COUNT(*) AS total FROM tcc_proposta WHERE estado = 'pendente'")),
+      import("../../config/database/mysql/db.js").then(({ pool }) => pool.query("SELECT COUNT(*) AS total FROM tcc_etapa WHERE prazo < CURRENT_DATE AND estado NOT IN ('concluida', 'aprovada')")),
+    ]);
+    return res.json({ data: {
+      tccsPorEstado: statusRows,
+      alunosSemOrientador: withoutTutor[0]?.total || 0,
+      propostasPendentes: pendingProposals[0]?.total || 0,
+      etapasAtrasadas: lateStages[0]?.total || 0,
+    } });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Não foi possível gerar o relatório." });
+  }
+};

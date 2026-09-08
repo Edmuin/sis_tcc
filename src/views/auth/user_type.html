@@ -1,21 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register - 3D Glassmorphism Dashboard</title>
-    <meta name="description" content="3D Glassmorphism Dashboard Template by TemplateMo">
+    <title>Criar conta | Gestor TCC</title>
+    <meta name="description" content="Escolha o seu perfil no Gestor TCC">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/templatemo-glass-admin-style.css">
-    <!--
-
-TemplateMo 607 Glass Admin
-
-https://templatemo.com/tm-607-glass-admin
-
--->
 </head>
 <body>
     <!-- Animated Background -->
@@ -40,20 +33,21 @@ https://templatemo.com/tm-607-glass-admin
 
         <div class="login-container">
             <div class="login-card">
-                <div class="login-header">
-                    <div class="login-logo">G</div>
-                    <h1 class="login-title">Tipo de Utilizador</h1>
-                    <p class="login-subtitle">Seleccione o seu tipo de utilizador</p>
+                <div class="login-header account-type-header">
+                    <div class="login-logo">TCC</div>
+                    <p class="login-kicker">Primeiro passo</p>
+                    <h1 class="login-title">Criar uma conta</h1>
+                    <p class="login-subtitle">Escolha o perfil que corresponde à sua função académica.</p>
                 </div>
 
-                <form action="/auth/select-type" method="POST" class="login-form">
+                <form action="/auth/select-type" method="POST" class="login-form account-type-form">
                     
                     <div class="form-group">
-                        <label class="form-label" for="role">Tipo de Utilizador</label>
+                            <label class="form-label" for="role">Perfil de acesso</label>
                         <select id="role" name="role" class="form-input" required>
                             <option disabled selected value="">Selecione...</option>
                             <option value="aluno">Aluno</option>
-                            <option value="tutor">Tutor</option>
+                            <option value="tutor">Professor / Orientador</option>
                             <option value="coordenador">Coordenador</option>
                         </select>
                     </div>
@@ -79,11 +73,10 @@ https://templatemo.com/tm-607-glass-admin
 
         <!-- Footer -->
         <footer class="site-footer">
-            <p>Copyright © 2026 Your Company. Designed by <a href="https://templatemo.com" target="_blank" rel="nofollow">Helder & BV</a></p>
+            <p>Gestor TCC · Plataforma académica</p>
         </footer>
     </div>
 
     <script src="/js/templatemo-glass-admin-script.js"></script>
-    <!-- TemplateMo 607 Glass Admin -->
 </body>
 </html>

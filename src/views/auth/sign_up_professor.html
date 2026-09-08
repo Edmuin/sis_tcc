@@ -1,21 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register - 3D Glassmorphism Dashboard</title>
-    <meta name="description" content="3D Glassmorphism Dashboard Template by TemplateMo">
+    <title>Cadastro de professor | Gestor TCC</title>
+    <meta name="description" content="Crie o seu perfil de professor no Gestor TCC">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/templatemo-glass-admin-style.css">
-    <!--
-
-TemplateMo 607 Glass Admin
-
-https://templatemo.com/tm-607-glass-admin
-
--->
 </head>
 <body>
     <!-- Animated Background -->
@@ -41,9 +34,9 @@ https://templatemo.com/tm-607-glass-admin
         <div class="login-container">
             <div class="login-card">
                 <div class="login-header">
-                    <div class="login-logo">G</div>
-                    <h1 class="login-title">Cadastro de Tutor</h1>
-                    <p class="login-subtitle">Crie o seu perfil de Tutor</p>
+                    <div class="login-logo">TCC</div>
+                    <h1 class="login-title">Cadastro de professor</h1>
+                    <p class="login-subtitle">Crie o seu perfil de professor e orientador.</p>
                 </div>
 
                 <form action="/auth/register" method="POST" class="login-form">
@@ -84,7 +77,7 @@ https://templatemo.com/tm-607-glass-admin
 
                     <div class="form-group">
                         <label>Curso</label>
-                        <select id="curso" name="curso" class="form-input">
+                        <select id="curso" name="curso" class="form-input" required>
                             <option disabled selected value="">Selecione o curso...</option>
                         </select>
                     </div>
@@ -110,11 +103,11 @@ https://templatemo.com/tm-607-glass-admin
 
         <!-- Footer -->
         <footer class="site-footer">
-            <p>Copyright © 2026 Your Company. Designed by <a href="https://templatemo.com" target="_blank" rel="nofollow">Helder & BV</a></p>
+            <p>Gestor TCC · Plataforma académica</p>
         </footer>
     </div>
 
     <script src="/js/templatemo-glass-admin-script.js"></script>
-    <!-- TemplateMo 607 Glass Admin -->
+    <script src="/js/auth/register-options.js"></script>
 </body>
 </html>

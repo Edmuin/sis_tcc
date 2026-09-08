@@ -115,8 +115,8 @@
                 <div class="user-profile">
                     <div class="user-avatar">HB</div>
                     <div class="user-info">
-                        <div class="user-name">H & B</div>
-                        <div class="user-role">Administrador</div>
+                        <div class="user-name" data-session-name>Gestor TCC</div>
+                        <div class="user-role" data-session-role>Utilizador</div>
                     </div>
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <polyline points="6 9 12 15 18 9"/>
@@ -129,8 +129,12 @@
         <main class="main-content">
             <!-- Top Navbar -->
             <nav class="navbar">
-                <h1 class="page-title">Painel Principal</h1>
+                <div>
+                    <p class="login-kicker">Área de trabalho</p>
+                    <h1 class="page-title">Painel principal</h1>
+                </div>
                 <div class="navbar-right">
+                    <span class="session-status" data-session-status>Ligado</span>
                     <div class="search-box">
                         <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <circle cx="11" cy="11" r="8"/>
@@ -246,11 +250,7 @@
                             <h2 class="card-title">Análises de TCCs</h2>
                             <p class="card-subtitle">Mensalmente</p>
                         </div>
-                        <div class="card-actions">
-                            <button class="card-btn active">Mensalmente</button>
-                            <button class="card-btn">Semanalmente</button>
-                            <button class="card-btn">Diariamente</button>
-                        </div>
+                        <div class="card-actions"><span class="card-subtitle">Dados gerais</span></div>
                     </div>
                     <div class="chart-wrapper">
                         <div class="chart-container">
@@ -262,20 +262,7 @@
                                 <span class="y-value">20</span>
                                 <span class="y-value">0</span>
                             </div>
-                            <div class="chart-placeholder">
-                                <div class="chart-bar-group"><div class="chart-bar bar-emerald" style="height: 120px;"></div><span class="chart-label">Jan</span></div>
-                                <div class="chart-bar-group"><div class="chart-bar bar-gold" style="height: 160px;"></div><span class="chart-label">Feb</span></div>
-                                <div class="chart-bar-group"><div class="chart-bar bar-coral" style="height: 90px;"></div><span class="chart-label">Mar</span></div>
-                                <div class="chart-bar-group"><div class="chart-bar bar-teal" style="height: 140px;"></div><span class="chart-label">Apr</span></div>
-                                <div class="chart-bar-group"><div class="chart-bar bar-amber" style="height: 180px;"></div><span class="chart-label">May</span></div>
-                                <div class="chart-bar-group"><div class="chart-bar bar-emerald" style="height: 130px;"></div><span class="chart-label">Jun</span></div>
-                                <div class="chart-bar-group"><div class="chart-bar bar-gold" style="height: 170px;"></div><span class="chart-label">Jul</span></div>
-                                <div class="chart-bar-group"><div class="chart-bar bar-coral" style="height: 150px;"></div><span class="chart-label">Aug</span></div>
-                                <div class="chart-bar-group"><div class="chart-bar bar-teal" style="height: 190px;"></div><span class="chart-label">Sep</span></div>
-                                <div class="chart-bar-group"><div class="chart-bar bar-amber" style="height: 140px;"></div><span class="chart-label">Oct</span></div>
-                                <div class="chart-bar-group"><div class="chart-bar bar-emerald" style="height: 175px;"></div><span class="chart-label">Nov</span></div>
-                                <div class="chart-bar-group"><div class="chart-bar bar-gold" style="height: 200px;"></div><span class="chart-label">Dec</span></div>
-                            </div>
+                            <div class="chart-placeholder"><p class="empty-table-message">A carregar indicadores...</p></div>
                         </div>
                     </div>
                 </div>
@@ -284,47 +271,11 @@
                 <div class="glass-card activity-card">
                     <div class="card-header">
                         <div>
-                            <h2 class="card-title">Activades Recentes</h2>
-                            <p class="card-subtitle">Últimos TCCs</p>
+                            <h2 class="card-title">Atividades recentes</h2>
+                                <p class="card-subtitle">Acontecimentos do processo</p>
                         </div>
                     </div>
-                    <div class="activity-list">
-                        <div class="activity-item">
-                            <div class="activity-avatar" style="background: linear-gradient(135deg, var(--emerald-light), var(--emerald));">DS</div>
-                            <div class="activity-content">
-                                <p class="activity-text"><strong>Utilizador</strong> Adicionou o TCC</p>
-                                <span class="activity-time">Há 2 minutos</span>
-                            </div>
-                        </div>
-                        <div class="activity-item">
-                            <div class="activity-avatar" style="background: linear-gradient(135deg, var(--gold), var(--amber));">DS</div>
-                            <div class="activity-content">
-                                <p class="activity-text"><strong>Utilizador</strong> Enviou o seu BI</p>
-                                <span class="activity-time">Há 15 minutos</span>
-                            </div>
-                        </div>
-                        <div class="activity-item">
-                            <div class="activity-avatar" style="background: linear-gradient(135deg, var(--coral), var(--gold));">DS</div>
-                            <div class="activity-content">
-                                <p class="activity-text"><strong>Utilizador</strong> Enviou o seu BI</p>
-                                <span class="activity-time">Há 1 hora</span>
-                            </div>
-                        </div>
-                        <div class="activity-item">
-                            <div class="activity-avatar" style="background: linear-gradient(135deg, var(--success), var(--emerald));">DS</div>
-                            <div class="activity-content">
-                                <p class="activity-text"><strong>Utilizador</strong> concluiu o cadastro</p>
-                                <span class="activity-time">Há 2 horas</span>
-                            </div>
-                        </div>
-                        <div class="activity-item">
-                            <div class="activity-avatar" style="background: linear-gradient(135deg, var(--warning), var(--gold));">DS</div>
-                            <div class="activity-content">
-                                <p class="activity-text"><strong>Utilizador</strong> solicitou revisão</p>
-                                <span class="activity-time">Há 3 horas</span>
-                            </div>
-                        </div>
-                    </div>
+                    <div class="activity-list"><p class="empty-table-message">Ainda não existem atividades registadas.</p></div>
                 </div>
 
                 <!-- Data Table -->
@@ -335,8 +286,7 @@
                             <p class="card-subtitle">Últimos TCCs enviados</p>
                         </div>
                         <div class="card-actions">
-                            <button class="card-btn">Visualizar todos</button>
-                            <button class="card-btn">Exportar</button>
+                            <a class="card-btn" href="/tcc">Visualizar todos</a>
                         </div>
                     </div>
                     <div class="table-wrapper">
@@ -349,38 +299,7 @@
                                     <th>Status</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr>
-                                    <td><div class="table-user"><div class="table-avatar" style="background: linear-gradient(135deg, var(--emerald-light), var(--emerald));">JD</div><div class="table-user-info"><span class="table-user-name">Utilizador</span><span class="table-user-email">utilizador@gestortcc.local</span></div></div></td>
-                                    <td>Submissão de TCC</td>
-                                    <td>Jan 15, 2025</td>
-                                    <td><span class="status-badge completed">Concluído</span></td>
-                                </tr>
-                                <tr>
-                                    <td><div class="table-user"><div class="table-avatar" style="background: linear-gradient(135deg, var(--gold), var(--amber));">AS</div><div class="table-user-info"><span class="table-user-name">Utilizador</span><span class="table-user-email">utilizador@gestortcc.local</span></div></div></td>
-                                    <td>Validação institucional</td>
-                                    <td>Jan 14, 2025</td>
-                                    <td><span class="status-badge processing">Em processamento</span></td>
-                                </tr>
-                                <tr>
-                                    <td><div class="table-user"><div class="table-avatar" style="background: linear-gradient(135deg, var(--success), var(--emerald));">MJ</div><div class="table-user-info"><span class="table-user-name">Utilizador</span><span class="table-user-email">utilizador@gestortcc.local</span></div></div></td>
-                                    <td>Documento académico</td>
-                                    <td>Jan 13, 2025</td>
-                                    <td><span class="status-badge completed">Concluído</span></td>
-                                </tr>
-                                <tr>
-                                    <td><div class="table-user"><div class="table-avatar" style="background: linear-gradient(135deg, var(--coral), var(--gold));">DS</div><div class="table-user-info"><span class="table-user-name">Utilizador</span><span class="table-user-email">utilizador@gestortcc.local</span></div></div></td>
-                                    <td>Pedido de revisão</td>
-                                    <td>Jan 12, 2025</td>
-                                    <td><span class="status-badge pending">Pendente</span></td>
-                                </tr>
-                                <tr>
-                                    <td><div class="table-user"><div class="table-avatar" style="background: linear-gradient(135deg, var(--emerald), var(--gold));">DS</div><div class="table-user-info"><span class="table-user-name">Utilizador</span><span class="table-user-email">utilizador@gestortcc.local</span></div></div></td>
-                                    <td>Aprovação anual</td>
-                                    <td>Jan 11, 2025</td>
-                                    <td><span class="status-badge completed">Concluído</span></td>
-                                </tr>
-                            </tbody>
+                            <tbody><tr><td colspan="4" class="empty-table-message">A carregar dados...</td></tr></tbody>
                         </table>
                     </div>
                 </div>
@@ -395,13 +314,12 @@
 
     
     <footer class="site-footer" style="display: flex;">
-        <p style="justify-content: center;">Copyright © 2026 Gestor TCC. Desenvolvido por <a href="index_new.html" target="_blank" rel="nofollow">H & B</a></p>
+        <p style="justify-content: center;">Gestor TCC · Plataforma académica</p>
     </footer>
 
     <script src="/js/templatemo-glass-admin-script.js"></script>
     <script src="/js/api-client.js"></script>
     <script src="/js/dashboard-page.js"></script>
-    <!-- TemplateMo 607 Glass Admin -->
 
     <script>
         const user = JSON.parse(localStorage.getItem('user'));

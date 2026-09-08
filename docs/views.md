@@ -5,12 +5,12 @@ As telas ficam em `src/views` e usam os assets publicos de `src/public`.
 ## Telas principais
 
 - `index_new.html` e `Painel-principal.html`: painel inicial do sistema.
-- `TCC.html`: area geral de trabalhos de conclusao de curso.
-- `Agendar.html`: agendamento e acompanhamento de defesas.
-- `Curso.html` e `Area-de-Formacao.html`: configuracoes academicas.
-- `Config-utilizadores.html`: configuracao de utilizadores.
-- `Meus-dados.html`: dados do utilizador.
-- `auth/login.html` e `auth/register.html`: acesso e cadastro.
+- `TCC/`: listagem, criação, detalhe e edição de trabalhos de conclusão de curso.
+- `Agendar.html`: entrada legada; o fluxo atual de agendamento usa `Defesas`.
+- `Curso.html` e `Area-de-Formacao.html`: configurações académicas.
+- `Tela-operacional.html`: módulos administrativos reutilizáveis.
+- `Meus-dados.html`: dados do utilizador, preenchidos via `/auth/me`.
+- `auth/sign_in.html`, `auth/sign_up_aluno.html`, `auth/sign_up_professor.html` e `auth/sign_up_coordenador.html`: acesso e cadastro.
 
 ## Tela operacional reutilizavel
 

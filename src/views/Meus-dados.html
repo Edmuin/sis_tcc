@@ -171,17 +171,11 @@
                     <div class="settings-tab-content active" id="tab-profile">
                         <div class="profile-header">
                             <div class="profile-avatar-large">
-                                DN
-                                <div class="profile-avatar-edit">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
-                                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
-                                    </svg>
-                                </div>
+                                <span data-profile-initials>--</span>
                             </div>
                             <div class="profile-info">
-                                <h2>Utilizador</h2>
-                                <p>admin@gestortcc.local • Administrador</p>
+                                <h2 data-profile-name>Utilizador</h2>
+                                <p data-profile-summary>--</p>
                             </div>
                         </div>
 
@@ -190,23 +184,23 @@
                             <div class="form-grid">
                                 <div class="form-group-settings">
                                     <label>Nome</label>
-                                    <input type="text" value="Helder">
+                                    <input type="text" data-profile-field="fullname" readonly>
                                 </div>
                                 <div class="form-group-settings">
-                                    <label>Sobrenome</label>
-                                    <input type="text" value="Benvindo">
+                                    <label>Nº de Processo</label>
+                                    <input type="text" data-profile-field="n_processo" readonly>
                                 </div>
                                 <div class="form-group-settings">
                                     <label>E-mail</label>
-                                    <input type="email" value="admin@gestortcc.local">
+                                    <input type="email" data-profile-field="email" readonly>
                                 </div>
                                 <div class="form-group-settings">
                                     <label>Telefone</label>
-                                    <input type="tel" value="+244 900 000 000">
+                                    <input type="tel" data-profile-field="telefone" readonly>
                                 </div>
                                 <div class="form-group-settings full-width">
-                                    <label>Resumo acadêmico</label>
-                                    <textarea>Utilizador do sistema académico para acompanhamento de TCCs.</textarea>
+                                    <label>Género</label>
+                                    <textarea data-profile-field="genero" readonly></textarea>
                                 </div>
                             </div>
                         </div>
@@ -218,30 +212,28 @@
                                     <span class="settings-label-title">Orientador</span>
                                     <span class="settings-label-desc">Selecione o seu Orientador</span>
                                 </div>
-                                <select class="settings-select">
-                                    <option value="">Selecione o seu Orientador</option>
-                                    <option>Lucas Pazito</option>
-                                    <option>Maria Álvaro</option>
-                                    <option>Olívia Matos</option>
-                                </select>
+                                <span class="settings-value" data-profile-field="orientador">-</span>
                             </div>
                             <div class="settings-row">
                                 <div class="settings-label">
                                     <span class="settings-label-title">Curso</span>
                                     <span class="settings-label-desc">Selecione o seu Curso</span>
                                 </div>
-                                <select class="settings-select">
-                                    <option value="">Selecione o seu Curso</option>
-                                    <option>Engenharia de Software</option>
-                                    <option>Sistemas de Informação</option>
-                                    <option>Ciência da Computação</option>
-                                </select>
+                                <span class="settings-value" data-profile-field="curso">-</span>
+                            </div>
+                            <div class="settings-row">
+                                <div class="settings-label">
+                                    <span class="settings-label-title">Área de Formação</span>
+                                </div>
+                                <span class="settings-value" data-profile-field="area_formacao">-</span>
+                            </div>
+                            <div class="settings-row">
+                                <div class="settings-label">
+                                    <span class="settings-label-title">Nº Mecanográfico</span>
+                                </div>
+                                <span class="settings-value" data-profile-field="n_mecanografico">-</span>
                             </div>
 
-                        <div class="btn-group">
-                            <button class="btn btn-primary" style="width: auto;">Guardar Alterações</button>
-                            <button class="btn btn-secondary" style="width: auto;">Cancelar</button>
-                        </div>
                     </div>
 
                     <!-- Security Tab -->
@@ -325,7 +317,6 @@
 
                         <div class="btn-group">
                             <button class="btn btn-primary" style="width: auto;">Atualizar Senha</button>
-                            <button class="btn btn-secondary" style="width: auto;">Cancelar</button>
                         </div>
                     </div>
 
@@ -564,5 +555,6 @@
     </footer>
 
     <script src="/js/templatemo-glass-admin-script.js"></script>
+    <script src="/js/profile-page.js"></script>
 </body>
 </html>

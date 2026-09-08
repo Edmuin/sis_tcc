@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Acompanhamento do TCC - Gestor TCC</title>
+  <link rel="stylesheet" href="/css/templatemo-glass-admin-style.css">
+</head>
+<body>
+  <div class="background"></div>
+  <div class="orb orb-1"></div><div class="orb orb-2"></div><div class="orb orb-3"></div>
+  <div class="dashboard">
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header"><div class="logo">TCC</div><span class="logo-text">Gestor TCC</span></div>
+      <ul class="nav-menu">
+        <li class="nav-section"><span class="nav-section-title">Processo</span><ul>
+          <li class="nav-item"><a href="/tcc" class="nav-link">TCCs</a></li>
+          <li class="nav-item"><a href="/Defesas" class="nav-link">Defesas</a></li>
+        </ul></li>
+        <li class="nav-section"><span class="nav-section-title">Conta</span><ul>
+          <li class="nav-item"><a href="/MeusDados" class="nav-link">Meus Dados</a></li>
+          <li class="nav-item"><a href="/auth/logout" class="nav-link">Sair</a></li>
+        </ul></li>
+      </ul>
+      <div class="sidebar-footer"><div class="user-profile"><div class="user-avatar">TCC</div><div class="user-info"><div class="user-name">Utilizador</div><div class="user-role">Perfil</div></div></div></div>
+    </aside>
+    <main class="main-content">
+      <nav class="navbar"><div class="page-header"><h1 class="page-title">Acompanhamento do TCC</h1><div class="page-breadcrumb"><a href="/tcc">TCCs</a><span>/</span><span>Workflow</span></div></div></nav>
+      <section class="content-grid" data-workflow-root>
+        <div class="glass-card table-card"><div class="card-header"><div><h2 class="card-title" data-tcc-title>A carregar...</h2><p class="card-subtitle" data-tcc-state>Estado do processo</p></div></div><div class="workflow-progress" data-progress>0%</div></div>
+        <div class="glass-card table-card"><div class="card-header"><div><h2 class="card-title">Proposta do tema</h2><p class="card-subtitle">Tema e linha de investigação</p></div></div><div data-proposals>A carregar...</div><form data-proposal-form hidden><input class="form-input" name="titulo" placeholder="Título do tema" required><input class="form-input" name="area_investigacao" placeholder="Área ou linha de investigação"><textarea class="form-input" name="descricao" placeholder="Descreva o objetivo da proposta"></textarea><button class="btn btn-primary" type="submit">Enviar proposta</button></form></div>
+        <div class="glass-card table-card"><div class="card-header"><div><h2 class="card-title">Cronograma</h2><p class="card-subtitle">Etapas e prazos</p></div></div><div data-stages>A carregar...</div><form data-stage-form hidden><input class="form-input" name="nome" placeholder="Nome da etapa" required><input class="form-input" name="prazo" type="date"><button class="btn btn-primary" type="submit">Adicionar etapa</button></form></div>
+        <div class="glass-card table-card"><div class="card-header"><div><h2 class="card-title">Submissões e correções</h2><p class="card-subtitle">Versões enviadas para revisão</p></div></div><div data-submissions>A carregar...</div><form data-submission-form hidden enctype="multipart/form-data"><input class="form-input" name="titulo" placeholder="Título do documento" required><input class="form-input" name="documento" type="file" accept="application/pdf"><button class="btn btn-primary" type="submit">Submeter versão</button></form></div>
+        <div class="glass-card table-card"><div class="card-header"><div><h2 class="card-title">Avaliação do júri</h2><p class="card-subtitle">Notas da defesa e resultado final</p></div></div><div data-evaluations>A carregar...</div><form data-evaluation-form hidden><input class="form-input" name="nota_trabalho" type="number" min="0" max="20" step="0.01" placeholder="Trabalho escrito" required><input class="form-input" name="nota_apresentacao" type="number" min="0" max="20" step="0.01" placeholder="Apresentação" required><input class="form-input" name="nota_defesa" type="number" min="0" max="20" step="0.01" placeholder="Defesa" required><textarea class="form-input" name="observacoes" placeholder="Observações"></textarea><button class="btn btn-primary" type="submit">Registar avaliação</button></form></div>
+        <div class="glass-card table-card"><div class="card-header"><div><h2 class="card-title">Sessões de orientação</h2><p class="card-subtitle">Pedidos, encontros e observações</p></div></div><div data-orientations>A carregar...</div><form data-orientation-form hidden><input class="form-input" name="data_sessao" type="datetime-local" required><input class="form-input" name="assunto" placeholder="Assunto da sessão" required><button class="btn btn-primary" type="submit">Solicitar sessão</button></form></div>
+      </section>
+    </main>
+  </div>
+  <script src="/js/templatemo-glass-admin-script.js"></script>
+  <script src="/js/TCC/workflow.js"></script>
+</body>
+</html>

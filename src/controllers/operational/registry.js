@@ -12,7 +12,7 @@ import { hasValue, positiveInteger, validDate, validEmail } from "./validation.j
 export const resources = {
   users: {
     model: UserModel,
-    required: ["nome", "email", "password"],
+    required: ["fullname", "email", "password"],
     hidden: ["password"],
   },
   roles: {
@@ -146,7 +146,7 @@ export const decorateRows = async (resourceName, rows) => {
 
     return rows.map((row) => ({
       ...row,
-      utilizador_nome: usersById[row.id_user]?.nome || "",
+      utilizador_nome: usersById[row.id_user]?.fullname || "",
       curso_nome: cursosById[row.id_curso]?.nome || "",
     }));
   }
@@ -157,7 +157,7 @@ export const decorateRows = async (resourceName, rows) => {
 
     return rows.map((row) => ({
       ...row,
-      utilizador_nome: usersById[row.id_user]?.nome || "",
+      utilizador_nome: usersById[row.id_user]?.fullname || "",
       utilizador_email: usersById[row.id_user]?.email || "",
     }));
   }
@@ -188,8 +188,8 @@ export const decorateRows = async (resourceName, rows) => {
 
       return {
         ...row,
-        estudante_nome: usersById[estudante?.id_user]?.nome || "",
-        professor_nome: usersById[professor?.id_user]?.nome || "",
+        estudante_nome: usersById[estudante?.id_user]?.fullname || "",
+        professor_nome: usersById[professor?.id_user]?.fullname || "",
       };
     });
   }

@@ -1,4 +1,11 @@
- async function loadDefesas() {
+    const escapeHtml = (value) => String(value ?? "")
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
+
+     async function loadDefesas() {
       const tbody = document.querySelector("[data-defesa-list]");
 
       try {
@@ -13,10 +20,10 @@
 
         tbody.innerHTML = rows.map((row) => `
           <tr>
-            <td>${row.tcc_tema || "-"}</td>
-            <td>${row.banca_sala || "-"}</td>
-            <td>${row.data_defesa || "-"}</td>
-            <td>${row.resultado || "-"}</td>
+            <td>${escapeHtml(row.tcc_tema || "-")}</td>
+            <td>${escapeHtml(row.banca_sala || "-")}</td>
+            <td>${escapeHtml(row.data_defesa || "-")}</td>
+            <td>${escapeHtml(row.resultado || "-")}</td>
             <td class="table-actions">
               <a class="card-btn" href="/Defesas/${row.id}">Ver</a>
               <a class="card-btn" href="/Defesas/${row.id}/edit">Editar</a>

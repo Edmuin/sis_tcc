@@ -10,7 +10,7 @@
             action: "Novo Utilizador",
             stats: [["Total", "0"], ["Ativos", "-"], ["Perfis", "-"], ["Recentes", "-"]],
             columns: [
-                ["nome", "Nome"],
+                ["fullname", "Nome"],
                 ["email", "Email"],
                 ["telefone", "Telefone"],
                 ["idade", "Idade"],
@@ -18,14 +18,14 @@
                 ["role_id", "Perfil"],
             ],
             form: [
-                ["nome", "Nome", "text", true],
+                ["fullname", "Nome", "text", true],
                 ["email", "Email", "email", true],
                 ["password", "Senha", "password", true],
                 ["telefone", "Telefone", "text"],
                 ["idade", "Idade", "number"],
                 ["genero", "Gênero", "text"],
                 ["foto", "Foto", "text"],
-                ["role_id", "ID do perfil", "number"],
+                ["role_id", "Perfil", "relation:roles"],
             ],
         },
         "/Perfis": {
@@ -69,12 +69,12 @@
                 ["Helena Costa", "2024008", "Informática", "INF4B", "2025/2026", "Finalista"],
             ],
             form: [
-                ["id_user", "ID do utilizador", "number", false],
+                ["id_user", "Utilizador", "relation:users", false],
                 ["numero_estudante", "Número de estudante", "number", true],
                 ["numero_processo", "Número de processo", "text"],
                 ["turma", "Turma", "text"],
                 ["ano_lectivo", "Ano lectivo", "text"],
-                ["id_curso", "ID do curso", "number", true],
+                ["id_curso", "Curso", "relation:cursos", true],
             ],
         },
         "/Professores": {
@@ -97,7 +97,7 @@
                 ["14", "Base de Dados", "Titular", "2026-05-20", "2026-05-20"],
             ],
             form: [
-                ["id_user", "ID do utilizador", "number", true],
+                ["id_user", "Utilizador", "relation:users", true],
                 ["especializacao", "Especialização", "text"],
                 ["categoria", "Categoria", "text"],
             ],
@@ -110,7 +110,7 @@
             action: "Nova Subdirecção",
             stats: [["Total", "0"], ["Ativas", "-"], ["Acadêmicas", "-"], ["Recentes", "-"]],
             columns: [["utilizador_nome", "Utilizador"], ["cargo", "Cargo"], ["created_at", "Criada em"], ["updated_at", "Atualizada em"]],
-            form: [["id_user", "ID do utilizador", "number"], ["cargo", "Cargo", "text"]],
+            form: [["id_user", "Utilizador", "relation:users"], ["cargo", "Cargo", "text"]],
         },
         "/Bancas": {
             title: "Bancas",
@@ -136,8 +136,8 @@
             stats: [["Total", "0"], ["Aprovadas", "-"], ["Pendentes", "-"], ["Recentes", "-"]],
             columns: [["tcc_tema", "TCC"], ["banca_sala", "Sala"], ["data_defesa", "Data"], ["resultado", "Resultado"], ["created_at", "Criada em"]],
             form: [
-                ["id_tcc", "ID do TCC", "number", true],
-                ["id_banca", "ID da banca", "number", true],
+                ["id_tcc", "TCC", "relation:tccs", true],
+                ["id_banca", "Banca", "relation:bancas", true],
                 ["data_defesa", "Data da defesa", "date", true],
                 ["resultado", "Resultado", "text", true],
             ],
@@ -166,8 +166,8 @@
                 ["objectivo", "Objetivo", "text"],
                 ["estado", "Estado", "number"],
                 ["data_submissao", "Data de submissão", "date"],
-                ["id_estudante", "ID do estudante", "number", true],
-                ["id_professor", "ID do professor", "number", true],
+                ["id_estudante", "Estudante", "relation:estudantes", true],
+                ["id_professor", "Professor", "relation:professores", true],
             ],
         },
     };
@@ -244,6 +244,26 @@
         window.OperationalRenderers.renderForm(dom, page);
     }
 
+    async function loadRelationOptions(page) {
+        const relationFields = page.form.filter(([, , type]) => type.startsWith("relation:"));
+        await Promise.all(relationFields.map(async ([name, label, type]) => {
+            const select = dom.form.elements[name];
+            if (!select) return;
+
+            try {
+                const result = await window.ApiClient.get(`/api/${type.slice(9)}`);
+                (result.data || []).forEach((row) => {
+                    const option = document.createElement("option");
+                    option.value = row.id;
+                    option.textContent = row.fullname || row.nome || row.tema || `${label} #${row.id}`;
+                    select.append(option);
+                });
+            } catch (error) {
+                select.innerHTML = `<option value="">${label} indisponível</option>`;
+            }
+        }));
+    }
+
     function filterTableRows(term) {
         window.OperationalTableTools.filterRows(dom.table, term);
     }
@@ -256,6 +276,22 @@
         return window.OperationalForms.validatePayload(page, payload, formData, editingId);
     }
 
+    function getDynamicStats(page, rows) {
+        const total = rows.length;
+        const values = rows.map((row) => String(row.estado || row.resultado || "").toLowerCase());
+        return page.stats.map(([label], index) => {
+            if (index === 0) return [label, String(total)];
+            if (/aprov|conclu|final/.test(label.toLowerCase())) {
+                return [label, String(values.filter((value) => /aprov|conclu|final/.test(value)).length)];
+            }
+            if (/pend|análise|analise/.test(label.toLowerCase())) {
+                return [label, String(values.filter((value) => /pend|análise|analise/.test(value)).length)];
+            }
+            if (/recent|actualiz|atualiz/.test(label.toLowerCase())) return [label, String(Math.min(total, 5))];
+            return [label, "-"];
+        });
+    }
+
     async function loadRows(page) {
         renderStats(page.stats.map(([label], index) => [label, index === 0 ? "0" : "-"]));
         renderTable(page, []);
@@ -264,11 +300,15 @@
 
         try {
             const result = await window.ApiClient.get(page.endpoint);
-            const rows = result.data || [];
+            const rows = Array.from((result.data || []).reduce((uniqueRows, row) => {
+                const key = row.id === undefined || row.id === null ? Symbol() : String(row.id);
+                uniqueRows.set(key, row);
+                return uniqueRows;
+            }, new Map()).values());
             currentRows = rows;
 
             renderTable(page, rows, true);
-            renderStats(page.stats.map(([label], index) => [label, index === 0 ? String(rows.length) : "-"]));
+            renderStats(getDynamicStats(page, rows));
             setMessage(rows.length === 0 ? "Ainda não há registos para esta área." : "", rows.length === 0 ? "info" : "");
         } catch (error) {
             currentRows = [];
@@ -392,6 +432,15 @@
         dom.exportAction?.addEventListener("click", () => exportRows(page));
     }
 
+    function applyRoleView(page) {
+        const role = JSON.parse(localStorage.getItem("user") || "{}").role;
+        if (role !== "tutor") return;
+        if (dom.form) dom.form.hidden = true;
+        if (dom.primaryAction) dom.primaryAction.hidden = true;
+        setText(dom.panelTitle, "Consulta");
+        setText(dom.panelSubtitle, "Informação disponível para o seu perfil");
+    }
+
     function init() {
         const page = getPageConfig();
 
@@ -399,7 +448,9 @@
         activateCurrentMenuItem();
         renderHeader(page);
         renderForm(page);
+        applyRoleView(page);
         bindEvents(page);
+        loadRelationOptions(page);
         loadRows(page);
     }
 

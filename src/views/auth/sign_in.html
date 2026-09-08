@@ -1,21 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register - 3D Glassmorphism Dashboard</title>
-    <meta name="description" content="3D Glassmorphism Dashboard Template by TemplateMo">
+    <title>Entrar | Gestor TCC</title>
+    <meta name="description" content="Acesso ao Gestor TCC">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/templatemo-glass-admin-style.css">
-    <!--
-
-TemplateMo 607 Glass Admin
-
-https://templatemo.com/tm-607-glass-admin
-
--->
 </head>
 <body>
     <!-- Animated Background -->
@@ -41,12 +34,14 @@ https://templatemo.com/tm-607-glass-admin
         <div class="login-container">
             <div class="login-card">
                 <div class="login-header">
-                    <div class="login-logo">G</div>
-                    <h1 class="login-title">Login</h1>
-                    <p class="login-subtitle">Inicie Sessão Aqui</p>
+                    <div class="login-logo">TCC</div>
+                    <p class="login-kicker">Gestão académica</p>
+                    <h1 class="login-title">Bem-vindo ao Gestor TCC</h1>
+                    <p class="login-subtitle">Entre para acompanhar trabalhos, orientações e defesas.</p>
                 </div>
 
                 <form class="login-form" id="loginForm">
+                    <p class="form-message" data-login-message role="alert" aria-live="polite"></p>
 
                     <div class="form-group">
                         <label class="form-label" for="email">E-mail</label>
@@ -55,7 +50,10 @@ https://templatemo.com/tm-607-glass-admin
 
                     <div class="form-group">
                         <label class="form-label" for="password">Palavra-passe</label>
-                        <input type="password" id="password" name="password" class="form-input" placeholder="Palavra-passe" required>
+                        <div class="password-field">
+                            <input type="password" id="password" name="password" class="form-input" placeholder="Palavra-passe" required>
+                            <button class="password-toggle" type="button" data-toggle-password aria-label="Mostrar palavra-passe">Mostrar</button>
+                        </div>
                     </div>
 
                     <button type="submit" class="btn btn-primary">
@@ -66,6 +64,8 @@ https://templatemo.com/tm-607-glass-admin
                         </svg>
                     </button>
                 </form>
+
+                <a class="auth-support-link" href="/auth/forgot-password">Esqueci-me da palavra-passe</a>
 
                 <div class="divider">
                     <span>ou entre com</span>
@@ -79,12 +79,11 @@ https://templatemo.com/tm-607-glass-admin
 
         <!-- Footer -->
         <footer class="site-footer">
-            <p>Copyright © 2026 Your Company. Designed by <a href="https://templatemo.com" target="_blank" rel="nofollow">Helder & BV</a></p>
+            <p>Gestor TCC · Plataforma académica</p>
         </footer>
     </div>
 
     <script src="/js/templatemo-glass-admin-script.js"></script>
     <script src="/js/auth/login.js"></script>
-    <!-- TemplateMo 607 Glass Admin -->
 </body>
 </html>

@@ -1,3 +1,10 @@
+    const escapeHtml = (value) => String(value ?? "")
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
+
      async function loadTccs() {
       const tbody = document.querySelector("[data-tcc-list]");
 
@@ -13,14 +20,15 @@
 
         tbody.innerHTML = rows.map((row) => `
           <tr>
-            <td>${row.tema || "-"}</td>
-            <td>${row.estado ?? "-"}</td>
-            <td>${row.data_submissao || "-"}</td>
-            <td>${row.id_estudante || "-"}</td>
-            <td>${row.id_professor || "-"}</td>
-            <td>${row.relatorio_pdf ? `<a class="card-btn" href="${row.relatorio_pdf}" target="_blank" rel="noopener">PDF</a>` : "-"}</td>
+            <td>${escapeHtml(row.tema || "-")}</td>
+            <td>${escapeHtml(row.estado ?? "-")}</td>
+            <td>${escapeHtml(row.data_submissao || "-")}</td>
+            <td>${escapeHtml(row.id_estudante || "-")}</td>
+            <td>${escapeHtml(row.id_professor || "-")}</td>
+            <td>${row.relatorio_pdf ? `<a class="card-btn" href="${escapeHtml(row.relatorio_pdf)}" target="_blank" rel="noopener">PDF</a>` : "-"}</td>
             <td class="table-actions">
               <a class="card-btn" href="/tcc/${row.id}">Ver</a>
+              <a class="card-btn" href="/WorkflowTcc/${row.id}">Acompanhar</a>
               <a class="card-btn" href="/tcc/${row.id}/edit">Editar</a>
               <button class="card-btn" type="button" data-delete="${row.id}">Eliminar</button>
             </td>

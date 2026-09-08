@@ -5,6 +5,15 @@
         if (element) element.textContent = value;
     }
 
+    function escapeHtml(value) {
+        return String(value ?? "")
+            .replaceAll("&", "&amp;")
+            .replaceAll("<", "&lt;")
+            .replaceAll(">", "&gt;")
+            .replaceAll('"', "&quot;")
+            .replaceAll("'", "&#039;");
+    }
+
     function renderHeader(dom, page) {
         document.title = `${page.title} - Gestor TCC`;
 
@@ -24,8 +33,8 @@
             <div class="glass-card glass-card-3d stat-card">
                 <div class="stat-card-inner">
                     <div class="stat-info">
-                        <h3>${label}</h3>
-                        <div class="stat-value">${value}</div>
+                                <h3>${escapeHtml(label)}</h3>
+                                <div class="stat-value">${escapeHtml(value)}</div>
                         <span class="stat-change positive">Atualizado</span>
                     </div>
                     <div class="stat-icon ${["cyan", "magenta", "purple", "success"][index] || "cyan"}"></div>
@@ -40,12 +49,12 @@
     }
 
     function renderTableCell(cell) {
-        return `<td>${cell || "-"}</td>`;
+        return `<td>${escapeHtml(cell || "-")}</td>`;
     }
 
     function renderTable(dom, page, rows = [], fromApi = false) {
         const header = page.columns.map((column) => {
-            return `<th>${Array.isArray(column) ? column[1] : column}</th>`;
+            return `<th>${escapeHtml(Array.isArray(column) ? column[1] : column)}</th>`;
         }).join("");
 
         const hasActions = fromApi && page.form.length > 0;
@@ -76,6 +85,11 @@
     }
 
     function renderSelectInput(name, label, type, required) {
+        if (type.startsWith("relation:")) {
+            return `<select class="form-input" name="${escapeHtml(name)}" data-relation="${escapeHtml(type.slice(9))}" ${required ? "required" : ""}>
+                <option value="">${escapeHtml(label)}</option>
+            </select>`;
+        }
         const options = type.replace("select:", "").split("|");
         return `
             <select class="form-input" name="${name}" ${required ? "required" : ""}>
@@ -92,13 +106,14 @@
         }
 
         dom.form.innerHTML = page.form.map(([name, label, type, required = false]) => {
-            const input = type.startsWith("select:")
-                ? renderSelectInput(name, label, type, required)
-                : `<input class="form-input" name="${name}" type="${type}" placeholder="${label}" ${required ? "required" : ""}>`;
+            const inputId = `operational-${name.replace(/[^a-zA-Z0-9_-]/g, "-")}`;
+            const input = type.startsWith("select:") || type.startsWith("relation:")
+                ? renderSelectInput(name, label, type, required).replace("<select", `<select id="${inputId}"`)
+                : `<input id="${inputId}" class="form-input" name="${name}" type="${type}" placeholder="${label}" ${required ? "required" : ""}>`;
 
             return `
                 <div class="form-group">
-                    <label class="form-label">${label}</label>
+                    <label class="form-label" for="${inputId}">${label}</label>
                     ${input}
                 </div>
             `;

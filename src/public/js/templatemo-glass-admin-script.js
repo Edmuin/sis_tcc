@@ -116,8 +116,13 @@
         const sidebar = document.getElementById('sidebar');
         
         if (menuToggle && sidebar) {
+            if (!menuToggle.getAttribute('aria-label')) menuToggle.setAttribute('aria-label', 'Abrir menu principal');
+            menuToggle.setAttribute('aria-controls', 'sidebar');
+            menuToggle.setAttribute('aria-expanded', 'false');
             menuToggle.addEventListener('click', () => {
-                sidebar.classList.toggle('open');
+                const isOpen = sidebar.classList.toggle('open');
+                menuToggle.setAttribute('aria-expanded', String(isOpen));
+                menuToggle.setAttribute('aria-label', isOpen ? 'Fechar menu principal' : 'Abrir menu principal');
             });
 
             // Close sidebar when clicking outside
@@ -126,6 +131,8 @@
                     !sidebar.contains(e.target) && 
                     !menuToggle.contains(e.target)) {
                     sidebar.classList.remove('open');
+                    menuToggle.setAttribute('aria-expanded', 'false');
+                    menuToggle.setAttribute('aria-label', 'Abrir menu principal');
                 }
             });
         }
@@ -137,7 +144,7 @@
             links: [
                 ["/PainelPrincipal", "Dashboard"],
                 ["/tcc", "TCC"],
-                ["/Agendar", "Defesa"],
+                ["/Defesas", "Defesas"],
                 ["/Estudantes", "Estudantes"],
                 ["/Professores", "Professores"],
                 ["/Subdireccoes", "Subdirecções"],
@@ -149,7 +156,7 @@
             links: [
                 ["/AreadeFormacao", "Área de Formação"],
                 ["/Curso", "Cursos"],
-                ["/users", "Utilizadores"],
+                ["/Utilizadores", "Utilizadores"],
                 ["/Perfis", "Papeis"],
 
                 ["/ConfigSobre", "Sobre"],
@@ -158,28 +165,40 @@
         {
             title: "Conta",
             links: [
-                ["/MeusDados", "Meu Perfil"],
-                ["/auth/form-login", "Sair"],
+                ["/MeusDados", "Meus Dados"],
+                ["/auth/logout", "Sair"],
             ],
         },
     ];
+
+    function allowedNavigation(role, href) {
+        if (role === 'coordenador') return true;
+        if (role === 'tutor') return ['/tcc', '/Estudantes', '/DetalhesTcc', '/Bancas', '/Curso', '/AreadeFormacao', '/MeusDados', '/auth/logout'].includes(href);
+        if (role === 'aluno') return ['/tcc', '/MeusDados', '/auth/logout'].includes(href);
+        return true;
+    }
 
     function initStableNavigation() {
         const navMenu = document.querySelector('.nav-menu');
         if (!navMenu) return;
 
-        navMenu.innerHTML = navigationSections.map((section) => `
+        const role = JSON.parse(localStorage.getItem('user') || '{}').role;
+        navMenu.innerHTML = navigationSections.map((section) => {
+            const links = section.links.filter(([href]) => allowedNavigation(role, href));
+            if (links.length === 0) return '';
+            return `
             <li class="nav-section">
                 <span class="nav-section-title">${section.title}</span>
                 <ul>
-                    ${section.links.map(([href, label]) => `
+                    ${links.map(([href, label]) => `
                         <li class="nav-item">
                             <a href="${href}" class="nav-link" data-route="${href}">${label}</a>
                         </li>
                     `).join('')}
                 </ul>
             </li>
-        `).join('');
+        `;
+        }).join('');
 
         navMenu.querySelectorAll('.nav-link').forEach((link) => {
             const href = link.getAttribute('href');
@@ -188,7 +207,7 @@
                 (href === '/Curso' && window.location.pathname.startsWith('/Curso/')) ||
                 (href === '/Bancas' && window.location.pathname.startsWith('/Bancas/')) ||
                 (href === '/Defesas' && window.location.pathname.startsWith('/Defesas/')) ||
-                (href === '/Agendar' && window.location.pathname.startsWith('/Defesas')) ||
+                (href === '/Defesas' && (window.location.pathname === '/Agendar' || window.location.pathname.startsWith('/Defesas'))) ||
                 (href === '/AreadeFormacao' && window.location.pathname.startsWith('/AreadeFormacao/'));
             link.classList.toggle('active', isActive);
         });
@@ -202,7 +221,8 @@
         const icons = {
             '/PainelPrincipal': '<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>',
             '/tcc': '<path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/>',
-            '/ConfigUtilizadores': '<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',
+            '/Utilizadores': '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',
+            '/ConfigUtilizadores': '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',
             '/Perfis': '<path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7z"/><path d="M9 12l2 2 4-4"/>',
             '/Curso': '<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5z"/>',
             '/Estudantes': '<path d="M17 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9.5" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/>',
@@ -212,7 +232,6 @@
             '/Subdireccoes': '<path d="M3 21h18"/><path d="M6 21V8l6-4 6 4v13"/><path d="M9 21v-6h6v6"/>',
             '/Bancas': '<path d="M4 21v-7"/><path d="M20 21v-7"/><path d="M12 21v-9"/><path d="M2 14h20"/><path d="M12 3l9 5H3z"/>',
             '/MeusDados': '<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',
-            '/ConfigUtilizadores': '<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/>',
             '/AreadeFormacao': '<path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M9 21v-7h6v7"/>',
             '/Curso': '<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5z"/>',
             '/ConfigSobre': '<circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>',
@@ -286,16 +305,38 @@
             button.addEventListener('click', () => {
                 const input = button.parentElement.querySelector('input');
                 const icon = button.querySelector('svg');
+                    if (!input) return;
                 
                 if (input.type === 'password') {
                     input.type = 'text';
-                    icon.innerHTML = '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/>';
+                    button.textContent = 'Ocultar';
+                    button.setAttribute('aria-label', 'Ocultar palavra-passe');
+                        if (icon) icon.innerHTML = '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/>';
                 } else {
                     input.type = 'password';
-                    icon.innerHTML = '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>';
+                    button.textContent = 'Mostrar';
+                    button.setAttribute('aria-label', 'Mostrar palavra-passe');
+                        if (icon) icon.innerHTML = '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>';
                 }
             });
         });
+    }
+
+    function initSessionIdentity() {
+        const names = document.querySelectorAll('.user-name');
+        const roles = document.querySelectorAll('.user-role');
+        if (!names.length && !roles.length) return;
+
+        fetch('/auth/me', { headers: { Accept: 'application/json' } })
+            .then(response => response.ok ? response.json() : null)
+            .then(result => {
+                const user = result && result.data;
+                if (!user) return;
+                const labels = { aluno: 'Aluno', tutor: 'Professor / Orientador', coordenador: 'Coordenação' };
+                names.forEach(element => { element.textContent = user.fullname || 'Utilizador'; });
+                roles.forEach(element => { element.textContent = labels[user.role] || 'Utilizador'; });
+            })
+            .catch(() => {});
     }
 
     // ============================================
@@ -453,6 +494,7 @@
         initNavigationIcons();
         initFormValidation();
         initPasswordToggle();
+        initSessionIdentity();
         initPageTransitions();
         initSettingsTabs();
         initPlaceholderActions();

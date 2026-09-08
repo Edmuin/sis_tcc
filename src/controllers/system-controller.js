@@ -4,6 +4,7 @@ import path from "path";
 import { SystemService } from "../services/system-service.js";
 
 export const dashboard = async (req, res) => {
+    if (req.user?.role === "aluno") return res.redirect("/tcc");
     res.sendFile(path.join(process.cwd(), "src/views/index_new.html"));
 }
 
@@ -21,7 +22,7 @@ export const ConfigSobre = async (req, res) => {
 }
 
 export const PainelPrincipal = async (req, res) => {
-    res.sendFile(path.join(process.cwd(), "src/views/Painel-principal.html"));
+    return dashboard(req, res);
 }
 
 export const Configuracoes = async (req, res) => {
@@ -35,3 +36,7 @@ export const AreadeFormacao = async (req, res) => {
 export const modulePage = async (req, res) => {
     res.sendFile(path.join(process.cwd(), "src/views/Tela-operacional.html"));
 }
+
+export const WorkflowTcc = async (req, res) => {
+    res.sendFile(path.join(process.cwd(), "src/views/TCC/workflow.html"));
+};

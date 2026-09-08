@@ -6,13 +6,17 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     try {
         // Users
-        const response = await fetch('/users/getusertoedit', {
+        const userId = window.location.pathname.split("/").filter(Boolean).pop();
+        const userForm = document.querySelector(".user-form");
+        if (userForm) userForm.action = `/users/edit/${encodeURIComponent(userId)}`;
+        const response = await fetch(`/users/${encodeURIComponent(userId)}/data`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
             },
         });
-        const user = await response.json();
+        const userPayload = await response.json();
+        const user = userPayload.data || userPayload;
         console.log("User carregado:", user);
 
         document.getElementById("fullname").value = user.fullname || "";
@@ -25,7 +29,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         // Roles
         const rolesRes = await fetch("/roles");
-        const roles = await rolesRes.json() || [];
+        const rolesPayload = await rolesRes.json();
+        const roles = rolesPayload.data || rolesPayload || [];
 
         roles.forEach(role => {
             if (role.id == user.role_id) {
@@ -39,8 +44,9 @@ document.addEventListener("DOMContentLoaded", async () => {
         });
 
         // Cursos
-        const cursosRes = await fetch("/cursos");
-        const cursos = await cursosRes.json() || [];
+        const cursosRes = await fetch("/Curso/api");
+        const cursosPayload = await cursosRes.json();
+        const cursos = cursosPayload.data || [];
 
         cursos.forEach(curso => {
             if(curso.id == user.curso) {
@@ -53,8 +59,9 @@ document.addEventListener("DOMContentLoaded", async () => {
         });
 
         // Áreas
-        const areasRes = await fetch("/areas");
-        const areas = await areasRes.json() || [];
+        const areasRes = await fetch("/AreadeFormacao/api");
+        const areasPayload = await areasRes.json();
+        const areas = areasPayload.data || [];
 
         areas.forEach(area => {
             if (area.id == user.area_formacao) {

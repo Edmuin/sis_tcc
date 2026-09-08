@@ -1,27 +1,13 @@
-document.addEventListener("DOMContentLoaded", async () => {
-    const roleList = document.getElementById("roles");
-    if (!roleList) return;
-
-    try {
-        const roles = await window.ApiClient.get("/roles");
-        /*roles.forEach((role) => {
-            const newOption = document.createElement("option");
-            newOption.value = role.nome;
-            newOption.textContent = role.nome;
-            roleList.append(newOption);
-        });*/
-    } catch (error) {
-        console.error("Não foi possível carregar os perfis.", error);
-    }
-});
-
 document.getElementById('loginForm').addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    alert("teste");
-
+    const form = e.currentTarget;
+    const submitButton = form.querySelector('button[type="submit"]');
+    const message = document.querySelector("[data-login-message]");
     const email = document.getElementById('email').value.trim();
     const password = document.getElementById('password').value;
+    if (message) message.textContent = "A validar os dados...";
+    if (submitButton) submitButton.disabled = true;
 
     try {
         const response = await fetch('/auth/login', {
@@ -35,22 +21,23 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
             })
         });
 
-        const data = await response.json();
+        const contentType = response.headers.get("content-type") || "";
+        const data = contentType.includes("application/json")
+            ? await response.json()
+            : { message: await response.text() };
 
         if (response.ok) {
-            alert("Utilizador Autenticado com Sucesso!");
-
             localStorage.setItem('user', JSON.stringify(data.user));
             localStorage.setItem('token', data.token);
-
-            alert('Redirecionando...');
             window.location.href = '/';
         } else {
-            console.log('Erro ao autenticar:', data.message);
-            alert(data.message || "Erro ao autenticar.");
+            if (message) message.textContent = data.message || "Erro ao autenticar.";
         }
     } catch (error) {
         console.error("Erro na requisição:", error);
-        alert("Erro de conexão com o servidor.");
+        if (message) message.textContent = "Não foi possível contactar o servidor. Verifique se está em execução.";
+    } finally {
+        if (submitButton) submitButton.disabled = false;
     }
 });
+

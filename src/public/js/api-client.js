@@ -2,9 +2,11 @@
     "use strict";
 
     async function request(path, options = {}) {
+        const token = localStorage.getItem("token");
         const headers = {
             Accept: "application/json",
             ...(options.body && !(options.body instanceof FormData) ? { "Content-Type": "application/json" } : {}),
+            ...(token ? { Authorization: `Bearer ${token}` } : {}),
             ...(options.headers || {}),
         };
 
@@ -19,6 +21,10 @@
             : await response.text();
 
         if (!response.ok) {
+            if (response.status === 401) {
+                localStorage.removeItem("token");
+                localStorage.removeItem("user");
+            }
             const message = typeof payload === "object" && payload?.message
                 ? payload.message
                 : "Não foi possível processar o pedido.";

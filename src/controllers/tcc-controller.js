@@ -1,6 +1,8 @@
 import path from "path";
 
 import { TccModel } from "../models/tcc.model.js";
+import { EstudanteModel } from "../models/estudante.model.js";
+import { ProfessorModel } from "../models/professor.model.js";
 
 const tccViewsPath = (...segments) => path.join(process.cwd(), "src/views/TCC", ...segments);
 
@@ -63,6 +65,19 @@ const redirectOrJson = (req, res, redirectPath, payload, status = 200) => {
   return res.status(status).json(payload);
 };
 
+const canAccessTcc = async (req, tcc) => {
+  if (req.user?.role === "coordenador") return true;
+  if (req.user?.role === "aluno") {
+    const student = (await EstudanteModel.findAll()).find((row) => String(row.id_user) === String(req.user.id));
+    return Boolean(student && String(student.id) === String(tcc.id_estudante));
+  }
+  if (req.user?.role === "tutor") {
+    const professor = (await ProfessorModel.findAll()).find((row) => String(row.id_user) === String(req.user.id));
+    return Boolean(professor && String(professor.id) === String(tcc.id_professor));
+  }
+  return false;
+};
+
 export const index = async (req, res) => {
   res.sendFile(tccViewsPath("index.html"));
 };
@@ -82,7 +97,11 @@ export const edit = async (req, res) => {
 export const list = async (req, res) => {
   try {
     const rows = await TccModel.findAll();
-    res.json({ data: rows });
+    const visibleRows = [];
+    for (const row of rows) {
+      if (await canAccessTcc(req, row)) visibleRows.push(row);
+    }
+    res.json({ data: visibleRows });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Não foi possível listar os TCCs." });
@@ -93,6 +112,7 @@ export const detail = async (req, res) => {
   try {
     const tcc = await TccModel.findById(req.params.id);
     if (!tcc) return res.status(404).json({ message: "TCC não encontrado." });
+    if (!(await canAccessTcc(req, tcc))) return res.status(403).json({ message: "Não tem permissão para aceder a este TCC." });
 
     res.json({ data: tcc });
   } catch (error) {
@@ -109,6 +129,18 @@ export const store = async (req, res) => {
       ...normalizeTccPayload(req.body),
       ...uploadedTccFiles(req.files),
     };
+    if (req.user.role === "aluno") {
+      const student = (await EstudanteModel.findAll()).find((row) => String(row.id_user) === String(req.user.id));
+      if (!student) return validationError(res, "Perfil de aluno não encontrado.");
+      data.id_estudante = student.id;
+    }
+    if (req.user.role === "tutor") {
+      const professor = (await ProfessorModel.findAll()).find((row) => String(row.id_user) === String(req.user.id));
+      if (!professor) return validationError(res, "Perfil de tutor não encontrado.");
+      data.id_professor = professor.id;
+    }
+    if (!(await EstudanteModel.findById(data.id_estudante))) return validationError(res, "Estudante não encontrado.");
+    if (!(await ProfessorModel.findById(data.id_professor))) return validationError(res, "Professor não encontrado.");
     const errors = validateTccPayload(data);
 
     if (errors.length > 0) return validationError(res, errors.join("; "));
@@ -127,11 +159,16 @@ export const update = async (req, res) => {
 
     const current = await TccModel.findById(req.params.id);
     if (!current) return res.status(404).json({ message: "TCC não encontrado." });
+    if (!(await canAccessTcc(req, current))) return res.status(403).json({ message: "Não tem permissão para alterar este TCC." });
 
     const data = {
       ...normalizeTccPayload(req.body),
       ...uploadedTccFiles(req.files),
     };
+    if (req.user.role !== "coordenador") {
+      delete data.id_estudante;
+      delete data.id_professor;
+    }
     Object.keys(data).forEach((key) => {
       if (!hasValue(data[key])) delete data[key];
     });
@@ -153,6 +190,9 @@ export const update = async (req, res) => {
 
 export const destroy = async (req, res) => {
   try {
+    const current = await TccModel.findById(req.params.id);
+    if (!current) return res.status(404).json({ message: "TCC não encontrado." });
+    if (!(await canAccessTcc(req, current))) return res.status(403).json({ message: "Não tem permissão para eliminar este TCC." });
     const result = await TccModel.deleteById(req.params.id);
     if (!result || result.affectedRows === 0) {
       return res.status(404).json({ message: "TCC não encontrado." });

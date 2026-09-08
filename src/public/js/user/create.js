@@ -2,72 +2,74 @@ document.addEventListener("DOMContentLoaded", async () => {
     
     const roleSelect = document.getElementById("role");
     const cursoSelect = document.getElementById("curso");
-    const areaSelect = document.getElementById("area_coordenacao");
+    const areaSelect = document.getElementById("area_formacao");
 
     try {
         // Roles
         const rolesRes = await fetch("/roles");
-        const roles = await rolesRes.json();
+        const rolesPayload = await rolesRes.json();
+        const roles = rolesPayload.data || rolesPayload;
 
         roles.forEach(role => {
             const option = document.createElement("option");
             option.value = role.nome;
             option.textContent = role.nome;
-            roleSelect.appendChild(option);
+            roleSelect?.appendChild(option);
         });
 
         // Cursos
-        const cursosRes = await fetch("/cursos");
-        const cursos = await cursosRes.json();
+        const cursosRes = await fetch("/Curso/api");
+        const cursosPayload = await cursosRes.json();
+        const cursos = cursosPayload.data || [];
 
         cursos.forEach(curso => {
             const option = document.createElement("option");
             option.value = curso.id; // ou codigo
             option.textContent = curso.nome;
-            cursoSelect.appendChild(option);
+            cursoSelect?.appendChild(option);
         });
 
         // Áreas
-        const areasRes = await fetch("/areas");
-        const areas = await areasRes.json();
+        const areasRes = await fetch("/AreadeFormacao/api");
+        const areasPayload = await areasRes.json();
+        const areas = areasPayload.data || [];
 
         areas.forEach(area => {
             const option = document.createElement("option");
             option.value = area.id;
             option.textContent = area.nome;
-            areaSelect.appendChild(option);
+            areaSelect?.appendChild(option);
         });
 
     } catch (error) {
         console.log("Erro ao carregar cursos/áreas:", error);
     }
 
-    const nProcesso = document.getElementById("n_processo").parentElement;
-    const curso = document.getElementById("curso").parentElement;
-    const nMecanografico = document.getElementById("n_mecanografico").parentElement;
-    const areaCoordenacao = document.getElementById("area_formacao").parentElement;
+    const nProcesso = document.getElementById("n_processo")?.parentElement;
+    const curso = document.getElementById("curso")?.parentElement;
+    const nMecanografico = document.getElementById("n_mecanografico")?.parentElement;
+    const areaCoordenacao = document.getElementById("area_formacao")?.parentElement;
 
     function atualizarCampos(role) {
         // esconder todos primeiro
-        nProcesso.style.display = "none";
-        curso.style.display = "none";
-        nMecanografico.style.display = "none";
-        areaCoordenacao.style.display = "none";
+        [nProcesso, curso, nMecanografico, areaCoordenacao].forEach((field) => {
+            if (field) field.style.display = "none";
+        });
 
         // regra por tipo
         if (role === "aluno") {
-            nProcesso.style.display = "block";
-            curso.style.display = "block";
+            if (nProcesso) nProcesso.style.display = "block";
+            if (curso) curso.style.display = "block";
         } 
         
         if (role === "tutor") {
-            curso.style.display = "block";
-            nMecanografico.style.display = "block";
+            if (curso) curso.style.display = "block";
+            if (nMecanografico) nMecanografico.style.display = "block";
         } 
         
         if (role === "coordenador") {
-            nMecanografico.style.display = "block";
-            areaCoordenacao.style.display = "block";
+            if (nMecanografico) nMecanografico.style.display = "block";
+            if (areaCoordenacao) areaCoordenacao.style.display = "block";
         }
     }
 
@@ -75,7 +77,5 @@ document.addEventListener("DOMContentLoaded", async () => {
     atualizarCampos("");
 
     // evento de mudança
-    roleSelect.addEventListener("change", (e) => {
-        atualizarCampos(e.target.value);
-    });
+    roleSelect?.addEventListener("change", (e) => atualizarCampos(e.target.value));
 });
