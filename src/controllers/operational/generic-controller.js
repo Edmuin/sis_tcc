@@ -4,9 +4,10 @@ import { decorateRows, matchesFilters, resources, sanitize, validateResourceData
 import { ProfessorModel } from "../../models/professor.model.js";
 import { TccModel } from "../../models/tcc.model.js";
 import { EstudanteModel } from "../../models/estudante.model.js";
+import bcrypt from "bcryptjs";
 
 const canAccessResource = async (req, resourceName, row) => {
-  if (req.user?.role === "coordenador") return true;
+  if (["coordenador", "administrador"].includes(req.user?.role)) return true;
   if (resourceName !== "tccs") return req.method === "GET";
 
   if (req.user?.role === "aluno") {
@@ -76,18 +77,15 @@ export const createResource = async (req, res) => {
     const resource = resources[resourceName];
     if (!resource) return res.status(404).json({ message: "Recurso não encontrado." });
     if (resourceName === "tccs" && req.user?.role !== "coordenador") {
+      if (req.user?.role === "tutor") {
+        return res.status(403).json({ message: "A criação de TCC deve ser iniciada pelo aluno ou pela coordenação." });
+      }
       const reference = { id_estudante: req.body.id_estudante, id_professor: req.body.id_professor };
       if (req.user?.role === "aluno") {
         const student = (await EstudanteModel.findAll()).find((item) => String(item.id_user) === String(req.user.id));
         if (!student) return res.status(403).json({ message: "Perfil de aluno não encontrado." });
         reference.id_estudante = student.id;
         req.body.id_estudante = student.id;
-      }
-      if (req.user?.role === "tutor") {
-        const professor = (await ProfessorModel.findAll()).find((item) => String(item.id_user) === String(req.user.id));
-        if (!professor) return res.status(403).json({ message: "Perfil de tutor não encontrado." });
-        reference.id_professor = professor.id;
-        req.body.id_professor = professor.id;
       }
       if (!(await canAccessResource(req, resourceName, reference))) return res.status(403).json({ message: "Não tem permissão para criar este TCC." });
     }
@@ -102,7 +100,9 @@ export const createResource = async (req, res) => {
       return validationError(res, validationErrors.join("; "));
     }
 
-    const row = await resource.model.store(req.body);
+    const data = { ...req.body };
+    if (resourceName === "users") data.password = await bcrypt.hash(data.password, 12);
+    const row = await resource.model.store(data);
     success(res, sanitize(resource, row), 201);
   } catch (error) {
     failure(res, error);
@@ -118,17 +118,20 @@ export const updateResource = async (req, res) => {
     if (!current) return res.status(404).json({ message: "Registo não encontrado." });
     if (!(await canAccessResource(req, resourceName, current))) return res.status(403).json({ message: "Não tem permissão para alterar este registo." });
 
-    const validationErrors = await validateResourceData(resourceName, req.body);
+    const data = { ...req.body };
+    if (resourceName === "users" && data.password === "") delete data.password;
+    const validationErrors = await validateResourceData(resourceName, data);
     if (validationErrors.length > 0) {
       return validationError(res, validationErrors.join("; "));
     }
+    if (resourceName === "users" && data.password) data.password = await bcrypt.hash(data.password, 12);
 
-    const result = await resource.model.update(req.params.id, req.body);
+    const result = await resource.model.update(req.params.id, data);
     if (!result || result.affectedRows === 0) {
       return res.status(404).json({ message: "Registo não encontrado ou sem alterações." });
     }
 
-    success(res, sanitize(resource, { id: req.params.id, ...req.body }));
+    success(res, sanitize(resource, { id: req.params.id, ...data }));
   } catch (error) {
     failure(res, error);
   }

@@ -1,3 +1,5 @@
+const escapeHtml = (value) => String(value ?? "").replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&#039;");
+
 async function loadAreas() {
       const tbody = document.querySelector("[data-area-list]");
 
@@ -13,13 +15,13 @@ async function loadAreas() {
 
         tbody.innerHTML = rows.map((row) => `
           <tr>
-            <td>${row.nome || "-"}</td>
-            <td>${row.descricao || "-"}</td>
-            <td>${row.created_at || "-"}</td>
+            <td>${escapeHtml(row.nome || "-")}</td>
+            <td>${escapeHtml(row.descricao || "-")}</td>
+            <td>${escapeHtml(row.created_at || "-")}</td>
             <td class="table-actions">
-              <a class="card-btn" href="/AreadeFormacao/${row.id}">Ver</a>
-              <a class="card-btn" href="/AreadeFormacao/${row.id}/edit">Editar</a>
-              <button class="card-btn" type="button" data-delete="${row.id}">Eliminar</button>
+              <a class="card-btn" href="/AreadeFormacao/${encodeURIComponent(row.id)}">Ver</a>
+              <a class="card-btn" href="/AreadeFormacao/${encodeURIComponent(row.id)}/edit">Editar</a>
+              <button class="card-btn" type="button" data-delete="${escapeHtml(row.id)}">Eliminar</button>
             </td>
           </tr>
         `).join("");

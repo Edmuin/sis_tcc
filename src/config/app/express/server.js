@@ -12,7 +12,7 @@ import areaFormacaoRoutes from "./routes/area-formacao-routes.js";
 import cursoRoutes from "./routes/curso-routes.js";
 import bancaRoutes from "./routes/banca-routes.js";
 import defesaRoutes from "./routes/defesa-routes.js";
-import { criarTodasTabelas } from "../../database/index.js";
+import { runMigrations } from "../../../database/migrate.js";
 import { configSession } from "./session/index.js";
 import operationalRoutes from "./routes/operational-routes.js";
 import { allowRoles, populateUser, requireAuth } from "../../../middlewares/auth-middleware.js";
@@ -71,7 +71,7 @@ app.get("/health", async (req, res) => {
 app.use("/", systemRoutes);
 
 const startServer = async () => {
-  await criarTodasTabelas();
+  await runMigrations();
   app.listen(port, () => {
     console.log(`Server On Fire on port: http://localhost:${port}`);
   });

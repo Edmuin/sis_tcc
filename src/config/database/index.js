@@ -168,12 +168,32 @@ export const criarTabelaUser = async () => {
       area_formacao VARCHAR(50) NULL,
       n_mecanografico VARCHAR(50) NULL,
       password VARCHAR(255) NOT NULL,
+      password_expires_at DATETIME NULL,
       created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
       updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
     )
   `;
   await pool.query(query);
+  await garantirColunaUser("password_expires_at", "DATETIME NULL");
 }
+
+const garantirColunaUser = async (coluna, definicao) => {
+  const [rows] = await pool.query(`SHOW COLUMNS FROM user LIKE ?`, [coluna]);
+  if (rows.length > 0) return;
+
+  await pool.query(`ALTER TABLE user ADD COLUMN ${coluna} ${definicao}`);
+};
+
+export const criarTabelaSessao = async () => {
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS app_session (
+      id VARCHAR(255) PRIMARY KEY,
+      data MEDIUMTEXT NOT NULL,
+      expires_at DATETIME NOT NULL,
+      INDEX idx_app_session_expires_at (expires_at)
+    )
+  `);
+};
 
 export const dadosDeRoles = async () => {
   const query = `
@@ -350,6 +370,7 @@ export const criarTodasTabelas = async () => {
   await criarTabelaRole();
   await dadosDeRoles();
   await criarTabelaUser();
+  await criarTabelaSessao();
   await criarTabelaAreaFormacao();
   await criarTabelaCurso();
   await criarTabelaEstudante();

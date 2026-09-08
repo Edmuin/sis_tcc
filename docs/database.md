@@ -1,6 +1,6 @@
 # Banco de Dados
 
-O sistema cria as tabelas automaticamente no arranque da aplicacao, a partir de `src/config/database/index.js`.
+O schema é mantido apenas por migrations versionadas. O servidor aplica migrations pendentes antes de aceitar pedidos; também pode executar `npm run migrate` manualmente.
 
 ## Tabelas principais
 
@@ -16,8 +16,8 @@ O sistema cria as tabelas automaticamente no arranque da aplicacao, a partir de 
 
 ## Observacao
 
-Atualmente as relacoes sao guardadas por campos `id_*`, mas ainda nao existem chaves estrangeiras definidas no SQL.
+As relações principais possuem chaves estrangeiras. Registos dependentes não podem ser apagados enquanto houver referências, evitando dados órfãos.
 
 ## Configuracao local
 
-Copie `.env.example` para `.env`, ajuste as credenciais do MySQL e crie a base de dados indicada em `DB_NAME`. As tabelas sao criadas automaticamente quando o servidor inicia.
+Copie `.env.example` para `.env`, ajuste as credenciais do MySQL e crie a base de dados indicada em `DB_NAME`. Nunca envie o `.env` para o repositório. Execute `npm start`.

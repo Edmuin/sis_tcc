@@ -12,6 +12,8 @@ import { RoleModel } from "../models/role.model.js";
 import { EstudanteModel } from "../models/estudante.model.js";
 import { ProfessorModel } from "../models/professor.model.js";
 import bcrypt from "bcryptjs";
+import { randomBytes } from "crypto";
+import { isPublicRegistrationRole } from "../services/registration-policy.js";
 
 export const signin = async (req, res) => {
     res.sendFile(path.join(process.cwd(), "src/views/auth/sign_in.html"));
@@ -27,11 +29,19 @@ export const forgotPasswordResult = async (req, res) => {
 
 export const forgotPassword = async (req, res) => {
     try {
-        const user = await UserService.buscarPorEmail(req.body.email);
+        let user;
+        try {
+            user = await UserService.buscarPorEmail(req.body.email);
+        } catch (error) {
+            if (error.message === "Usuário não encontrado.") {
+                return res.redirect("/auth/forgot-password/result?status=sent");
+            }
+            throw error;
+        }
         const smsToken = process.env.UMBALA_API_TOKEN;
         if (!smsToken) return res.redirect("/auth/forgot-password/result?status=config");
 
-        const temporaryPassword = Math.random().toString(36).slice(-8);
+        const temporaryPassword = randomBytes(6).toString("base64url").slice(0, 8);
         const smsUrl = process.env.UMBALA_API_URL || "https://api.useombala.ao/v1/messages";
         const smsFrom = process.env.UMBALA_SMS_FROM || "Gestor TCC";
         await axios.post(smsUrl, {
@@ -42,7 +52,10 @@ export const forgotPassword = async (req, res) => {
         }, {
             headers: { "Content-Type": "application/json", Authorization: `Token ${smsToken}` },
         });
-        await UserService.atualizar(user.id, { password: await bcrypt.hash(temporaryPassword, 12) });
+        await UserService.atualizar(user.id, {
+            password: await bcrypt.hash(temporaryPassword, 12),
+            password_expires_at: new Date(Date.now() + 24 * 60 * 60 * 1000),
+        });
         return res.redirect("/auth/forgot-password/result?status=sent");
     } catch (error) {
         console.error("Erro na recuperação da palavra-passe:", error.message);
@@ -97,6 +110,9 @@ export const login = async (req, res) => {
             : user.password === password;
         if (!passwordMatches) {
             return res.status(401).json({ message: "Credenciais inválidas." });
+        }
+        if (user.password_expires_at && new Date(user.password_expires_at) <= new Date()) {
+            return res.status(401).json({ message: "A palavra-passe temporária expirou. Solicite uma nova recuperação." });
         }
         if (!user.password?.startsWith("$2")) {
             await UserService.atualizar(user.id, { password: await bcrypt.hash(password, 12) });
@@ -163,7 +179,7 @@ export const userType = async (req, res) => {
 export const selectType = async (req, res) => {
     try {
         const { role } = req.body;
-        if (!["aluno", "tutor", "coordenador"].includes(role)) {
+        if (!isPublicRegistrationRole(role)) {
             return res.status(400).send("Tipo de utilizador inválido para cadastro público.");
         }
         req.session.role = { role };
@@ -202,7 +218,7 @@ export const register = async (req, res) => {
         const { fullname, email, telefone, idade, genero, n_processo, n_mecanografico, curso, area_formacao } = req.body;
         const role = req.session.role?.role;
         if (!role) return res.status(400).send("Seleccione primeiro o tipo de utilizador.");
-        if (!["aluno", "tutor", "coordenador"].includes(role)) {
+        if (!isPublicRegistrationRole(role)) {
             return res.status(403).send("Este perfil só pode ser criado pela administração do sistema.");
         }
 
@@ -212,18 +228,12 @@ export const register = async (req, res) => {
             }
         }
 
-        if (role === "coordenador") {
-            if (!area_formacao || !(await AreaFormacaoModel.findById(area_formacao))) {
-                return res.status(400).send("Seleccione uma área de formação válida.");
-            }
-        }
-
         const normalizedNMechanographic = role === "aluno" ? null : n_mecanografico;
         const role_id = await RoleService.getRoleByName(role);
         if (!role_id) return res.status(400).send("Tipo de utilizador inválido.");
-        const password = Math.random().toString(36).slice(-8);
+        const password = randomBytes(12).toString("base64url");
         const hashedPassword = await bcrypt.hash(password, 12);
-        const user = await UserService.gravar({ fullname, email, telefone, idade, genero, role_id: role_id.id, n_processo, curso, area_formacao, n_mecanografico: normalizedNMechanographic, password: hashedPassword });
+        const user = await UserService.gravar({ fullname, email, telefone, idade, genero, role_id: role_id.id, n_processo, curso, area_formacao, n_mecanografico: normalizedNMechanographic, password: hashedPassword, password_expires_at: new Date(Date.now() + 24 * 60 * 60 * 1000) });
 
         if (role === "aluno") {
             await EstudanteModel.store({
@@ -239,31 +249,32 @@ export const register = async (req, res) => {
         }
 
         const message = `Caro(a) ${user.fullname}, a sua conta foi criada com sucesso! A sua senha é: ${password}`;
-        const dateScheduled= generateDateWith30s();
+        const dateScheduled = generateDateWith30s();
         
         const data = {
             "message": message,
-            "from": "Umbillical",
+            "from": process.env.UMBALA_SMS_FROM || "Gestor TCC",
             "to": user.telefone,
             "schedule": dateScheduled
         };
         const smsToken = process.env.UMBALA_API_TOKEN;
-        if (!smsToken) return res.redirect("/auth/sign-in");
-        const config = {
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Token ${smsToken}`
+        if (!smsToken) {
+            console.error("Cadastro concluído, mas UMBALA_API_TOKEN não está configurado.");
+        } else {
+            try {
+                await axios.post(
+                    process.env.UMBALA_API_URL || "https://api.useombala.ao/v1/messages",
+                    data,
+                    {
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Authorization": `Token ${smsToken}`
+                        }
+                    }
+                );
+            } catch (error) {
+                console.error("Erro ao enviar mensagem:", error.response?.data || error.message);
             }
-        };
-
-        try {
-            const responseSendedMessage = await axios.post(
-                "https://api.useombala.ao/v1/messages",
-                data,
-                config
-            );
-        }catch (error) {
-            console.error("Erro ao enviar mensagem:", error.response ? error.response.data : error.message);
         }
 
         res.redirect("/auth/sign-in");

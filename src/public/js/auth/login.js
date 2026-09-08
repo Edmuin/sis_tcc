@@ -28,7 +28,6 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
 
         if (response.ok) {
             localStorage.setItem('user', JSON.stringify(data.user));
-            localStorage.setItem('token', data.token);
             window.location.href = '/';
         } else {
             if (message) message.textContent = data.message || "Erro ao autenticar.";

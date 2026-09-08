@@ -18,9 +18,17 @@ const id = window.location.pathname.split("/").filter(Boolean)[1];
         form.elements[key].value = value ?? "";
       });
       document.querySelector("[data-show-link]").href = `/tcc/${id}`;
-      document.querySelector("[data-existing-files]").innerHTML = `
-        ${result.data.relatorio_pdf ? `<a class="card-btn" href="${result.data.relatorio_pdf}" target="_blank" rel="noopener">Ver relatório</a>` : ""}
-      `;
+      const existingFiles = document.querySelector("[data-existing-files]");
+      existingFiles.replaceChildren();
+      if (result.data.relatorio_pdf) {
+        const link = document.createElement("a");
+        link.className = "card-btn";
+        link.href = result.data.relatorio_pdf;
+        link.target = "_blank";
+        link.rel = "noopener";
+        link.textContent = "Ver relatório";
+        existingFiles.append(link);
+      }
     }
 
     form.addEventListener("submit", async (event) => {

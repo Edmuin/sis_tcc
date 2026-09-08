@@ -10,11 +10,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     };
 
     try {
-        const token = localStorage.getItem("token");
         const response = await fetch("/auth/me", {
             headers: {
                 Accept: "application/json",
-                ...(token ? { Authorization: `Bearer ${token}` } : {}),
             },
         });
         const payload = await response.json();

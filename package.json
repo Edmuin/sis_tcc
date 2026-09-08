@@ -2,9 +2,10 @@
   "name": "Sistema-de-Gerenciamento-de-TCC",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "src/server.js",
   "type": "module",
   "scripts": {
+    "start": "node src/server.js",
     "test": "node --test",
     "migrate": "node src/database/migrate.js",
     "dev": "nodemon src/server.js"

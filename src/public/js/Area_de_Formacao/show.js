@@ -1,4 +1,5 @@
 const id = window.location.pathname.split("/").filter(Boolean)[1];
+const escapeHtml = (value) => String(value ?? "").replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&#039;");
 
     async function loadArea() {
       const detail = document.querySelector("[data-detail]");
@@ -6,7 +7,7 @@ const id = window.location.pathname.split("/").filter(Boolean)[1];
       const result = await response.json();
 
       if (!response.ok) {
-        detail.innerHTML = `<tr><td>${result.message || "Área de formação não encontrada."}</td></tr>`;
+        detail.innerHTML = `<tr><td>${escapeHtml(result.message || "Área de formação não encontrada.")}</td></tr>`;
         return;
       }
 
@@ -14,11 +15,11 @@ const id = window.location.pathname.split("/").filter(Boolean)[1];
       document.querySelector("[data-nome]").textContent = row.nome || "Área sem nome";
       document.querySelector("[data-edit-link]").href = `/AreadeFormacao/${id}/edit`;
       detail.innerHTML = `
-        <tr><th>ID</th><td>${row.id}</td></tr>
-        <tr><th>Nome</th><td>${row.nome || "-"}</td></tr>
-        <tr><th>Descrição</th><td>${row.descricao || "-"}</td></tr>
-        <tr><th>Criada em</th><td>${row.created_at || "-"}</td></tr>
-        <tr><th>Atualizada em</th><td>${row.updated_at || "-"}</td></tr>
+        <tr><th>ID</th><td>${escapeHtml(row.id)}</td></tr>
+        <tr><th>Nome</th><td>${escapeHtml(row.nome || "-")}</td></tr>
+        <tr><th>Descrição</th><td>${escapeHtml(row.descricao || "-")}</td></tr>
+        <tr><th>Criada em</th><td>${escapeHtml(row.created_at || "-")}</td></tr>
+        <tr><th>Atualizada em</th><td>${escapeHtml(row.updated_at || "-")}</td></tr>
       `;
     }
 

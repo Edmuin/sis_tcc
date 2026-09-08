@@ -6,7 +6,7 @@ import { pool } from "../config/database/mysql/db.js";
 const currentFile = fileURLToPath(import.meta.url);
 const migrationsDirectory = path.join(path.dirname(currentFile), "migrations");
 
-const run = async () => {
+export const runMigrations = async () => {
   await pool.query(`CREATE TABLE IF NOT EXISTS schema_migrations (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255) NOT NULL UNIQUE, applied_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP)`);
   const files = (await fs.readdir(migrationsDirectory)).filter((file) => file.endsWith(".sql")).sort();
   for (const file of files) {
@@ -27,11 +27,10 @@ const run = async () => {
       connection.release();
     }
   }
-  await pool.end();
 };
 
-run().catch(async (error) => {
-  console.error("Migration failed:", error);
-  await pool.end();
-  process.exitCode = 1;
-});
+if (process.argv[1] === fileURLToPath(import.meta.url)) {
+  runMigrations()
+    .catch((error) => { console.error("Migration failed:", error); process.exitCode = 1; })
+    .finally(() => pool.end());
+}

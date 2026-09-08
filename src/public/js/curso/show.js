@@ -1,4 +1,5 @@
 const id = window.location.pathname.split("/").filter(Boolean)[1];
+const escapeHtml = (value) => String(value ?? "").replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&#039;");
 
     async function loadCurso() {
       const detail = document.querySelector("[data-detail]");
@@ -6,7 +7,7 @@ const id = window.location.pathname.split("/").filter(Boolean)[1];
       const result = await response.json();
 
       if (!response.ok) {
-        detail.innerHTML = `<tr><td>${result.message || "Curso não encontrado."}</td></tr>`;
+        detail.innerHTML = `<tr><td>${escapeHtml(result.message || "Curso não encontrado.")}</td></tr>`;
         return;
       }
 
@@ -14,12 +15,12 @@ const id = window.location.pathname.split("/").filter(Boolean)[1];
       document.querySelector("[data-nome]").textContent = row.nome || "Curso sem nome";
       document.querySelector("[data-edit-link]").href = `/Curso/${id}/edit`;
       detail.innerHTML = `
-        <tr><th>ID</th><td>${row.id}</td></tr>
-        <tr><th>Nome</th><td>${row.nome || "-"}</td></tr>
-        <tr><th>Área de Formação</th><td>${row.area_formacao_nome || "-"}</td></tr>
-        <tr><th>Descrição</th><td>${row.descricao || "-"}</td></tr>
-        <tr><th>Criado em</th><td>${row.created_at || "-"}</td></tr>
-        <tr><th>Atualizado em</th><td>${row.updated_at || "-"}</td></tr>
+        <tr><th>ID</th><td>${escapeHtml(row.id)}</td></tr>
+        <tr><th>Nome</th><td>${escapeHtml(row.nome || "-")}</td></tr>
+        <tr><th>Área de Formação</th><td>${escapeHtml(row.area_formacao_nome || "-")}</td></tr>
+        <tr><th>Descrição</th><td>${escapeHtml(row.descricao || "-")}</td></tr>
+        <tr><th>Criado em</th><td>${escapeHtml(row.created_at || "-")}</td></tr>
+        <tr><th>Atualizado em</th><td>${escapeHtml(row.updated_at || "-")}</td></tr>
       `;
     }
 

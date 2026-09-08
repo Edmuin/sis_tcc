@@ -5,7 +5,7 @@ export const sameOrigin = (req, res, next) => {
 
   const originHeader = req.headers.origin;
   const origin = originHeader && originHeader !== "null" ? originHeader : req.headers.referer;
-  if (!origin) return next();
+  if (!origin) return res.status(403).json({ message: "A origem da requisição é obrigatória." });
 
   try {
     const requestOrigin = new URL(origin).origin;

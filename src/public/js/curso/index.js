@@ -1,3 +1,5 @@
+const escapeHtml = (value) => String(value ?? "").replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&#039;");
+
 async function loadCursos() {
       const tbody = document.querySelector("[data-curso-list]");
 
@@ -13,14 +15,14 @@ async function loadCursos() {
 
         tbody.innerHTML = rows.map((row) => `
           <tr>
-            <td>${row.nome || "-"}</td>
-            <td>${row.area_formacao_nome || "-"}</td>
-            <td>${row.descricao || "-"}</td>
-            <td>${row.created_at || "-"}</td>
+            <td>${escapeHtml(row.nome || "-")}</td>
+            <td>${escapeHtml(row.area_formacao_nome || "-")}</td>
+            <td>${escapeHtml(row.descricao || "-")}</td>
+            <td>${escapeHtml(row.created_at || "-")}</td>
             <td class="table-actions">
-              <a class="card-btn" href="/Curso/${row.id}">Ver</a>
-              <a class="card-btn" href="/Curso/${row.id}/edit">Editar</a>
-              <button class="card-btn" type="button" data-delete="${row.id}">Eliminar</button>
+              <a class="card-btn" href="/Curso/${encodeURIComponent(row.id)}">Ver</a>
+              <a class="card-btn" href="/Curso/${encodeURIComponent(row.id)}/edit">Editar</a>
+              <button class="card-btn" type="button" data-delete="${escapeHtml(row.id)}">Eliminar</button>
             </td>
           </tr>
         `).join("");

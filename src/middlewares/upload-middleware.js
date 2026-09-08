@@ -1,6 +1,7 @@
 import multer from "multer";
 import path from "path";
 import fs from "fs";
+import { promises as fsPromises } from "fs";
 
 const allowedMimeTypes = new Set([
   "application/pdf",
@@ -71,3 +72,20 @@ export const pdfUploadMiddleware = multer({
     fileSize: 10 * 1024 * 1024,
   },
 });
+
+export const isValidPdfUpload = async (file) => {
+  if (!file?.path) return true;
+  try {
+    const handle = await fsPromises.open(file.path, "r");
+    const buffer = Buffer.alloc(5);
+    await handle.read(buffer, 0, 5, 0);
+    await handle.close();
+    return buffer.toString("ascii") === "%PDF-";
+  } catch {
+    return false;
+  }
+};
+
+export const removeUpload = async (file) => {
+  if (file?.path) await fsPromises.unlink(file.path).catch(() => {});
+};

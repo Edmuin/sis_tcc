@@ -14,6 +14,7 @@ export const tabela = {
     area_formacao: "area_formacao",
     n_mecanografico: "n_mecanografico",
     password: "password",
+    password_expires_at: "password_expires_at",
   },
 };
 

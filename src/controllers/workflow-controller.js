@@ -2,6 +2,7 @@ import { pool } from "../config/database/mysql/db.js";
 import { TccModel } from "../models/tcc.model.js";
 import { EstudanteModel } from "../models/estudante.model.js";
 import { ProfessorModel } from "../models/professor.model.js";
+import { isValidPdfUpload, removeUpload } from "../middlewares/upload-middleware.js";
 
 const rolesWithFullAccess = new Set(["coordenador", "administrador"]);
 const proposalStates = new Set(["pendente", "aprovada", "rejeitada", "necessita_alteracoes"]);
@@ -151,6 +152,10 @@ export const createStage = async (req, res) => {
 export const createSubmission = async (req, res) => {
   try {
     if (req.fileValidationError) return res.status(400).json({ message: req.fileValidationError });
+    if (!(await isValidPdfUpload(req.file))) {
+      await removeUpload(req.file);
+      return res.status(400).json({ message: "O ficheiro enviado não é um PDF válido." });
+    }
     const tcc = await getTcc(req, res);
     if (!tcc || !(await canEditProposal(req, tcc))) return res.status(403).json({ message: "Apenas o aluno responsável pode submeter documentos." });
     if (!req.body.titulo) return res.status(400).json({ message: "O título da submissão é obrigatório." });

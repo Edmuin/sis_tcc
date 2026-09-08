@@ -9,7 +9,7 @@ export const downloadUpload = async (req, res) => {
   const tcc = (await TccModel.findAll()).find((row) => path.basename(row.relatorio_pdf || "") === filename);
   if (!tcc) return res.status(404).send("Ficheiro não encontrado.");
 
-  if (req.user.role !== "coordenador") {
+  if (!["coordenador", "administrador"].includes(req.user.role)) {
     const student = (await EstudanteModel.findAll()).find((row) => String(row.id_user) === String(req.user.id));
     const professor = (await ProfessorModel.findAll()).find((row) => String(row.id_user) === String(req.user.id));
     const permitted = (student && String(student.id) === String(tcc.id_estudante))

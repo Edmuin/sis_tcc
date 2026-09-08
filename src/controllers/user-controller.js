@@ -8,6 +8,8 @@ import axios from "axios";
 import bcrypt from "bcryptjs";
 import { EstudanteModel } from "../models/estudante.model.js";
 import { ProfessorModel } from "../models/professor.model.js";
+import { sanitizeUser, sanitizeUsers } from "../utils/sanitize-user.js";
+import { randomBytes } from "crypto";
 
 export const index = async (req, res) => {
     // const users = await UserService.listar();
@@ -17,7 +19,7 @@ export const index = async (req, res) => {
 export const all = async (req, res) => {
     console.log("Listando usuários...");
     const users = await UserService.listar();
-    res.json(users);
+    res.json(sanitizeUsers(users));
 };
 
 export const show = async (req, res) => {
@@ -39,10 +41,14 @@ export const store = async (req, res) => {
         const { role, fullname, email, telefone, idade, genero, n_processo, n_mecanografico, curso, area_formacao } = req.body;
         const normalizedNMechanographic = role === "aluno" ? null : n_mecanografico;
 
+        if (!["aluno", "tutor", "coordenador", "juri", "administrador"].includes(role)) {
+            return res.status(400).send("Perfil de utilizador inválido.");
+        }
         const role_id = await RoleService.getRoleByName(role);
-        const password = Math.random().toString(36).slice(-8);
+        if (!role_id) return res.status(400).send("Perfil de utilizador inválido.");
+        const password = randomBytes(12).toString("base64url");
         const hashedPassword = await bcrypt.hash(password, 12);
-        const user = await UserService.gravar({ fullname, email, telefone, idade, genero, role_id: role_id.id, n_processo, curso, area_formacao, n_mecanografico: normalizedNMechanographic, password: hashedPassword });
+        const user = await UserService.gravar({ fullname, email, telefone, idade, genero, role_id: role_id.id, n_processo, curso, area_formacao, n_mecanografico: normalizedNMechanographic, password: hashedPassword, password_expires_at: new Date(Date.now() + 24 * 60 * 60 * 1000) });
         if (role === "aluno") {
             await EstudanteModel.store({ id_user: user.id, numero_estudante: Number(n_processo) > 0 ? Number(n_processo) : user.id, numero_processo: n_processo || null, turma: null, ano_lectivo: null, id_curso: Number(curso) });
         } else if (role === "tutor") {
@@ -54,7 +60,7 @@ export const store = async (req, res) => {
           
         const data = {
             "message": message,
-            "from": "Umbillical",
+            "from": process.env.UMBALA_SMS_FROM || "Gestor TCC",
             "to": user.telefone,
             "schedule": dateScheduled
         };
@@ -69,7 +75,7 @@ export const store = async (req, res) => {
 
         try {
             const responseSendedMessage = await axios.post(
-                "https://api.useombala.ao/v1/messages",
+                process.env.UMBALA_API_URL || "https://api.useombala.ao/v1/messages",
                 data,
                 config
             );
@@ -94,7 +100,7 @@ export const findById = async (req, res) => {
     console.log("Buscando usuário com ID:", id);
     const user = await UserService.buscarPorId(id);
     if (user) {
-        res.json(user);
+        res.json(sanitizeUser(user));
     } else {
         res.status(404).json({ error: "Usuário não encontrado" });
     }
@@ -103,8 +109,7 @@ export const findById = async (req, res) => {
 export const findByIdParam = async (req, res) => {
     try {
         const user = await UserService.buscarPorId(req.params.id);
-        const { password: _password, ...safeUser } = user;
-        return res.json(safeUser);
+        return res.json(sanitizeUser(user));
     } catch (error) {
         return res.status(404).json({ error: "Usuário não encontrado" });
     }

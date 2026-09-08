@@ -1,3 +1,5 @@
+const escapeHtml = (value) => String(value ?? "").replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&#039;");
+
 async function loadBancas() {
       const tbody = document.querySelector("[data-banca-list]");
 
@@ -13,13 +15,13 @@ async function loadBancas() {
 
         tbody.innerHTML = rows.map((row) => `
           <tr>
-            <td>${row.sala || "-"}</td>
-            <td>${row.data || "-"}</td>
-            <td>${row.created_at || "-"}</td>
+            <td>${escapeHtml(row.sala || "-")}</td>
+            <td>${escapeHtml(row.data || "-")}</td>
+            <td>${escapeHtml(row.created_at || "-")}</td>
             <td class="table-actions">
-              <a class="card-btn" href="/Bancas/${row.id}">Ver</a>
-              <a class="card-btn" href="/Bancas/${row.id}/edit">Editar</a>
-              <button class="card-btn" type="button" data-delete="${row.id}">Eliminar</button>
+              <a class="card-btn" href="/Bancas/${encodeURIComponent(row.id)}">Ver</a>
+              <a class="card-btn" href="/Bancas/${encodeURIComponent(row.id)}/edit">Editar</a>
+              <button class="card-btn" type="button" data-delete="${escapeHtml(row.id)}">Eliminar</button>
             </td>
           </tr>
         `).join("");

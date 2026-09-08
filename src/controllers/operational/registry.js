@@ -86,6 +86,7 @@ const resourceValidators = {
   users: async (data) => {
     const errors = [];
     if (hasValue(data.email) && !validEmail(data.email)) errors.push("email inválido");
+    if (hasValue(data.password) && (String(data.password).length < 10 || String(data.password).length > 128)) errors.push("a palavra-passe deve ter entre 10 e 128 caracteres");
     if (hasValue(data.idade) && Number(data.idade) < 0) errors.push("idade deve ser positiva");
     if (hasValue(data.role_id) && !(await existsById(RoleModel, data.role_id))) errors.push("role_id não encontrado");
     return errors;

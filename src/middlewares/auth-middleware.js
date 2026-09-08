@@ -62,7 +62,7 @@ export const requireApiAuth = (req, res, next) => {
   }
 
   if (req.user) return next();
-  if (process.env.API_AUTH_REQUIRED === "false") return next();
+  if (process.env.NODE_ENV !== "production" && process.env.API_AUTH_REQUIRED === "false") return next();
 
   return res.status(401).json({ message: "Autenticação obrigatória para consumir a API." });
 };

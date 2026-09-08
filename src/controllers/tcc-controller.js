@@ -1,8 +1,10 @@
 import path from "path";
+import { promises as fs } from "fs";
 
 import { TccModel } from "../models/tcc.model.js";
 import { EstudanteModel } from "../models/estudante.model.js";
 import { ProfessorModel } from "../models/professor.model.js";
+import { isValidPdfUpload, removeUpload } from "../middlewares/upload-middleware.js";
 
 const tccViewsPath = (...segments) => path.join(process.cwd(), "src/views/TCC", ...segments);
 
@@ -30,6 +32,12 @@ const uploadedTccFiles = (files = {}) => {
   }
 
   return data;
+};
+
+const removeTccReport = async (reportPath) => {
+  if (!reportPath?.startsWith("/uploads/")) return;
+  const filename = path.basename(reportPath);
+  await fs.unlink(path.resolve("uploads", filename)).catch(() => {});
 };
 
 const validateTccPayload = (data, { partial = false } = {}) => {
@@ -66,7 +74,7 @@ const redirectOrJson = (req, res, redirectPath, payload, status = 200) => {
 };
 
 const canAccessTcc = async (req, tcc) => {
-  if (req.user?.role === "coordenador") return true;
+  if (["coordenador", "administrador"].includes(req.user?.role)) return true;
   if (req.user?.role === "aluno") {
     const student = (await EstudanteModel.findAll()).find((row) => String(row.id_user) === String(req.user.id));
     return Boolean(student && String(student.id) === String(tcc.id_estudante));
@@ -124,20 +132,23 @@ export const detail = async (req, res) => {
 export const store = async (req, res) => {
   try {
     if (req.fileValidationError) return validationError(res, req.fileValidationError);
+    const uploadedFile = req.files?.relatorio_pdf?.[0];
+    if (!(await isValidPdfUpload(uploadedFile))) {
+      await removeUpload(uploadedFile);
+      return validationError(res, "O ficheiro enviado não é um PDF válido.");
+    }
 
     const data = {
       ...normalizeTccPayload(req.body),
       ...uploadedTccFiles(req.files),
     };
+    if (req.user.role === "tutor") {
+      return res.status(403).json({ message: "A criação de TCC deve ser iniciada pelo aluno ou pela coordenação." });
+    }
     if (req.user.role === "aluno") {
       const student = (await EstudanteModel.findAll()).find((row) => String(row.id_user) === String(req.user.id));
       if (!student) return validationError(res, "Perfil de aluno não encontrado.");
       data.id_estudante = student.id;
-    }
-    if (req.user.role === "tutor") {
-      const professor = (await ProfessorModel.findAll()).find((row) => String(row.id_user) === String(req.user.id));
-      if (!professor) return validationError(res, "Perfil de tutor não encontrado.");
-      data.id_professor = professor.id;
     }
     if (!(await EstudanteModel.findById(data.id_estudante))) return validationError(res, "Estudante não encontrado.");
     if (!(await ProfessorModel.findById(data.id_professor))) return validationError(res, "Professor não encontrado.");
@@ -156,6 +167,11 @@ export const store = async (req, res) => {
 export const update = async (req, res) => {
   try {
     if (req.fileValidationError) return validationError(res, req.fileValidationError);
+    const uploadedFile = req.files?.relatorio_pdf?.[0];
+    if (!(await isValidPdfUpload(uploadedFile))) {
+      await removeUpload(uploadedFile);
+      return validationError(res, "O ficheiro enviado não é um PDF válido.");
+    }
 
     const current = await TccModel.findById(req.params.id);
     if (!current) return res.status(404).json({ message: "TCC não encontrado." });
@@ -165,7 +181,7 @@ export const update = async (req, res) => {
       ...normalizeTccPayload(req.body),
       ...uploadedTccFiles(req.files),
     };
-    if (req.user.role !== "coordenador") {
+    if (!["coordenador", "administrador"].includes(req.user.role)) {
       delete data.id_estudante;
       delete data.id_professor;
     }
@@ -180,6 +196,7 @@ export const update = async (req, res) => {
     if (!result || result.affectedRows === 0) {
       return res.status(404).json({ message: "TCC não encontrado ou sem alterações." });
     }
+    if (data.relatorio_pdf && data.relatorio_pdf !== current.relatorio_pdf) await removeTccReport(current.relatorio_pdf);
 
     return redirectOrJson(req, res, `/tcc/${req.params.id}`, { data: { id: req.params.id, ...data } });
   } catch (error) {
@@ -197,6 +214,7 @@ export const destroy = async (req, res) => {
     if (!result || result.affectedRows === 0) {
       return res.status(404).json({ message: "TCC não encontrado." });
     }
+    await removeTccReport(current.relatorio_pdf);
 
     return redirectOrJson(req, res, "/tcc", { data: { id: req.params.id } });
   } catch (error) {
